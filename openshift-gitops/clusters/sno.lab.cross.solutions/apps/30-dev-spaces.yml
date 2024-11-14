@@ -14,7 +14,7 @@ spec:
   sources:
     - repoURL: https://github.com/wtcross/lab-gitops
       targetRevision: HEAD
-      path: openshift-gitops/catalog/openshift-dev-spaces/aggregate/default
+      path: openshift-gitops/catalog/openshift-dev-spaces/aggregate/overlays/default
       #directory:
       #  recurse: true
   project: local-cluster
