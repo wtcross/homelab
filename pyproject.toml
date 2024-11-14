@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "lab.cross.solutions"
+version = "0.1.0"
+description = ""
+authors = ["Tyler Cross <tyler@cross.solutions>"]
+readme = "README.md"
+packages = [{include = "lab"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+yamllint = "^1.35.1"
+ansible = "^10.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

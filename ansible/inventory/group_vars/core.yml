@@ -1,0 +1,6 @@
+---
+ansible_user: ansible
+ansible_user_1password_item_name: "{{ ansible_user }}@{{ inventory_hostname }}"
+ansible_become_password: "{{ lookup('community.general.onepassword', ansible_user_1password_item_name, vault='lab.cross.solutions') }}"
+
+ip4_gateway: 192.168.10.1

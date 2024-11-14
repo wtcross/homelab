@@ -1,0 +1,22 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: etcd-defrag
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  labels:
+    has-git-repo-objects: "true"
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://github.com/wtcross/homelab
+      targetRevision: HEAD
+      path: openshift-gitops/clusters/sno.lab.cross.solutions/cluster-config/etcd-defrag
+  project: local-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
