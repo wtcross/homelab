@@ -7,12 +7,12 @@ resources:
   - 00-git-config-map.yml
   - 01-config-machineconfigs.yml
   - 05-operator-lvm.yml
-  # - 05-operator-service-mesh.yml
+  - 05-operator-service-mesh.yml
   # - 05-operator-openshift-virt.yml
   - 07-instance-lvmcluster.yml
   - 10-config-storageclasses.yml
   # - 20-instance-openshift-virt.yml
-  # - 20-instance-service-mesh.yml
+  - 20-instance-service-mesh.yml
   - 30-web-terminal.yml
   # - 30-openshift-ai.yml
   - 30-dev-spaces.yml
