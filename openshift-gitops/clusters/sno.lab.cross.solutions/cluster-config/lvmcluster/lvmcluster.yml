@@ -11,7 +11,7 @@ spec:
         default: true
         fstype: xfs
         deviceSelector:
-          paths:
+          optionalPaths:
             - /dev/disk/by-path/pci-0000:41:00.0-scsi-0:0:294:0
         thinPoolConfig:
           sizePercent: 90
