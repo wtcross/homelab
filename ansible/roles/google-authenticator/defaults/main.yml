@@ -1,0 +1,2 @@
+---
+totp_credential_id: "{{ ansible_user }}@{{ inventory_hostname }}"

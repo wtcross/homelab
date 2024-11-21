@@ -1,0 +1,38 @@
+---
+- name: Install bolt package
+  dnf:
+    name: bolt
+    state: present
+
+- name: Enable bolt service
+  service:
+    name: bolt
+    enabled: yes
+    state: started
+
+- name: Find all Thunderbolt domains
+  shell:
+    cmd: "boltctl domains | grep domain | awk -F' ' '{ print $2, $3 }'"
+  register: thunderbolt_domains_raw
+  changed_when: no
+
+- set_fact:
+    thunderbolt_domains: "{{ thunderbolt_domains | default({}) | combine({item.split(' ')[1]: {'domain_name': item.split(' ')[0], 'domain_number': item.split(' ')[0].split('domain')[1] | int }}, recursive=True)}}"
+  loop: "{{ thunderbolt_domains_raw.stdout_lines }}"
+
+- shell:
+    cmd: "boltctl info {{ item.key }} | grep syspath"
+  register: thunderbolt_syspaths
+  loop: "{{ thunderbolt_domains | dict2items }}"
+  when: "{{ thunderbolt_domains | length > 0}}"
+
+- debug:
+    msg: "{{ thunderbolt_domains }}"
+
+- name: Set up Thunderbolt ethernet
+  block:
+    - name: Load the thunderbolt-net kernel module
+      community.general.modprobe:
+        name: thunderbolt-net
+        persistent: present
+        state: present
