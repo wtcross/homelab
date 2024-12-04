@@ -1,10 +1,6 @@
-# This has been configured from the RHEL 9 default configs
 {% set decided_source = ntp_configuration.upstream_source | default(ntp_upstream_source) %}
 {% set decided_pools = ntp_configuration.pools | default(ntp_pools) %}
-{% set decided_servers = ntp_configuration.servers | default(ntp_servers)  %}
-# Use public servers from the pool.ntp.org project.
-# Please consider joining the pool (http://www.pool.ntp.org/join.html).
-
+{% set decided_servers = ntp_configuration.servers | default(ntp_servers) %}
 {% if decided_source == "pools" %}
 {% for pool in decided_pools %}
 pool {{ pool }} iburst
@@ -42,7 +38,7 @@ minsources 1
 #local stratum 10
 
 # Require authentication (nts or key option) for all NTP sources.
-#authselectmode requir
+#authselectmode require
 
 # Specify file containing keys for NTP authentication.
 keyfile /etc/chrony.keys
