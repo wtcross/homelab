@@ -1,0 +1,21 @@
+---
+# This ArgoCD Application is used to load in all the other ArgoCD Applications that are used to manage the Hub of Hubs cluster
+# It will sync down the apps directory and all sub-directories, which are atomic Applications
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps-local-cluster
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://github.com/wtcross/homelab'
+    targetRevision: HEAD
+    path: openshift-gitops/clusters/core.lab.cross.solutions/apps
+  project: local-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true # overrides changes made on the cluster that drift from git state
