@@ -19,7 +19,7 @@ spec:
           enabled: true
           dhcp: false
           auto-dns: false
-          addresses:
+          address:
             - ip: 10.15.15.50
               prefixLength: 24
           routes:
@@ -38,7 +38,7 @@ spec:
           enabled: true
           dhcp: false
           auto-dns: false
-          addresses:
+          address:
             - ip: 10.15.15.50
               prefixLength: 24
           routes:
@@ -74,7 +74,7 @@ spec:
           enabled: true
           dhcp: false
           auto-dns: false
-          addresses:
+          address:
             - ip: 10.15.15.51
               prefixLength: 24
           routes:
@@ -93,7 +93,7 @@ spec:
           enabled: true
           dhcp: false
           auto-dns: false
-          addresses:
+          address:
             - ip: 10.15.15.51
               prefixLength: 24
           routes:
@@ -129,7 +129,7 @@ spec:
           enabled: true
           dhcp: false
           auto-dns: false
-          addresses:
+          address:
             - ip: 10.15.15.52
               prefixLength: 24
           routes:
@@ -148,7 +148,7 @@ spec:
           enabled: true
           dhcp: false
           auto-dns: false
-          addresses:
+          address:
             - ip: 10.15.15.52
               prefixLength: 24
           routes:
