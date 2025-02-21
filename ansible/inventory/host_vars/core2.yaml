@@ -1,0 +1,15 @@
+---
+ansible_host: 192.168.10.6
+eth_mac_address: 58:47:CA:74:D5:19
+
+tbt_01_ipv4_keys: |
+  method=manual
+  addresses=10.0.2.2/30
+  # Route to A–B (10.0.1.0/30) via 10.0.2.1 (A)
+  routes=10.0.1.0/30,10.0.2.1
+  never-default=true
+
+tbt_02_ipv4_keys: |
+  method=manual
+  addresses=10.0.3.2/30
+  never-default=true

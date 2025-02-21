@@ -1,0 +1,10 @@
+---
+- name: Configure tank
+  hosts: tank
+  gather_facts: true
+  roles:
+    - role: tank
+    - role: ntp
+    # - role: google-authenticator
+    - role: podman-host
+    - role: cockpit

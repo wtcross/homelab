@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - 00-git-config-map.yaml
+  - 01-config-machineconfigs.yaml
+  # - 01-external-secrets-operator.yaml
+  # - 02-external-secrets-operator-instance.yaml
+  # TODO: set up ESO
+  # - 05-layered-image-secrets.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: git-config
+      fieldPath: data.repoBase
+    targets:
+      - select:
+          kind: Application
+          group: argoproj.io
+          labelSelector: has-git-repo-objects=true
+        fieldPaths:
+        - spec.sources.*.repoURL

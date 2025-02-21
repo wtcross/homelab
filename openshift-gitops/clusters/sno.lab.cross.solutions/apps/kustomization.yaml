@@ -1,0 +1,31 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - 00-etcd-defrag.yaml
+  - 00-git-config-map.yaml
+  - 01-config-machineconfigs.yaml
+  - 02-node-feature-discovery.yaml
+  - 05-operator-lvm.yaml
+  # - 05-operator-service-mesh.yaml
+  # - 05-operator-openshift-virt.yaml
+  - 07-instance-lvmcluster.yaml
+  - 10-config-storageclasses.yaml
+  # - 20-instance-openshift-virt.yaml
+  # - 20-instance-service-mesh.yaml
+  - 30-dev-spaces.yaml
+  # - 40-openshift-ai.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: git-config
+      fieldPath: data.repoBase
+    targets:
+      - select:
+          kind: Application
+          group: argoproj.io
+          labelSelector: has-git-repo-objects=true
+        fieldPaths:
+        - spec.sources.*.repoURL
