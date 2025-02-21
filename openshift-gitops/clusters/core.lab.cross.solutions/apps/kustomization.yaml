@@ -4,11 +4,8 @@ kind: Kustomization
 
 resources:
   - 00-git-config-map.yaml
-  - 01-config-machineconfigs.yaml
-  # - 01-external-secrets-operator.yaml
-  # - 02-external-secrets-operator-instance.yaml
-  # TODO: set up ESO
-  # - 05-layered-image-secrets.yaml
+  - 01-compact-node-pools.yaml
+  - 02-machineconfigs.yaml
 
 replacements:
   - source:

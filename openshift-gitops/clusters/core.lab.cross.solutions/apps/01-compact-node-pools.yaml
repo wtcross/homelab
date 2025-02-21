@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-secrets-operator
+  name: compact-node-pools
   namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -14,12 +14,10 @@ spec:
   sources:
     - repoURL: https://github.com/wtcross/homelab
       targetRevision: HEAD
-      path: openshift-gitops/catalog/external-secrets-operator/operator/overlays/stable/
-      #directory:
-      #  recurse: true
+      path: openshift-gitops/clusters/core.lab.cross.solutions/cluster-config/compact-node-pools/
   project: local-cluster
   syncPolicy:
     automated:
-      prune: true
+      prune: false
       allowEmpty: true
-      # selfHeal: false # overrides changes made on the cluster that drift from git state
+      selfHeal: true

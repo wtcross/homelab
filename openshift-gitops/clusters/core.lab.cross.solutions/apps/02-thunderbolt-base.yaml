@@ -2,10 +2,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: config-machineconfigs
+  name: thunderbolt-base
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     has-git-repo-objects: "true"
 spec:
@@ -14,12 +14,10 @@ spec:
   sources:
     - repoURL: https://github.com/wtcross/homelab
       targetRevision: HEAD
-      path: openshift-gitops/clusters/core.lab.cross.solutions/cluster-config/machineconfigs/
-      #directory:
-      #  recurse: true
+      path: openshift-gitops/clusters/core.lab.cross.solutions/cluster-config/thunderbolt-base/
   project: local-cluster
   syncPolicy:
     automated:
-      # prune: true
+      prune: false
       allowEmpty: true
-      # selfHeal: false # overrides changes made on the cluster that drift from git state
+      selfHeal: true

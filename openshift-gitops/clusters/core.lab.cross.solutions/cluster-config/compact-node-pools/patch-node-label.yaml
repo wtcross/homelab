@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: core0.lab.cross.solutions
+  labels:
+    node-role.kubernetes.io/core0: ""
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: core1.lab.cross.solutions
+  labels:
+    node-role.kubernetes.io/core1: ""
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: core2.lab.cross.solutions
+  labels:
+    node-role.kubernetes.io/core2: ""
