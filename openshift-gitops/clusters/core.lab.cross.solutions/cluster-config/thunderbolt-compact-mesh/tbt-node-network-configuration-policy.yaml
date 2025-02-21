@@ -1,0 +1,165 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: core0-tbt
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: core0.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: tbt-01
+        description: thunderbolt over ethernet
+        type: ethernet
+        state: up
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          auto-dns: false
+          addresses:
+            - ip: 10.15.15.50
+              prefixLength: 24
+          routes:
+            - destination: 10.15.15.51/32
+              # No actual gateway, so "on-link"
+              next-hop-address: 0.0.0.0
+              next-hop-interface: tbt-01
+              on-link: true
+      - name: tbt-02
+        description: thunderbolt over ethernet
+        type: ethernet
+        state: up
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          auto-dns: false
+          addresses:
+            - ip: 10.15.15.50
+              prefixLength: 24
+          routes:
+            - destination: 10.15.15.52/32
+              next-hop-address: 0.0.0.0
+              next-hop-interface: tbt-02
+              on-link: true
+    dns-resolver: 
+      config:
+        search:
+          - lab.cross.solutions
+        server:
+          - 1.1.1.1
+          - 1.0.0.1
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: core1-tbt
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: core1.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: tbt-01
+        description: thunderbolt over ethernet
+        type: ethernet
+        state: up
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          auto-dns: false
+          addresses:
+            - ip: 10.15.15.51
+              prefixLength: 24
+          routes:
+            - destination: 10.15.15.52/32
+              # No actual gateway, so "on-link"
+              next-hop-address: 0.0.0.0
+              next-hop-interface: tbt-01
+              on-link: true
+      - name: tbt-02
+        description: thunderbolt over ethernet
+        type: ethernet
+        state: up
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          auto-dns: false
+          addresses:
+            - ip: 10.15.15.51
+              prefixLength: 24
+          routes:
+            - destination: 10.15.15.50/32
+              next-hop-address: 0.0.0.0
+              next-hop-interface: tbt-02
+              on-link: true
+    dns-resolver: 
+      config:
+        search:
+          - lab.cross.solutions
+        server:
+          - 1.1.1.1
+          - 1.0.0.1
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: core2-tbt
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: core2.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: tbt-01
+        description: thunderbolt over ethernet
+        type: ethernet
+        state: up
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          auto-dns: false
+          addresses:
+            - ip: 10.15.15.52
+              prefixLength: 24
+          routes:
+            - destination: 10.15.15.50/32
+              # No actual gateway, so "on-link"
+              next-hop-address: 0.0.0.0
+              next-hop-interface: tbt-01
+              on-link: true
+      - name: tbt-02
+        description: thunderbolt over ethernet
+        type: ethernet
+        state: up
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          auto-dns: false
+          addresses:
+            - ip: 10.15.15.52
+              prefixLength: 24
+          routes:
+            - destination: 10.15.15.51/32
+              next-hop-address: 0.0.0.0
+              next-hop-interface: tbt-02
+              on-link: true
+    dns-resolver: 
+      config:
+        search:
+          - lab.cross.solutions
+        server:
+          - 1.1.1.1
+          - 1.0.0.1
