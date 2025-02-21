@@ -1,0 +1,58 @@
+---
+variant: openshift
+version: 4.17.0
+metadata:
+  name: 50-core0-thunderbolt-nmconnection-keyfiles
+  labels:
+    machineconfiguration.openshift.io/role: core0
+storage:
+  files:
+    - path: /etc/NetworkManager/system-connections/tbt-01.nmconnection
+      mode: 0600
+      overwrite: true
+      contents:
+        inline: |
+          [connection]
+          id=tbt-01
+          interface-name=tbt-01
+          type=ethernet
+          autoconnect=true
+
+          [ethernet]
+          mac-address-randomization=never
+          cloned-mac-address=permanent
+          mtu=9000
+
+          [ipv4]
+          method=manual
+          addresses=10.15.15.50/24
+          routes=10.15.15.51/32,0.0.0.0
+          never-default=true
+
+          [ipv6]
+          method=disabled
+
+    - path: /etc/NetworkManager/system-connections/tbt-02.nmconnection
+      mode: 0600
+      overwrite: true
+      contents:
+        inline: |
+          [connection]
+          id=tbt-02
+          interface-name=tbt-02
+          type=ethernet
+          autoconnect=true
+
+          [ethernet]
+          mac-address-randomization=never
+          cloned-mac-address=permanent
+          mtu=9000
+
+          [ipv4]
+          method=manual
+          addresses=10.15.15.50/24
+          routes=10.15.15.52/32,0.0.0.0
+          never-default=true
+
+          [ipv6]
+          method=disabled

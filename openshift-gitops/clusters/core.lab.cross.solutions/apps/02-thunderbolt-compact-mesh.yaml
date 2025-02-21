@@ -2,10 +2,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: compact-node-pools
+  name: thunderbolt-compact-mesh
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     has-git-repo-objects: "true"
 spec:
@@ -14,7 +14,7 @@ spec:
   sources:
     - repoURL: https://github.com/wtcross/homelab
       targetRevision: HEAD
-      path: openshift-gitops/clusters/core.lab.cross.solutions/cluster-config/compact-node-pools/
+      path: openshift-gitops/clusters/core.lab.cross.solutions/cluster-config/thunderbolt-compact-mesh
   project: local-cluster
   syncPolicy:
     automated:

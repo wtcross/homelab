@@ -5,6 +5,9 @@ kind: Kustomization
 resources:
   - machineconfigpool.yaml
   - node.yaml
+  - 50-core0-thunderbolt-nmconnection-keyfiles.yaml
+  - 50-core1-thunderbolt-nmconnection-keyfiles.yaml
+  - 50-core2-thunderbolt-nmconnection-keyfiles.yaml
 
 patchesStrategicMerge:
   - patch-node-label.yaml
