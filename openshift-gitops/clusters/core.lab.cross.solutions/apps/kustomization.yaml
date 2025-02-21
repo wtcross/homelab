@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - 00-git-config-map.yaml
   - 01-compact-node-pools.yaml
-  - 02-machineconfigs.yaml
+  - 02-thunderbolt-base.yaml
 
 replacements:
   - source:
