@@ -6,6 +6,7 @@ resources:
   - 00-git-config-map.yaml
   - 01-thunderbolt-base.yaml
   - 02-thunderbolt-compact-mesh.yaml
+  - 05-nmstate.yaml
 
 replacements:
   - source:
