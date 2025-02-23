@@ -45,11 +45,11 @@ spec:
     routes:
       config:
         - destination: 10.15.15.51/32
-          next-hop-address: 0.0.0.0
+          next-hop-address: 10.15.15.51
           next-hop-interface: tbt-01
           # on-link: true
         - destination: 10.15.15.52/32
-          next-hop-address: 0.0.0.0
+          next-hop-address: 10.15.15.52
           next-hop-interface: tbt-02
           # on-link: true
 ---
@@ -92,11 +92,11 @@ spec:
     routes:
       config:
         - destination: 10.15.15.52/32
-          next-hop-address: 0.0.0.0
+          next-hop-address: 10.15.15.52
           next-hop-interface: tbt-01
           # on-link: true
         - destination: 10.15.15.50/32
-          next-hop-address: 0.0.0.0
+          next-hop-address: 10.15.15.50
           next-hop-interface: tbt-02
           # on-link: true
     dns-resolver: 
@@ -146,11 +146,11 @@ spec:
     routes:
       config:
         - destination: 10.15.15.50/32
-          next-hop-address: 0.0.0.0
+          next-hop-address: 10.15.15.50
           next-hop-interface: tbt-01
           # on-link: true
         - destination: 10.15.15.51/32
-          next-hop-address: 0.0.0.0
+          next-hop-address: 10.15.15.51
           next-hop-interface: tbt-02
           # on-link: true
     dns-resolver: 

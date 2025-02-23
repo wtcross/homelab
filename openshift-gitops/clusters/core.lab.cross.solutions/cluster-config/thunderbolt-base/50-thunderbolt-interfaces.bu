@@ -37,6 +37,23 @@ storage:
           [Link]
           MACAddressPolicy=none
           Name=tbt-02
+    - path: /etc/udev/rules.d/90-nm-thunderbolt.rules
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          # Override /usr/lib/udev/rules.d/90-nm-thunderbolt.rules
+    - path: /etc/udev/rules.d/40-thunderbolt-net.rules
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          ACTION!="add|change|move", GOTO="nm_thunderbolt_end"
+
+          # Load he thunderbolt-net driver if we a device of type thunderbolt_xdomain is added.
+          SUBSYSTEM=="thunderbolt", ENV{DEVTYPE}=="thunderbolt_xdomain", RUN{builtin}+="kmod load thunderbolt-net"
+
+          LABEL="nm_thunderbolt_end"
     - path: /etc/udev/rules.d/50-tbt.rules
       mode: 0644
       overwrite: true
