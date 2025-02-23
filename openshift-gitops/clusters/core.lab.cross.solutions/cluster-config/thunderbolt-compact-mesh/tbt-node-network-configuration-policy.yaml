@@ -22,12 +22,6 @@ spec:
           address:
             - ip: 10.15.15.50
               prefix-length: 24
-          routes:
-            - destination: 10.15.15.51/32
-              # No actual gateway, so "on-link"
-              next-hop-address: 0.0.0.0
-              next-hop-interface: tbt-01
-              on-link: true
       - name: tbt-02
         description: thunderbolt over ethernet
         type: ethernet
@@ -41,11 +35,6 @@ spec:
           address:
             - ip: 10.15.15.50
               prefix-length: 24
-          routes:
-            - destination: 10.15.15.52/32
-              next-hop-address: 0.0.0.0
-              next-hop-interface: tbt-02
-              on-link: true
     dns-resolver: 
       config:
         search:
@@ -53,6 +42,16 @@ spec:
         server:
           - 1.1.1.1
           - 1.0.0.1
+    routes:
+      config:
+        - destination: 10.15.15.51/32
+          next-hop-address: 0.0.0.0
+          next-hop-interface: tbt-01
+          on-link: true
+        - destination: 10.15.15.52/32
+          next-hop-address: 0.0.0.0
+          next-hop-interface: tbt-02
+          on-link: true
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -77,12 +76,6 @@ spec:
           address:
             - ip: 10.15.15.51
               prefix-length: 24
-          routes:
-            - destination: 10.15.15.52/32
-              # No actual gateway, so "on-link"
-              next-hop-address: 0.0.0.0
-              next-hop-interface: tbt-01
-              on-link: true
       - name: tbt-02
         description: thunderbolt over ethernet
         type: ethernet
@@ -96,11 +89,16 @@ spec:
           address:
             - ip: 10.15.15.51
               prefix-length: 24
-          routes:
-            - destination: 10.15.15.50/32
-              next-hop-address: 0.0.0.0
-              next-hop-interface: tbt-02
-              on-link: true
+    routes:
+      config:
+        - destination: 10.15.15.52/32
+          next-hop-address: 0.0.0.0
+          next-hop-interface: tbt-01
+          on-link: true
+        - destination: 10.15.15.50/32
+          next-hop-address: 0.0.0.0
+          next-hop-interface: tbt-02
+          on-link: true
     dns-resolver: 
       config:
         search:
@@ -132,12 +130,6 @@ spec:
           address:
             - ip: 10.15.15.52
               prefix-length: 24
-          routes:
-            - destination: 10.15.15.50/32
-              # No actual gateway, so "on-link"
-              next-hop-address: 0.0.0.0
-              next-hop-interface: tbt-01
-              on-link: true
       - name: tbt-02
         description: thunderbolt over ethernet
         type: ethernet
@@ -151,11 +143,16 @@ spec:
           address:
             - ip: 10.15.15.52
               prefix-length: 24
-          routes:
-            - destination: 10.15.15.51/32
-              next-hop-address: 0.0.0.0
-              next-hop-interface: tbt-02
-              on-link: true
+    routes:
+      config:
+        - destination: 10.15.15.50/32
+          next-hop-address: 0.0.0.0
+          next-hop-interface: tbt-01
+          on-link: true
+        - destination: 10.15.15.51/32
+          next-hop-address: 0.0.0.0
+          next-hop-interface: tbt-02
+          on-link: true
     dns-resolver: 
       config:
         search:
