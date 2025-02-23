@@ -47,11 +47,11 @@ spec:
         - destination: 10.15.15.51/32
           next-hop-address: 0.0.0.0
           next-hop-interface: tbt-01
-          on-link: true
+          # on-link: true
         - destination: 10.15.15.52/32
           next-hop-address: 0.0.0.0
           next-hop-interface: tbt-02
-          on-link: true
+          # on-link: true
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -94,11 +94,11 @@ spec:
         - destination: 10.15.15.52/32
           next-hop-address: 0.0.0.0
           next-hop-interface: tbt-01
-          on-link: true
+          # on-link: true
         - destination: 10.15.15.50/32
           next-hop-address: 0.0.0.0
           next-hop-interface: tbt-02
-          on-link: true
+          # on-link: true
     dns-resolver: 
       config:
         search:
@@ -148,11 +148,11 @@ spec:
         - destination: 10.15.15.50/32
           next-hop-address: 0.0.0.0
           next-hop-interface: tbt-01
-          on-link: true
+          # on-link: true
         - destination: 10.15.15.51/32
           next-hop-address: 0.0.0.0
           next-hop-interface: tbt-02
-          on-link: true
+          # on-link: true
     dns-resolver: 
       config:
         search:
