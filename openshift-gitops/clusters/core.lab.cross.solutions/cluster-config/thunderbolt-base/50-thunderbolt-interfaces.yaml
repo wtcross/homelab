@@ -30,6 +30,18 @@ spec:
           overwrite: true
           path: /etc/systemd/network/50-tbt-02.link
         - contents:
+            compression: ""
+            source: data:,%23%20Override%20%2Fusr%2Flib%2Fudev%2Frules.d%2F90-nm-thunderbolt.rules%0A
+          mode: 420
+          overwrite: true
+          path: /etc/udev/rules.d/90-nm-thunderbolt.rules
+        - contents:
+            compression: gzip
+            source: data:;base64,H4sIAAAAAAAC/2yPwUrDQBRF9/MV1+fS6B/MotVBhJiImRa6CtO+VzOYmZE4jUrbfxcXQiKuz+Fy7uLWPtTVhSbHfNp1Lr7IKaRRqMB9bWtNMbS5O0SWYZv63EpkUuoSZXKMTjBh11EyePCjDPB7fAgcWEa/E6Q98tfbzG4/OQXnI/w7HLPwjWpWy2bTWPOoNU1MKmCq9fHOrO3myZzn8HeGCjyvquP24Pvs4/lK02tIjP4n808jKVUulqb8/9t3AAAA//+vXISDEQEAAA==
+          mode: 420
+          overwrite: true
+          path: /etc/udev/rules.d/40-thunderbolt-net.rules
+        - contents:
             compression: gzip
             source: data:;base64,H4sIAAAAAAAC/3J0DvH097O1VcrNL0tV0lEIDnUKjgwOcfW1tVXKSy1R0lHwdg3yc/WxtVUqSSrRNTBU0lEICvXTtlXSLy0u0s/JT07M0U/KzNMvKEvVhajQK85Q4iLVXCOC5hqBzQUEAAD//y/OgkmwAAAA
           mode: 420
