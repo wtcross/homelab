@@ -1,0 +1,6 @@
+---
+- name: Set up a thunderbolt-net mesh network across all core nodes
+  hosts: core
+  gather_facts: true
+  roles:
+    - role: thunderbolt-net-mesh

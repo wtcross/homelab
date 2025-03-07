@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - git-config-map.yaml
+  - 01-aggregate-nmstate.yaml
+  - 01-aggregate-node-feature-discovery.yaml
+  - 01-operator-local-storage.yaml
+  - 02-discover-local-storage.yaml
+  - 03-local-storage.yaml
+  - 04-operator-openshift-dev-spaces.yaml
+  - 05-instance-openshift-dev-spaces.yaml
+  - 06-operator-ansible-automation-platform.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: git-config
+      fieldPath: data.repoBase
+    targets:
+      - select:
+          kind: Application
+          group: argoproj.io
+          labelSelector: has-git-repo-objects=true
+        fieldPaths:
+        - spec.sources.*.repoURL

@@ -1,0 +1,13 @@
+---
+apiVersion: local.storage.openshift.io/v1alpha1
+kind: LocalVolumeSet
+metadata:
+  name: local-block-volumes
+  namespace: openshift-local-storage
+spec:
+  deviceInclusionSpec:
+    deviceTypes:
+      - part
+  storageClassName: local-block
+  volumeMode: Block
+  maxDeviceCount: 1

@@ -1,0 +1,2 @@
+ACTION=="move", SUBSYSTEM=="net", KERNEL=="tbt-01", RUN+="/usr/local/bin/pve-tbt-01.sh"
+ACTION=="move", SUBSYSTEM=="net", KERNEL=="tbt-02", RUN+="/usr/local/bin/pve-tbt-02.sh"

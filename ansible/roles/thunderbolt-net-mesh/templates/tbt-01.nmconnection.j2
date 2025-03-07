@@ -1,0 +1,20 @@
+#[match]
+#driver=thunderbolt-net
+#path=pci-0000:c7:00.6
+
+[connection]
+id=tbt-01
+interface-name=tbt-01
+type=ethernet
+permissions=
+
+[ethernet]
+mac-address-randomization=never
+cloned-mac-address=permanent
+mtu=9000
+
+[ipv4]
+{{ tbt_01_ipv4_keys }}
+
+[ipv6]
+method=disabled

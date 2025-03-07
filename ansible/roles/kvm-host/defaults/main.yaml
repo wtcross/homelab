@@ -1,0 +1,6 @@
+---
+kvm_packages:
+  - libvirt
+  - virt-install
+  - virt-top
+  - libguestfs-tools
