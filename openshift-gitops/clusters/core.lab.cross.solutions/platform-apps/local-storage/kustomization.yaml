@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - filesystem-localvolumeset.yaml
   - block-localvolumeset.yaml
-#  - immediate-local-block-storageclass.yaml
+  - default-local-block-storageclass.yaml
