@@ -3,5 +3,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - filesystem-localvolumeset.yaml
-  - block-localvolumeset.yaml
+  - default-local-block-storageclass.yaml
