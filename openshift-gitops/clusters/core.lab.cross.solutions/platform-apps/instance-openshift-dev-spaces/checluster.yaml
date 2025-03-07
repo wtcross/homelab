@@ -25,6 +25,8 @@ spec:
     secondsOfInactivityBeforeIdling: 1800
     storage:
       pvcStrategy: per-workspace
+      perWorkspaceStrategyPvcConfig:
+        storageClass: local-filesystem
   gitServices: {}
   networking:
     auth:
