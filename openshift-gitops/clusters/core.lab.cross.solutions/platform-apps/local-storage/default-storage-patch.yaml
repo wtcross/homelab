@@ -5,3 +5,4 @@ metadata:
   name: local-block
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
+volumeBindingMode: Immediate
