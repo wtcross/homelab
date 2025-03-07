@@ -9,9 +9,9 @@ resources:
   - 01-operator-local-storage.yaml
   - 02-discover-local-storage.yaml
   - 03-local-storage.yaml
-  - 04-operator-openshift-dev-spaces.yaml
-  - 05-instance-openshift-dev-spaces.yaml
-  - 06-operator-ansible-automation-platform.yaml
+  - 05-operator-openshift-dev-spaces.yaml
+  - 06-instance-openshift-dev-spaces.yaml
+  - 08-operator-ansible-automation-platform.yaml
 
 replacements:
   - source:
