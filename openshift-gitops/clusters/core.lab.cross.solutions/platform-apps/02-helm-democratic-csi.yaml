@@ -1,0 +1,29 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm-democratic-csi
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  destination:
+    namespace: 'democratic-csi'
+    server: https://kubernetes.default.svc
+  project: local-cluster
+  sources:
+    - chart: democratic-csi
+      helm:
+        valueFiles:
+          - $values/clusters/core.lab.cross.solutions/platform-apps/helm-democratic-csi/democratic-csi.yml
+      repoURL: 'https://democratic-csi.github.io/charts/'
+      targetRevision: 0.14.7
+    - ref: values
+      repoURL: 'https://github.com/wtcross/homelab/openshift-gitops'
+      targetRevision: main
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      #prune: false
+    syncOptions:
+      - CreateNamespace=true
