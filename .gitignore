@@ -1,0 +1,4 @@
+.idea
+.venv
+.env
+ansible/collections/ansible_collections/

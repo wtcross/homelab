@@ -1,0 +1,7 @@
+[Match]
+Path=pci-0000:c7:00.5
+Driver=thunderbolt-net
+
+[Link]
+MACAddressPolicy=none
+Name=tbt-02

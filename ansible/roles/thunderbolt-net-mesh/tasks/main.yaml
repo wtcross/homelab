@@ -1,0 +1,73 @@
+---
+- name: Ensure bolt is installed
+  become: true
+  ansible.builtin.package:
+    name: bolt
+    state: latest
+
+- name: Ensure thunderbolt kernel module is loaded at boot
+  become: true
+  ansible.builtin.copy:
+    src: thunderbolt.conf
+    dest: /etc/modules-load.d/thunderbolt.conf
+    owner: root
+    mode: 0644
+
+- name: Ensure the /etc/systemd/network directory exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/systemd/network
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ensure tbt-01 and tbt-02 links are persistent across reboots
+  become: true
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/systemd/network/{{ item }}
+    owner: root
+    mode: 0644
+  loop:
+    - 50-tbt-01.link
+    - 50-tbt-02.link
+  register: create_link_files
+
+- name: Propogate the new link files into initramfs
+  when: create_link_files.changed
+  become: true
+  ansible.builtin.command:
+    cmd: dracut --regenerate-all --force
+
+- name: Ensure tbt-01 and tbt-02 interfaces are set to up on reboots and cable insertions
+  block:
+    - become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /usr/local/bin/{{ item }}
+        owner: root
+        mode: a+x
+      loop:
+        - pve-tbt-01.sh
+        - pve-tbt-02.sh
+
+    - become: true
+      ansible.builtin.copy:
+        src: 50-tbt.rules
+        dest: /etc/udev/rules.d/50-tbt.rules
+        owner: root
+        mode: 0644
+
+- name: Ensure nmconnection keyfiles are created for both tbt-01 and tbt-02
+  become: true
+  template:
+    src: "{{ item }}.j2"
+    dest: /etc/NetworkManager/system-connections/{{ item }}
+    owner: root
+    group: root
+    mode: 0600
+  loop:
+    - tbt-01.nmconnection
+    - tbt-02.nmconnection
+  

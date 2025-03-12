@@ -1,0 +1,6 @@
+---
+- name: Install KVM packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ kvm_packages }}"
+    state: latest
