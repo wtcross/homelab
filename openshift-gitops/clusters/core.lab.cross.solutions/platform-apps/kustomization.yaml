@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - git-config-map.yaml
+  - 01-cluster-version.yaml
   - 01-aggregate-nmstate.yaml
   - 01-aggregate-node-feature-discovery.yaml
   # - 05-operator-openshift-dev-spaces.yaml
