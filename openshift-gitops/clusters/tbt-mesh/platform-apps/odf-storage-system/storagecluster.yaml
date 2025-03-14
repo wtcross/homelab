@@ -1,0 +1,86 @@
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  annotations:
+    cluster.ocs.openshift.io/local-devices: 'true'
+    uninstall.ocs.openshift.io/cleanup-policy: delete
+    uninstall.ocs.openshift.io/mode: graceful
+  name: ocs-storagecluster
+  namespace: openshift-storage
+  ownerReferences:
+    - apiVersion: odf.openshift.io/v1alpha1
+      kind: StorageSystem
+      name: ocs-storagecluster-storagesystem
+      uid: ae9452e0-93cd-41ff-9289-b4d0d4ac57e7
+  finalizers:
+    - storagecluster.ocs.openshift.io
+spec:
+  storageDeviceSets:
+    - config: {}
+      count: 3
+      dataPVCTemplate:
+        metadata: {}
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: '1'
+          storageClassName: nvme
+          volumeMode: Block
+        status: {}
+      name: ocs-deviceset-nvme
+      placement: {}
+      preparePlacement: {}
+      replica: 1
+      resources: {}
+  encryption:
+    keyRotation:
+      schedule: '@weekly'
+    kms: {}
+  mirroring: {}
+  monDataDirHostPath: /var/lib/rook
+  managedResources:
+    cephObjectStoreUsers: {}
+    cephCluster: {}
+    cephBlockPools:
+      defaultStorageClass: true
+    cephNonResilientPools:
+      count: 1
+      resources: {}
+      volumeClaimTemplate:
+        metadata: {}
+        spec:
+          resources: {}
+        status: {}
+    cephObjectStores: {}
+    cephFilesystems:
+      dataPoolSpec:
+        application: ''
+        erasureCoded:
+          codingChunks: 0
+          dataChunks: 0
+        mirroring: {}
+        quotas: {}
+        replicated:
+          size: 0
+        statusCheck:
+          mirror: {}
+    cephRBDMirror:
+      daemonCount: 1
+    cephToolbox: {}
+    cephDashboard: {}
+    cephConfig: {}
+  arbiter: {}
+  network:
+    connections:
+      encryption: {}
+    multiClusterService: {}
+    provider: multus
+    selectors:
+      cluster: openshift-storage/odf-cluster
+      public: openshift-storage/odf-public
+  nodeTopologies: {}
+  externalStorage: {}
+  resourceProfile: lean
+  flexibleScaling: true

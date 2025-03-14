@@ -1,0 +1,15 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+ENV BW_CLI_VERSION=2025.1.3
+
+RUN microdnf -y update && \
+    microdnf -y install wget unzip && \
+    wget https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip && \
+    unzip bw-linux-${BW_CLI_VERSION}.zip && \
+    chmod +x bw && \
+    mv bw /usr/local/bin/bw && \
+    rm -rfv *.zip
+
+COPY entrypoint.sh /
+
+CMD ["/entrypoint.sh"]

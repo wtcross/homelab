@@ -1,0 +1,11 @@
+---
+- name: Configure all core nodes
+  hosts: core
+  gather_facts: true
+  roles:
+    - role: core
+    - role: ntp
+    - role: google-authenticator
+    - role: kvm-host
+    - role: podman-host
+    - role: cockpit

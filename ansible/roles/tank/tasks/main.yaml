@@ -1,0 +1,6 @@
+---
+- name: Ensure required OS packages are installed
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ base_os_packages }}"
+    state: latest

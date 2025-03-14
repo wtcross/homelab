@@ -1,0 +1,58 @@
+---
+csiDriver:
+  name: "org.democratic-csi.nfs"
+
+storageClasses:
+  - name: truenas-nfs-nonroot
+    defaultClass: true
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    parameters:
+      # for block-based storage can be ext3, ext4, xfs
+      # for nfs should be nfs
+      fsType: nfs
+
+      # if true, volumes created from other snapshots will be
+      # zfs send/received instead of zfs cloned
+      # detachedVolumesFromSnapshots: "false"
+
+      # if true, volumes created from other volumes will be
+      # zfs send/received instead of zfs cloned
+      # detachedVolumesFromVolumes: "false"
+
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+
+# if your cluster supports snapshots you may enable below
+volumeSnapshotClasses:
+  - name: truenas-nfs-nonroot
+    parameters:
+    # if true, snapshots will be created with zfs send/receive
+    # detachedSnapshots: "false"
+    secrets:
+      snapshotter-secret:
+
+node:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    localtimeHostPath: false
+
+controller:
+  rbac:
+    openshift:
+      privileged: true
+
+driver:
+  existingConfigSecret: freenas-nfs-driver-config
+  config:
+    driver: freenas-nfs

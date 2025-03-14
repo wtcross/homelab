@@ -1,0 +1,47 @@
+# Node network: 10.15.15.0/24  (exclude from NetworkAttachmentDefintion's whereabouts)
+# Pod  network: 10.15.25.0/17  (see NetworkAttachmentDefinition)
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+ name: odf-public
+ namespace: openshift-storage
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "odf-public",
+      "type": "macvlan",
+      "master": "br-data",
+      "mode": "bridge",
+      "mtu": 9000,
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.15.25.0/24",
+        "exclude": [
+          "10.15.25.0/28"
+        ]
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: odf-cluster
+  namespace: openshift-storage
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "odf-cluster",
+      "type": "bridge",
+      "bridge": "br-data",
+      "mtu": 9000,
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.15.15.0/24",
+        "exclude": [
+          "10.15.15.0/28"
+        ]
+      }
+    }
