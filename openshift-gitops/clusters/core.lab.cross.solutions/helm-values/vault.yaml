@@ -18,13 +18,11 @@ server:
     accessMode: ReadWriteOnce
   route:
     enabled: true
-    host: vault.apps.core.lab.cross.solutions
+#    host: vault.apps.core.lab.cross.solutions
   standalone:
     enabled: false
   ha:
     enabled: true
-    raft:
-      enabled: true
     replicas: 3
     config: |
       storage "consul" {
