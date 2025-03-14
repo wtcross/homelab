@@ -28,7 +28,7 @@ server:
     replicas: 3
     config: |
       storage "consul" {
-        address = "consul-server:8500"
+        address = "helm-consul-consul-server:8500"
         path    = "vault/"
       }
       listener "tcp" {
