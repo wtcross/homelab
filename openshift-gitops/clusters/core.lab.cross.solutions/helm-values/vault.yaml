@@ -18,7 +18,7 @@ server:
     accessMode: ReadWriteOnce
   route:
     enabled: true
-#    host: vault.apps.core.lab.cross.solutions
+    host: vault.apps.core.lab.cross.solutions
   standalone:
     enabled: false
   ha:
