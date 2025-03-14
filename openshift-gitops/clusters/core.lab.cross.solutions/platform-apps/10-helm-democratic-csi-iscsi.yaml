@@ -17,7 +17,7 @@ spec:
         valueFiles:
           - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/democratic-csi-iscsi.yaml
       repoURL: 'https://democratic-csi.github.io/charts/'
-      targetRevision: 0.29.1
+      targetRevision: 0.14.7
     - ref: values
       repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main

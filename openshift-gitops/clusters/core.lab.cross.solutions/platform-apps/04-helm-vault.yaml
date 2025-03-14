@@ -17,7 +17,7 @@ spec:
         valueFiles:
           - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/vault.yaml
       repoURL: 'https://helm.releases.hashicorp.com'
-      targetRevision: 0.19.0
+      targetRevision: 0.29.1
     - ref: values
       repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main
