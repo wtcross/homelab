@@ -1,0 +1,14 @@
+---
+global:
+  enabled: true
+  openshift:
+    enabled: true
+  argocd:
+    enabled: true
+server:
+  replicas: 3
+  storageClass: truenas-nfs-nonroot
+client:
+  enabled: true
+ui:
+  enabled: true
