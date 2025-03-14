@@ -6,8 +6,9 @@ resources:
   - git-config-map.yaml
   - 01-cluster-version.yaml
   - 02-machineconfigs.yaml
-  - 05-aggregate-nmstate.yaml
-  - 05-aggregate-node-feature-discovery.yaml
+  - 03-aggregate-nmstate.yaml
+  - 03-aggregate-node-feature-discovery.yaml
+  - 04-helm-vault.yaml
   - 05-operator-eso.yaml
   - 06-instance-eso.yaml
   - 10-helm-democratic-csi-nfs.yaml

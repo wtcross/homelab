@@ -1,0 +1,31 @@
+---
+global:
+  openshift: true
+  namespace: vault
+  enabled: true
+server:
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: truenas-nfs-nonroot
+    mountPath: /vault/data
+    accessMode: ReadWriteOnce
+  auditStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: truenas-nfs-nonroot
+    mountPath: /vault/audit
+    accessMode: ReadWriteOnce
+  route:
+    enabled: true
+  standalone:
+    enabled: false
+  ha:
+    enabled: true
+    raft:
+      enabled: true
+    replicas: 3
+  ui:
+    enabled: true
+  csi:
+    enabled: true
