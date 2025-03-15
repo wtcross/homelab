@@ -35,6 +35,20 @@ server:
         address     = "0.0.0.0:8200"
         tls_disable = 1
       }
+      ui = true
+  extraEnvironmentVars:
+    VAULT_API_ADDR: "http://$(POD_IP):8200"
+    VAULT_CLUSTER_ADDR: "http://$(POD_IP):8201"
+  readinessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true"
+    port: 8200
+  serviceAccount:
+    create: true
+    name: vault
+  statefulSet:
+    annotations:
+      vault.hashicorp.com/service-selector: "vault-active=true"
 injector:
   enabled: true
 ui:
