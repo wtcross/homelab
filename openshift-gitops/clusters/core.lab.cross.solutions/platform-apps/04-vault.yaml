@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: helm-vault
+  name: vault
   namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-wave: "4"
@@ -24,6 +24,6 @@ spec:
   syncPolicy:
     automated:
       allowEmpty: true
-      #prune: false
+#      prune: false
     syncOptions:
       - CreateNamespace=true
