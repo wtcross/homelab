@@ -38,8 +38,8 @@ server:
       service_registration "kubernetes" {}
       ui = true
 injector:
-  enabled: false
+  enabled: true
 ui:
   enabled: true
 csi:
-  enabled: false
+  enabled: true
