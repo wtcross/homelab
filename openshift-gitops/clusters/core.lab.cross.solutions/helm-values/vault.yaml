@@ -50,7 +50,7 @@ server:
     annotations:
       vault.hashicorp.com/service-selector: "vault-active=true"
 injector:
-  enabled: true
+  enabled: false
 ui:
   enabled: true
 csi:
