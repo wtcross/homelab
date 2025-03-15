@@ -1,8 +1,8 @@
 ---
 global:
+  enabled: true
   openshift: true
   namespace: vault
-  enabled: true
 server:
   dataStorage:
     enabled: true
@@ -19,6 +19,8 @@ server:
   route:
     enabled: true
     host: vault.apps.core.lab.cross.solutions
+    tls:
+      termination: edge
   standalone:
     enabled: false
   ha:

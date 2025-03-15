@@ -8,7 +8,5 @@ global:
 server:
   replicas: 3
   storageClass: truenas-nfs-nonroot
-client:
-  enabled: true
 ui:
   enabled: true
