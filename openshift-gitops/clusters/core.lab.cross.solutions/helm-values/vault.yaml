@@ -41,5 +41,3 @@ injector:
   enabled: true
 ui:
   enabled: true
-csi:
-  enabled: true
