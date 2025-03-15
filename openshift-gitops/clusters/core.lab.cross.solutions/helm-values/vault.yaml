@@ -54,4 +54,4 @@ injector:
 ui:
   enabled: true
 csi:
-  enabled: true
+  enabled: false
