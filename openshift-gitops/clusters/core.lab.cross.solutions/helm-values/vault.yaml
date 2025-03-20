@@ -1,0 +1,43 @@
+---
+global:
+  enabled: true
+  openshift: true
+  namespace: vault
+server:
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: truenas-nfs-nonroot
+    mountPath: /vault/data
+    accessMode: ReadWriteOnce
+  auditStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: truenas-nfs-nonroot
+    mountPath: /vault/audit
+    accessMode: ReadWriteOnce
+  route:
+    enabled: true
+    host: vault.apps.core.lab.cross.solutions
+    tls:
+      termination: edge
+  standalone:
+    enabled: false
+  ha:
+    enabled: true
+    replicas: 3
+    config: |
+      storage "consul" {
+        address = "consul-consul-server:8500"
+        path    = "vault/"
+      }
+      listener "tcp" {
+        address     = "0.0.0.0:8200"
+        tls_disable = 1
+      }
+      service_registration "kubernetes" {}
+      ui = true
+injector:
+  enabled: true
+ui:
+  enabled: true

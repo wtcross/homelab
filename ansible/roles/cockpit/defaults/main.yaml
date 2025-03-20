@@ -1,0 +1,10 @@
+---
+cockpit_packages:
+  - cockpit
+  - cockpit-podman
+  - cockpit-machines
+  - cockpit-networkmanager
+  - cockpit-storaged
+  - cockpit-selinux
+
+require_totp_for_cockpit: no

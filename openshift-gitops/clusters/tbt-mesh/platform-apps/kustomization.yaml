@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - git-config-map.yaml
+  - 01-nmstate.yaml
+  - 01-operator-local-storage.yaml
+  # - 02-instance-local-storage-nvme.yaml
+  # - 03-openshift-data-foundation.yaml
+  # - 05-thunderbolt-base.yaml
+  # - 06-thunderbolt-compact-ring.yaml
+  # - 10-odf-storage-network.yaml
+  # - 12-odf-storage-system.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: git-config
+      fieldPath: data.repoBase
+    targets:
+      - select:
+          kind: Application
+          group: argoproj.io
+          labelSelector: has-git-repo-objects=true
+        fieldPaths:
+        - spec.sources.*.repoURL

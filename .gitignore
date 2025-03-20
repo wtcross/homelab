@@ -1,0 +1,10 @@
+.idea/
+.venv
+.env
+.env.secret
+ansible/collections/ansible_collections/
+*.ignore
+nfs-driver-config-file.yaml
+iscsi-driver-config-file.yaml
+freenas-nfs-driver-config.yaml
+freenas-iscsi-driver-config.yaml
