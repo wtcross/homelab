@@ -1,0 +1,27 @@
+---
+apiVersion: local.storage.openshift.io/v1alpha1
+kind: LocalVolumeSet
+metadata:
+  finalizers:
+    - storage.openshift.com/local-volume-protection
+  name: local-nvme-autodetect
+  namespace: openshift-local-storage
+spec:
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - core0.lab.cross.solutions
+            - core1.lab.cross.solutions
+            - core2.lab.cross.solutions
+  deviceInclusionSpec:
+    deviceMechanicalProperties:
+      - NonRotational
+    deviceTypes:
+      - disk
+      - part
+    minSize: 500G
+  storageClassName: local-nvme
+  volumeMode: Block

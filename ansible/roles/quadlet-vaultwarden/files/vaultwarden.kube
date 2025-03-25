@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vaultwarden
+  labels:
+    app: vaultwarden
+spec:
+  containers:
+    - name: vaultwarden
+      image: quay.io/vaultwarden/server:latest
+      volumeMounts:
+        - name: vaultwarden-data
+          mountPath: /data
+      ports:
+        - containerPort: 80
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        allowPrivilegeEscalation: false
+
+    - name: caddy
+      image: docker.io/caddy:latest
+      volumeMounts:
+        - name: caddyfile
+          mountPath: /etc/caddy/Caddyfile
+          subPath: Caddyfile
+          readOnly: true
+        - name: caddy-data
+          mountPath: /data
+        - name: caddy-config
+          mountPath: /config
+      ports:
+        - containerPort: 80
+          hostPort: 80
+        - containerPort: 443
+          hostPort: 443
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - NET_BIND_SERVICE
+        allowPrivilegeEscalation: false
+
+  volumes:
+    - name: vaultwarden-data
+      hostPath:
+        path: /data/vaultwarden
+        type: DirectoryOrCreate
+
+    - name: caddyfile
+      hostPath:
+        path: /data/caddy/Caddyfile
+        type: File
+
+    - name: caddy-data
+      hostPath:
+        path: /data/caddy/data
+        type: DirectoryOrCreate
+
+    - name: caddy-config
+      hostPath:
+        path: /data/caddy/config
+        type: DirectoryOrCreate

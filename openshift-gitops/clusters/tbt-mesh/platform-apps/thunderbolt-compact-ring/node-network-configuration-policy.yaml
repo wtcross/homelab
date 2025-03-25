@@ -1,0 +1,150 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: core0-tbt
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: core0.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-data
+        state: up
+        type: linux-bridge
+        mtu: 9000
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: tbt-01
+            - name: tbt-02
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 10.15.15.10
+              prefix-length: 24
+      - name: odf-public-shim
+        state: up
+        type: mac-vlan
+        mtu: 9000
+        mac-vlan:
+          base-iface: br-data
+          mode: bridge
+          promiscuous: true
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 10.15.25.10
+              prefix-length: 24
+    routes:
+      config:
+        - destination: 10.15.25.0/24
+          next-hop-interface: odf-public-shim
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: core1-tbt
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: core1.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-data
+        state: up
+        type: linux-bridge
+        mtu: 9000
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: tbt-01
+            - name: tbt-02
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 10.15.15.11
+              prefix-length: 24
+      - name: odf-public-shim
+        state: up
+        type: mac-vlan
+        mtu: 9000
+        mac-vlan:
+          base-iface: br-data
+          mode: bridge
+          promiscuous: true
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 10.15.25.11
+              prefix-length: 24
+    routes:
+      config:
+        - destination: 10.15.25.0/24
+          next-hop-interface: odf-public-shim
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: core2-tbt
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: core2.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-data
+        state: up
+        type: linux-bridge
+        mtu: 9000
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: tbt-01
+            - name: tbt-02
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 10.15.15.12
+              prefix-length: 24
+      - name: odf-public-shim
+        state: up
+        type: mac-vlan
+        mtu: 9000
+        mac-vlan:
+          base-iface: br-data
+          mode: bridge
+          promiscuous: true
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 10.15.25.12
+              prefix-length: 24
+    routes:
+      config:
+        - destination: 10.15.25.0/24
+          next-hop-interface: odf-public-shim

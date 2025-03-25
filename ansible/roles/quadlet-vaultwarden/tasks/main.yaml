@@ -1,0 +1,49 @@
+---
+- name: Create the vaultwarden group
+  become: true
+  ansible.builtin.group:
+    state: present
+    name: vaultwarden
+    gid: 2100
+  register: vaultwarden_group
+
+- name: Create the vaultwarden user
+  become: true
+  ansible.builtin.user:
+    state: present
+    name: vaultwarden
+    create_home: no
+    shell: /sbin/nologin
+    uid: 2100
+  register: vaultwarden_user
+
+- name: Create a directory for the vaultwarden user quadlet units
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: /etc/containers/systemd/users/2100
+    owner: vaultwarden
+    group: vaultwarden
+
+- name: Create a directory for the vaultwarden data volume
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: /data/vaultwarden
+    owner: vaultwarden
+    group: vaultwarden
+
+- name: Ensure vaultwarden quadlet kube unit is in place
+  become: true
+  ansible.builtin.copy:
+    src: technitium.kube
+    dest: /etc/containers/systemd/users/2100/technitium.kube
+    owner: vaultwarden
+    group: vaultwarden
+
+- name: Enable and start the vaultwarden service
+  become: true
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    name: vaultwarden

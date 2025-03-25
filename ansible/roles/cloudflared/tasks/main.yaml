@@ -1,0 +1,6 @@
+---
+- name: Install cloudflared
+  ansible.builtin.dnf:
+    state: latest
+    pkg: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-386.rpm
+

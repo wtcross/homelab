@@ -1,0 +1,64 @@
+variant: openshift
+version: 4.18.0
+metadata:
+  name: 50-thunderbolt-interfaces
+  labels:
+    machineconfiguration.openshift.io/role: master
+storage:
+  files:
+    - path: /etc/modules-load.d/thunderbolt.conf
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          thunderbolt
+          thunderbolt-net
+    - path: /etc/systemd/network/50-tbt-01.link
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          [Match]
+          Path=pci-0000:c7:00.6
+          Driver=thunderbolt-net
+
+          [Link]
+          MACAddressPolicy=none
+          MTUBytes=9000
+          NamePolicy=
+          Name=tbt-01
+    - path: /etc/systemd/network/50-tbt-02.link
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          [Match]
+          Path=pci-0000:c7:00.5
+          Driver=thunderbolt-net
+
+          [Link]
+          MACAddressPolicy=none
+          MTUBytes=9000
+          NamePolicy=
+          Name=tbt-02
+    - path: /etc/udev/rules.d/50-tbt.rules
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          ACTION=="move", SUBSYSTEM=="net", KERNEL=="tbt-01", RUN+="/usr/local/bin/tbt-01-up.sh"
+          ACTION=="move", SUBSYSTEM=="net", KERNEL=="tbt-02", RUN+="/usr/local/bin/tbt-02-up.sh"
+    - path: /usr/local/bin/tbt-01-up.sh
+      mode: 0755
+      overwrite: true
+      contents:
+        inline: |
+          #!/bin/bash
+          /usr/sbin/ip link set tbt-01 up  
+    - path: /usr/local/bin/tbt-02-up.sh
+      mode: 0755
+      overwrite: true
+      contents:
+        inline: |
+          #!/bin/bash
+          /usr/sbin/ip link set tbt-02 up 
