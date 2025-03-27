@@ -1,9 +1,9 @@
 ---
 # TODO
-- name: Create RoleBinding for initial cluster-admin user
+#- name: Create RoleBinding for initial cluster-admin user
 
 # TODO (probably use lookup mappingMethod and use Ansible to create users)
-- name: Configure Google OAuth
+#- name: Configure Google OAuth
 
 - name: Bootstrap the cluster with GitOps
   hosts: localhost
@@ -34,7 +34,7 @@
         argocd.resources[0].status.phase == 'Available'
 
     - name: Set up the local project and create apps
-      command: oc apply -k ../openshift-gitops/clusters/core.lab.cross.solutions/bootstrap-setup
+      command: oc apply -k ../openshift-gitops/clusters/core.lab.cross.solutions/setup
       register: oc_apply_result
       changed_when: "'configured' in oc_apply_result.stdout or 'created' in oc_apply_result.stdout"
 

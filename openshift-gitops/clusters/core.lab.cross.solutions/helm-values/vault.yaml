@@ -3,6 +3,8 @@ global:
   enabled: true
   openshift: true
   namespace: vault
+  imagePullSecrets:
+
 server:
   dataStorage:
     enabled: true
