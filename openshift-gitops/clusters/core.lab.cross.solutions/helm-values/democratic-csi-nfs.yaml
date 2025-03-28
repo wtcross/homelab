@@ -6,7 +6,7 @@ storageClasses:
   - name: truenas-nfs-nonroot
     defaultClass: true
     annotations:
-      storageclass.kubevirt.io/is-default-virt-class: true
+      storageclass.kubevirt.io/is-default-virt-class: "true"
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     allowVolumeExpansion: true
