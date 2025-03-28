@@ -7,11 +7,6 @@ storageClasses:
     defaultClass: true
     annotations:
       storageclass.kubevirt.io/is-default-virt-class: "true"
-      storage.openshift.io/access-mode: "ReadWriteMany"
-      storage.openshift.io/access-mode: "ReadWriteOnce"
-    labels:
-      access-mode: "ReadWriteMany"
-      access-mode: "ReadWriteOnce"
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     allowVolumeExpansion: true
