@@ -13,17 +13,17 @@ spec:
   project: local-cluster
   sources:
     - chart: consul
+      repoURL: 'https://helm.releases.hashicorp.com'
+      targetRevision: 1.6.2
       helm:
         valueFiles:
           - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/consul.yaml
-      repoURL: 'https://helm.releases.hashicorp.com'
-      targetRevision: 1.6.2
     - ref: values
       repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main
   syncPolicy:
     automated:
-      allowEmpty: false
+      allowEmpty: true
       prune: true
       selfHeal: true
     syncOptions:
