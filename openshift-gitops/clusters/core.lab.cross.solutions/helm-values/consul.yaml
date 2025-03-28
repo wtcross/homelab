@@ -1,4 +1,7 @@
 ---
+fullnameOverride: "consul"
+nameOverride: ""
+
 global:
   enabled: true
   openshift:
