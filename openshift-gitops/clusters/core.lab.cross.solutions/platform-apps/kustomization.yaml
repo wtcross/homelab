@@ -27,5 +27,6 @@ replacements:
       - select:
           kind: Application
           group: argoproj.io
+          labelSelector: has-git-repo-objects=true
         fieldPaths:
         - spec.sources.*.repoURL
