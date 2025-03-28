@@ -8,12 +8,12 @@ resources:
   - 02-machineconfigs.yaml
   - 03-aggregate-nmstate.yaml
   - 03-aggregate-node-feature-discovery.yaml
-#  - 03-consul.yaml
-#  - 04-vault.yaml
-  - 05-operator-eso.yaml
-  - 06-instance-eso.yaml
-  - 10-democratic-csi-nfs.yaml
-#  - 10-democratic-csi-iscsi.yaml
+  - 03-democratic-csi-nfs.yaml
+#  - 03-democratic-csi-iscsi.yaml
+  - 04-consul.yaml
+  - 05-vault.yaml
+  - 06-operator-eso.yaml
+  - 07-instance-eso.yaml
   - 20-operator-openshift-dev-spaces.yaml
   - 21-instance-openshift-dev-spaces.yaml
   - 30-operator-ansible-automation-platform.yaml

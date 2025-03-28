@@ -5,7 +5,7 @@ metadata:
   name: instance-eso
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-wave: "7"
   labels:
     has-git-repo-objects: "true"
 spec:

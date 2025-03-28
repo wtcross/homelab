@@ -3,13 +3,10 @@ global:
   enabled: true
   openshift: true
   namespace: vault
+
 server:
   dataStorage:
-    enabled: true
-    size: 10Gi
-    storageClass: truenas-nfs-nonroot
-    mountPath: /vault/data
-    accessMode: ReadWriteOnce
+    enabled: false
   auditStorage:
     enabled: true
     size: 10Gi
@@ -37,7 +34,9 @@ server:
       }
       service_registration "kubernetes" {}
       ui = true
+
 injector:
   enabled: true
+
 ui:
   enabled: true
