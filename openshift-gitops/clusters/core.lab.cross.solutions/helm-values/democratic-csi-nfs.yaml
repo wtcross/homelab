@@ -7,6 +7,11 @@ storageClasses:
     defaultClass: true
     annotations:
       storageclass.kubevirt.io/is-default-virt-class: "true"
+      storage.openshift.io/access-mode: "ReadWriteMany"
+      storage.openshift.io/access-mode: "ReadWriteOnce"
+    labels:
+      access-mode: "ReadWriteMany"
+      access-mode: "ReadWriteOnce"
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     allowVolumeExpansion: true
@@ -65,6 +70,47 @@ driver:
   existingConfigSecret: freenas-nfs-driver-config
   config:
     driver: freenas-nfs
+    zfs:
+      cli:
+        sudoEnabled: true
+        #  leave paths unset for auto-detection
+        paths:
+          zfs: /sbin/zfs
+          zpool: /sbin/zpool
+          sudo: /usr/bin/sudo
+          chroot: /usr/sbin/chroot
+
+      # can be used to set arbitrary values on the dataset/zvol
+      # can use handlebars templates with the parameters from the storage class/CO
+      #datasetProperties:
+      #  "org.freenas:description": "{{ parameters.[csi.storage.k8s.io/pvc/namespace] }}/{{ parameters.[csi.storage.k8s.io/pvc/name] }}"
+      #  "org.freenas:test": "{{ parameters.foo }}"
+      #  "org.freenas:test2": "some value"
+
+      datasetParentName: fast/csi/core.lab.cross.solutions/nfs/vols
+      # do NOT make datasetParentName and detachedSnapshotsDatasetParentName overlap
+      # they may be siblings, but neither should be nested in the other
+      # do NOT comment this option out even if you don't plan to use snapshots, just leave it with dummy value
+      detachedSnapshotsDatasetParentName: fast/csi/core.lab.cross.solutions/nfs/snaps
+      datasetEnableQuotas: true
+      datasetEnableReservation: false
+      datasetPermissionsMode: "0777"
+      datasetPermissionsUser: 0
+      datasetPermissionsGroup: 0
+      #datasetPermissionsAcls:
+      #- "-m everyone@:full_set:allow"
+      #- "-m u:kube:full_set:allow"
+
+    nfs:
+      #shareCommentTemplate: "{{ parameters.[csi.storage.k8s.io/pvc/namespace] }}-{{ parameters.[csi.storage.k8s.io/pvc/name] }}"
+      shareHost: nas.lab.cross.solutions
+      shareAlldirs: false
+      shareAllowedHosts: []
+      shareAllowedNetworks: []
+      shareMaprootUser: root
+      shareMaprootGroup: wheel
+      shareMapallUser: ""
+      shareMapallGroup: ""
 
 csiProxy:
   enabled: true
