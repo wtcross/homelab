@@ -77,8 +77,8 @@ driver:
 
       # can be used to set arbitrary values on the dataset/zvol
       # can use handlebars templates with the parameters from the storage class/CO
-      #datasetProperties:
-      #  "org.freenas:description": "{{ parameters.[csi.storage.k8s.io/pvc/namespace] }}/{{ parameters.[csi.storage.k8s.io/pvc/name] }}"
+      datasetProperties:
+        "org.freenas:description": "{{ parameters.[csi.storage.k8s.io/pvc/namespace] }}/{{ parameters.[csi.storage.k8s.io/pvc/name] }}"
       #  "org.freenas:test": "{{ parameters.foo }}"
       #  "org.freenas:test2": "some value"
 
@@ -97,7 +97,7 @@ driver:
       #- "-m u:kube:full_set:allow"
 
     nfs:
-      #shareCommentTemplate: "{{ parameters.[csi.storage.k8s.io/pvc/namespace] }}-{{ parameters.[csi.storage.k8s.io/pvc/name] }}"
+      shareCommentTemplate: "{{ parameters.[csi.storage.k8s.io/pvc/namespace] }}-{{ parameters.[csi.storage.k8s.io/pvc/name] }}"
       shareHost: nas.lab.cross.solutions
       shareAlldirs: false
       shareAllowedHosts: []
