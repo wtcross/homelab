@@ -14,7 +14,7 @@ spec:
   sources:
     - repoURL: 'https://helm.releases.hashicorp.com'
       chart: consul
-      targetRevision: 1.6.2
+      targetRevision: 1.6.3
       helm:
         valueFiles:
           - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/consul.yaml
@@ -24,7 +24,7 @@ spec:
   syncPolicy:
     automated:
       allowEmpty: false
-#      prune: true
-#      selfHeal: true
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
