@@ -47,7 +47,11 @@ node:
     openshift:
       privileged: true
   driver:
+    enabled: true
     localtimeHostPath: false
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  cleanup:
+    image: ghcr.io/containerd/busybox:1.36
 
 controller:
   rbac:
@@ -62,3 +66,6 @@ driver:
   config:
     driver: freenas-nfs
 
+csiProxy:
+  enabled: true
+  image: ghcr.io/democratic-csi/csi-grpc-proxy:latest
