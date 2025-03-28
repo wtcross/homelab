@@ -28,7 +28,8 @@ spec:
         - .webhooks[]?.clientConfig.caBundle
   syncPolicy:
     automated:
-      allowEmpty: true
-#      prune: false
+      allowEmpty: false
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
