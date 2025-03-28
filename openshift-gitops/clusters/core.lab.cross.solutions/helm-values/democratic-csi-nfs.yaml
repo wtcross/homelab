@@ -53,8 +53,12 @@ controller:
   rbac:
     openshift:
       privileged: true
+  driver:
+    enabled: true
+    image: ghcr.io/democratic-csi/democratic-csi:latest
 
 driver:
   existingConfigSecret: freenas-nfs-driver-config
   config:
     driver: freenas-nfs
+

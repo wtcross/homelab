@@ -1,5 +1,6 @@
 .idea/
-.venv
+.scratch/
+.venv/
 .env
 .env.secret
 ansible/.tmp/
