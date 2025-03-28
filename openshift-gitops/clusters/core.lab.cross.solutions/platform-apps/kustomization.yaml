@@ -16,6 +16,7 @@ resources:
   - 07-instance-eso.yaml
   - 08-operator-openshift-virtualization.yaml
   - 09-instance-openshift-virtualization.yaml
+  - 10-virt-storage-profiles.yaml
   - 20-operator-openshift-dev-spaces.yaml
   - 21-instance-openshift-dev-spaces.yaml
   - 30-operator-ansible-automation-platform.yaml
