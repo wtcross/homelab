@@ -12,19 +12,19 @@ spec:
     server: https://kubernetes.default.svc
   project: local-cluster
   sources:
-    - chart: consul
-      repoURL: 'https://helm.releases.hashicorp.com'
+    - repoURL: 'https://helm.releases.hashicorp.com'
+      chart: consul
       targetRevision: 1.6.2
       helm:
         valueFiles:
           - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/consul.yaml
-    - ref: values
-      repoURL: 'https://github.com/wtcross/homelab'
+    - repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main
+      ref: values
   syncPolicy:
     automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
+      allowEmpty: false
+#      prune: true
+#      selfHeal: true
     syncOptions:
       - CreateNamespace=true
