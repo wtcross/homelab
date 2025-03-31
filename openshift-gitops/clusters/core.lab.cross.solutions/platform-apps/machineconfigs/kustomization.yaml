@@ -4,3 +4,4 @@ kind: Kustomization
 
 resources:
   - 99-master-enable-iscsid-multipathd.yaml
+  - 99-worker-authorize-thunderbolt-devices.yaml
