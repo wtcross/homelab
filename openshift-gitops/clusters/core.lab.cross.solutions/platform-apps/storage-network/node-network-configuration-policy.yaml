@@ -20,7 +20,7 @@ spec:
           dhcp: false
           address:
             - ip: 192.168.11.33
-              prefix-length: 27
+              prefix-length: 24
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -43,7 +43,7 @@ spec:
           dhcp: false
           address:
             - ip: 192.168.11.34
-              prefix-length: 27
+              prefix-length: 24
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -66,4 +66,4 @@ spec:
             dhcp: false
             address:
               - ip: 192.168.11.35
-                prefix-length: 27
+                prefix-length: 24
