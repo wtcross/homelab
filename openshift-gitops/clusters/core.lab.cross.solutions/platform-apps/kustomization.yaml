@@ -15,7 +15,7 @@ resources:
   - 08-operator-eso.yaml
   - 09-instance-eso.yaml
 #  - 10-aggregate-openshift-virtualization.yaml
-  - 20-aggregate-openshift-dev-spaces.yaml
+#  - 20-aggregate-openshift-dev-spaces.yaml
 #  - 30-operator-ansible-automation-platform.yaml
 
 replacements:
