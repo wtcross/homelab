@@ -2,25 +2,30 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: helm-democratic-csi-iscsi
+  name: vault
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "7"
 spec:
   destination:
-    namespace: democratic-csi
+    namespace: vault
     server: https://kubernetes.default.svc
   project: local-cluster
   sources:
-    - chart: democratic-csi
+    - chart: vault
       helm:
         valueFiles:
-          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/democratic-csi-iscsi.yaml
-      repoURL: 'https://democratic-csi.github.io/charts/'
-      targetRevision: 0.14.7
+          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/vault.yaml
+      repoURL: 'https://helm.releases.hashicorp.com'
+      targetRevision: 0.29.1
     - ref: values
       repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[]?.clientConfig.caBundle
   syncPolicy:
     automated:
       allowEmpty: false

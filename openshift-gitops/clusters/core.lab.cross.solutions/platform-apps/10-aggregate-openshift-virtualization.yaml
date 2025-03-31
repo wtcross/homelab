@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: virt-storage-profiles
+  name: aggregate-openshift-virtualization
   namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -14,7 +14,7 @@ spec:
   sources:
     - repoURL: https://github.com/wtcross/homelab
       targetRevision: main
-      path: openshift-gitops/clusters/core.lab.cross.solutions/platform-apps/virt-storage-profiles
+      path: openshift-gitops/clusters/core.lab.cross.solutions/platform-apps/aggregate-openshift-virtualization
   project: local-cluster
   syncPolicy:
     automated:

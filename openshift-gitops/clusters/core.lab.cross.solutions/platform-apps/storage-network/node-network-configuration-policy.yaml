@@ -1,0 +1,69 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-0-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-0.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: enp102s0
+        state: up
+        type: ethernet
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.33
+              prefix-length: 27
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-1-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-1.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: enp102s0
+        state: up
+        type: ethernet
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.34
+              prefix-length: 27
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-2-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-2.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+        - name: enp102s0
+          state: up
+          type: ethernet
+          mtu: 1500
+          ipv6:
+            enabled: false
+          ipv4:
+            enabled: true
+            dhcp: false
+            address:
+              - ip: 192.168.11.35
+                prefix-length: 27
