@@ -21,6 +21,11 @@ spec:
           address:
             - ip: 192.168.11.33
               prefix-length: 24
+    routes:
+      config:
+        - destination: 192.168.11.0/24
+          next-hop-interface: enp102s0
+          table-id: 254
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -44,6 +49,11 @@ spec:
           address:
             - ip: 192.168.11.34
               prefix-length: 24
+    routes:
+      config:
+        - destination: 192.168.11.0/24
+          next-hop-interface: enp102s0
+          table-id: 254
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -67,6 +77,11 @@ spec:
             address:
               - ip: 192.168.11.35
                 prefix-length: 24
+    routes:
+      config:
+        - destination: 192.168.11.0/24
+          next-hop-interface: enp102s0
+          table-id: 254
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -93,6 +108,11 @@ spec:
           address:
             - ip: 192.168.11.30
               prefix-length: 24
+    routes:
+      config:
+        - destination: 192.168.11.0/24
+          next-hop-interface: br-ex.11
+          table-id: 254
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -119,6 +139,11 @@ spec:
           address:
             - ip: 192.168.11.31
               prefix-length: 24
+    routes:
+      config:
+        - destination: 192.168.11.0/24
+          next-hop-interface: br-ex.11
+          table-id: 254
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -145,3 +170,8 @@ spec:
           address:
             - ip: 192.168.11.32
               prefix-length: 24
+    routes:
+      config:
+        - destination: 192.168.11.0/24
+          next-hop-interface: br-ex.11
+          table-id: 254
