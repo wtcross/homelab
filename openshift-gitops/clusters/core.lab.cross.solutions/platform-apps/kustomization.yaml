@@ -14,7 +14,7 @@ resources:
   - 07-helm-vault.yaml
   - 08-operator-eso.yaml
   - 09-instance-eso.yaml
-  - 10-aggregate-openshift-virtualization.yaml
+#  - 10-aggregate-openshift-virtualization.yaml
 #  - 20-aggregate-openshift-dev-spaces.yaml
 #  - 30-operator-ansible-automation-platform.yaml
 
