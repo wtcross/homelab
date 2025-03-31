@@ -10,8 +10,8 @@ resources:
   - 03-aggregate-node-feature-discovery.yaml
   - 03-democratic-csi-nfs.yaml
 #  - 03-democratic-csi-iscsi.yaml
-  - 04-consul.yaml
-  - 05-vault.yaml
+#  - 04-consul.yaml
+#  - 05-vault.yaml
   - 06-operator-eso.yaml
   - 07-instance-eso.yaml
   - 08-operator-openshift-virtualization.yaml
