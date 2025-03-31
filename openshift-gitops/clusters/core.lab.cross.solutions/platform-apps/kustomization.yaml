@@ -10,11 +10,11 @@ resources:
   - 03-aggregate-node-feature-discovery.yaml
   - 04-storage-network.yaml
   - 05-helm-democratic-csi.yaml
-#  - 06-helm-consul.yaml
-#  - 07-helm-vault.yaml
+  - 06-helm-consul.yaml
+  - 07-helm-vault.yaml
   - 08-operator-eso.yaml
   - 09-instance-eso.yaml
-#  - 10-aggregate-openshift-virtualization.yaml
+  - 10-aggregate-openshift-virtualization.yaml
 #  - 20-aggregate-openshift-dev-spaces.yaml
 #  - 30-operator-ansible-automation-platform.yaml
 
