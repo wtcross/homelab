@@ -6,3 +6,5 @@ resources:
   - namespace.yaml
   - operatorgroup.yaml
   - subscription.yaml
+  - hyperconverged.yaml
+  - storageprofile.yaml
