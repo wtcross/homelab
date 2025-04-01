@@ -16,7 +16,7 @@ uv sync
 pushd ansible &> /dev/null
 
 uv run ansible-galaxy collection install -r collections/requirements.yaml --force
-uv run ansible-galaxy role install -r galaxy-roles/requirements.yaml -p galaxy-roles --force
+# uv run ansible-galaxy role install -r galaxy-roles/requirements.yaml -p galaxy-roles --force
 
 popd &> /dev/null
 popd &> /dev/null
