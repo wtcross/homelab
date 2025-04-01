@@ -3,8 +3,6 @@ apiVersion: cdi.kubevirt.io/v1beta1
 kind: StorageProfile
 metadata:
   name: truenas-nfs-nonroot
-  annotations:
-    argocd.argoproj.io/sync-wave: "5"
 spec:
   claimPropertySets:
     - accessModes:
