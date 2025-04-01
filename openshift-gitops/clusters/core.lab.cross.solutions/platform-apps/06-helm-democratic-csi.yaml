@@ -18,12 +18,6 @@ spec:
           - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/democratic-csi-nfs.yaml
       repoURL: 'https://democratic-csi.github.io/charts/'
       targetRevision: 0.14.7
-    - chart: democratic-csi
-      helm:
-        valueFiles:
-          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/democratic-csi-iscsi.yaml
-      repoURL: 'https://democratic-csi.github.io/charts/'
-      targetRevision: 0.14.7
     - ref: values
       repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main
