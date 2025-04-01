@@ -21,8 +21,6 @@ spec:
           address:
             - ip: 192.168.11.33
               prefix-length: 24
-    routes:
-      config: []
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -46,8 +44,6 @@ spec:
           address:
             - ip: 192.168.11.34
               prefix-length: 24
-    routes:
-      config: []
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -71,47 +67,3 @@ spec:
             address:
               - ip: 192.168.11.35
                 prefix-length: 24
-    routes:
-      config: []
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: control-0-storage-network
-spec:
-  nodeSelector:
-    kubernetes.io/hostname: control-0.core.lab.cross.solutions
-  maxUnavailable: 1
-  desiredState:
-    interfaces:
-      - name: br-ex.11
-        state: absent
-        type: vlan
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: control-1-storage-network
-spec:
-  nodeSelector:
-    kubernetes.io/hostname: control-1.core.lab.cross.solutions
-  maxUnavailable: 1
-  desiredState:
-    interfaces:
-      - name: br-ex.11
-        state: absent
-        type: vlan
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: control-2-storage-network
-spec:
-  nodeSelector:
-    kubernetes.io/hostname: control-2.core.lab.cross.solutions
-  maxUnavailable: 1
-  desiredState:
-    interfaces:
-      - name: br-ex.11
-        state: absent
-        type: vlan
