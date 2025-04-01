@@ -22,9 +22,7 @@ spec:
             - ip: 192.168.11.33
               prefix-length: 24
     routes:
-      config:
-        - destination: 192.168.11.0/24
-          next-hop-interface: enp102s0
+      config: []
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -49,9 +47,7 @@ spec:
             - ip: 192.168.11.34
               prefix-length: 24
     routes:
-      config:
-        - destination: 192.168.11.0/24
-          next-hop-interface: enp102s0
+      config: []
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -76,9 +72,7 @@ spec:
               - ip: 192.168.11.35
                 prefix-length: 24
     routes:
-      config:
-        - destination: 192.168.11.0/24
-          next-hop-interface: enp102s0
+      config: []
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -91,24 +85,8 @@ spec:
   desiredState:
     interfaces:
       - name: br-ex.11
-        state: up
+        state: absent
         type: vlan
-        mtu: 1500
-        ipv6:
-          enabled: false
-        vlan:
-          base-iface: br-ex
-          id: 11
-        ipv4:
-          enabled: true
-          dhcp: false
-          address:
-            - ip: 192.168.11.30
-              prefix-length: 24
-    routes:
-      config:
-        - destination: 192.168.11.0/24
-          next-hop-interface: br-ex.11
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -121,24 +99,8 @@ spec:
   desiredState:
     interfaces:
       - name: br-ex.11
-        state: up
+        state: absent
         type: vlan
-        mtu: 1500
-        ipv6:
-          enabled: false
-        vlan:
-          base-iface: br-ex
-          id: 11
-        ipv4:
-          enabled: true
-          dhcp: false
-          address:
-            - ip: 192.168.11.31
-              prefix-length: 24
-    routes:
-      config:
-        - destination: 192.168.11.0/24
-          next-hop-interface: br-ex.11
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -151,21 +113,5 @@ spec:
   desiredState:
     interfaces:
       - name: br-ex.11
-        state: up
+        state: absent
         type: vlan
-        mtu: 1500
-        ipv6:
-          enabled: false
-        vlan:
-          base-iface: br-ex
-          id: 11
-        ipv4:
-          enabled: true
-          dhcp: false
-          address:
-            - ip: 192.168.11.32
-              prefix-length: 24
-    routes:
-      config:
-        - destination: 192.168.11.0/24
-          next-hop-interface: br-ex.11
