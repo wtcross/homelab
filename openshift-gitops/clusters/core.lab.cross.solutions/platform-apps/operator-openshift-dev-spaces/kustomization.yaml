@@ -7,3 +7,5 @@ commonAnnotations:
 
 resources:
   - https://github.com/wtcross/gitops-catalog/openshift-dev-spaces/operator/overlays/stable?ref=main
+  - namespace.yaml
+  - networkpolicy.yaml
