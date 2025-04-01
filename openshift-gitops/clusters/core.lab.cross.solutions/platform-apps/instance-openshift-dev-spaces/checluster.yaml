@@ -25,7 +25,7 @@ spec:
       template: <username>-devspaces
     secondsOfInactivityBeforeIdling: 1800
     storage:
-      pvcStrategy: per-workspace
+      pvcStrategy: per-user
       perWorkspaceStrategyPvcConfig:
         storageClass: truenas-nfs-nonroot
   gitServices: {}
