@@ -4,7 +4,7 @@ csiDriver:
 
 storageClasses:
   - name: truenas-iscsi-nonroot
-    defaultClass: true
+    defaultClass: false
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     allowVolumeExpansion: true
@@ -42,12 +42,21 @@ node:
     openshift:
       privileged: true
   driver:
+    enabled: true
     localtimeHostPath: false
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
 
 controller:
   rbac:
     openshift:
       privileged: true
+  driver:
+    enabled: true
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
 
 driver:
   existingConfigSecret: freenas-iscsi-driver-config
