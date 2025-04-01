@@ -2,25 +2,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: helm-democratic-csi
+  name: consul
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "7"
 spec:
   destination:
-    namespace: democratic-csi
+    namespace: vault
     server: https://kubernetes.default.svc
   project: local-cluster
   sources:
-    - chart: democratic-csi
+    - repoURL: 'https://helm.releases.hashicorp.com'
+      chart: consul
+      targetRevision: 1.6.3
       helm:
         valueFiles:
-          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/democratic-csi-nfs.yaml
-      repoURL: 'https://democratic-csi.github.io/charts/'
-      targetRevision: 0.14.7
-    - ref: values
-      repoURL: 'https://github.com/wtcross/homelab'
+          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/consul.yaml
+    - repoURL: 'https://github.com/wtcross/homelab'
       targetRevision: main
+      ref: values
   syncPolicy:
     automated:
       allowEmpty: false

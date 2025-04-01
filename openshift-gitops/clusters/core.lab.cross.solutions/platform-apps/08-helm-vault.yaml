@@ -5,7 +5,7 @@ metadata:
   name: vault
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
+    argocd.argoproj.io/sync-wave: "8"
 spec:
   destination:
     namespace: vault

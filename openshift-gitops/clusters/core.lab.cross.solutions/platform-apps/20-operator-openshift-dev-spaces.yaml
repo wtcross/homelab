@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: aggregate-openshift-dev-spaces
+  name: operator-openshift-dev-spaces
   namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-wave: "20"
@@ -14,7 +14,7 @@ spec:
   sources:
     - repoURL: https://github.com/wtcross/homelab
       targetRevision: main
-      path: openshift-gitops/clusters/core.lab.cross.solutions/platform-apps/aggregate-openshift-dev-spaces
+      path: openshift-gitops/clusters/core.lab.cross.solutions/platform-apps/operator-openshift-dev-spaces
   project: local-cluster
   syncPolicy:
     automated:

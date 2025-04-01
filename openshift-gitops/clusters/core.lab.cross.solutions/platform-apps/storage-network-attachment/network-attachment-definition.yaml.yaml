@@ -4,8 +4,6 @@ kind: NetworkAttachmentDefinition
 metadata:
   name: lab-storage
   namespace: democratic-csi
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   config: |-
     {
