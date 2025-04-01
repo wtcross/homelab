@@ -13,8 +13,8 @@ resources:
   - 06-helm-democratic-csi.yaml
 #  - 07-helm-consul.yaml
 #  - 08-helm-vault.yaml
-#  - 09-operator-eso.yaml
-#  - 10-instance-eso.yaml
+  - 09-operator-eso.yaml
+  - 10-instance-eso.yaml
   - 11-operator-openshift-virtualization.yaml
   - 12-instance-openshift-virtualization.yaml
   - 13-openshift-virt-storage-profiles.yaml
