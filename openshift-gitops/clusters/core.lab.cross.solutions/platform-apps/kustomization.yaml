@@ -18,8 +18,8 @@ resources:
   - 11-operator-openshift-virtualization.yaml
   - 12-instance-openshift-virtualization.yaml
   - 13-openshift-virt-storage-profiles.yaml
-  - 20-operator-openshift-dev-spaces.yaml
-  - 21-instance-openshift-dev-spaces.yaml
+#  - 20-operator-openshift-dev-spaces.yaml
+#  - 21-instance-openshift-dev-spaces.yaml
 #  - 30-operator-ansible-automation-platform.yaml
 
 replacements:
