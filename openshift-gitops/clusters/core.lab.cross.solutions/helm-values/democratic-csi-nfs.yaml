@@ -50,6 +50,8 @@ node:
     enabled: true
     localtimeHostPath: false
     image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
   cleanup:
     image: ghcr.io/containerd/busybox:1.36
 
@@ -60,6 +62,8 @@ controller:
   driver:
     enabled: true
     image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
 
 driver:
   existingConfigSecret: freenas-nfs-driver-config
