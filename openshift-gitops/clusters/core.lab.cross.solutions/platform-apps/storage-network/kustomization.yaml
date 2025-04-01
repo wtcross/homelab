@@ -4,3 +4,4 @@ kind: Kustomization
 
 resources:
   - node-network-configuration-policy.yaml
+  - network-attachment-definition.yaml
