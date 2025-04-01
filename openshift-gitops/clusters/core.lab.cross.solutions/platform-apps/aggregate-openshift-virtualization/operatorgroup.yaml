@@ -5,7 +5,7 @@ metadata:
   name: kubevirt-hyperconverged-group
   namespace: openshift-cnv
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   targetNamespaces:
     - openshift-cnv
