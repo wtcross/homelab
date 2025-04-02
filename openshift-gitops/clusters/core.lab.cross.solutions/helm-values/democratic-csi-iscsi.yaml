@@ -23,7 +23,7 @@ storageClasses:
       # zfs send/received instead of zfs cloned
       # detachedVolumesFromVolumes: "false"
 
-    secrets:
+#    parameters:
       csi.storage.k8s.io/provisioner-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/provisioner-secret-namespace: democratic-csi
       csi.storage.k8s.io/controller-publish-secret-name: truenas-iscsi-chap
@@ -41,7 +41,7 @@ volumeSnapshotClasses:
     parameters:
     # if true, snapshots will be created with zfs send/receive
     # detachedSnapshots: "false"
-    secrets:
+#    secrets:
       csi.storage.k8s.io/snapshotter-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/snapshotter-secret-namespace: democratic-csi
 
