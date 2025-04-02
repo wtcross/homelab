@@ -22,11 +22,11 @@ storageClasses:
       # detachedVolumesFromVolumes: "false"
 
     secrets:
-      provisioner-secret:
-      controller-publish-secret:
-      node-stage-secret:
-      node-publish-secret:
-      controller-expand-secret:
+      provisioner-secret: truenas-iscsi-chap
+      controller-publish-secret: truenas-iscsi-chap
+      node-stage-secret: truenas-iscsi-chap
+      node-publish-secret: truenas-iscsi-chap
+      controller-expand-secret: truenas-iscsi-chap
 
 # if your cluster supports snapshots you may enable below
 volumeSnapshotClasses:
