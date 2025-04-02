@@ -8,6 +8,8 @@ storageClasses:
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     allowVolumeExpansion: true
+    storageClassAnnotations:
+      description: "iSCSI with mutual CHAP"
     parameters:
       # for block-based storage can be ext3, ext4, xfs
       # for nfs should be nfs
@@ -22,11 +24,16 @@ storageClasses:
       # detachedVolumesFromVolumes: "false"
 
     secrets:
-      provisioner-secret: truenas-iscsi-chap
-      controller-publish-secret: truenas-iscsi-chap
-      node-stage-secret: truenas-iscsi-chap
-      node-publish-secret: truenas-iscsi-chap
-      controller-expand-secret: truenas-iscsi-chap
+      provisioner-secret-name: truenas-iscsi-chap
+      provisioner-secret-namespace: democratic-csi
+      controller-publish-secret-name: truenas-iscsi-chap
+      controller-publish-secret-namespace: democratic-csi
+      node-stage-secret-name: truenas-iscsi-chap
+      node-stage-secret-namespace: democratic-csi
+      node-publish-secret-name: truenas-iscsi-chap
+      node-publish-secret-namespace: democratic-csi
+      controller-expand-secret-name: truenas-iscsi-chap
+      controller-expand-secret-namespace: democratic-csi
 
 # if your cluster supports snapshots you may enable below
 volumeSnapshotClasses:
@@ -35,7 +42,8 @@ volumeSnapshotClasses:
     # if true, snapshots will be created with zfs send/receive
     # detachedSnapshots: "false"
     secrets:
-      snapshotter-secret:
+      snapshotter-secret-name: truenas-iscsi-chap
+      snapshotter-secret-namespace: democratic-csi
 
 node:
   rbac:
