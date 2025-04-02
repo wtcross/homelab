@@ -1,0 +1,30 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-workspace-networkpolicy
+spec:
+  rules:
+    - name: add-networkpolicy-to-workspace
+      match:
+        resources:
+          kinds:
+            - Namespace
+          selector:
+            matchLabels:
+              workspace-namespace: "true"
+      generate:
+        kind: NetworkPolicy
+        name: allow-ingress-from-devspaces-gateway
+        namespace: "{{ request.object.metadata.name }}"
+        synchronize: true
+        data:
+          spec:
+            podSelector: {}
+            ingress:
+              - from:
+                  - namespaceSelector:
+                      matchLabels:
+                        kubernetes.io/metadata.name: openshift-devspaces
+            policyTypes:
+              - Ingress
