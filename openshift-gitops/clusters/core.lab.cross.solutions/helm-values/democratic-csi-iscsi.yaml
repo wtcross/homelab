@@ -24,16 +24,16 @@ storageClasses:
       # detachedVolumesFromVolumes: "false"
 
     secrets:
-      provisioner-secret-name: truenas-iscsi-chap
-      provisioner-secret-namespace: democratic-csi
-      controller-publish-secret-name: truenas-iscsi-chap
-      controller-publish-secret-namespace: democratic-csi
-      node-stage-secret-name: truenas-iscsi-chap
-      node-stage-secret-namespace: democratic-csi
-      node-publish-secret-name: truenas-iscsi-chap
-      node-publish-secret-namespace: democratic-csi
-      controller-expand-secret-name: truenas-iscsi-chap
-      controller-expand-secret-namespace: democratic-csi
+      csi.storage.k8s.io/provisioner-secret-name: truenas-iscsi-chap
+      csi.storage.k8s.io/provisioner-secret-namespace: democratic-csi
+      csi.storage.k8s.io/controller-publish-secret-name: truenas-iscsi-chap
+      csi.storage.k8s.io/controller-publish-secret-namespace: democratic-csi
+      csi.storage.k8s.io/node-stage-secret-name: truenas-iscsi-chap
+      csi.storage.k8s.io/node-stage-secret-namespace: democratic-csi
+      csi.storage.k8s.io/node-publish-secret-name: truenas-iscsi-chap
+      csi.storage.k8s.io/node-publish-secret-namespace: democratic-csi
+      csi.storage.k8s.io/controller-expand-secret-name: truenas-iscsi-chap
+      csi.storage.k8s.io/controller-expand-secret-namespace: democratic-csi
 
 # if your cluster supports snapshots you may enable below
 volumeSnapshotClasses:
@@ -42,8 +42,8 @@ volumeSnapshotClasses:
     # if true, snapshots will be created with zfs send/receive
     # detachedSnapshots: "false"
     secrets:
-      snapshotter-secret-name: truenas-iscsi-chap
-      snapshotter-secret-namespace: democratic-csi
+      csi.storage.k8s.io/snapshotter-secret-name: truenas-iscsi-chap
+      csi.storage.k8s.io/snapshotter-secret-namespace: democratic-csi
 
 node:
   rbac:
