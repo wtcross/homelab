@@ -27,13 +27,13 @@ storageClasses:
       csi.storage.k8s.io/controller-expand-secret-namespace: democratic-csi
     secrets:
       provisioner-secret:
-        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+        node-db.node.session.auth.authmethod: CHAP
       controller-publish-secret:
-        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+        node-db.node.session.auth.authmethod: CHAP
       node-stage-secret:
-        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+        node-db.node.session.auth.authmethod: CHAP
       controller-expand-secret:
-        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+        node-db.node.session.auth.authmethod: CHAP
 
       # if true, volumes created from other snapshots will be
       # zfs send/received instead of zfs cloned
