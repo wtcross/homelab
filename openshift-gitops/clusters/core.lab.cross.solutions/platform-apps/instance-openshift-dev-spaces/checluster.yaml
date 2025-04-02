@@ -23,8 +23,6 @@ spec:
     defaultNamespace:
       autoProvision: true
       template: <username>-devspaces
-      labels:
-        workspace-namespace: "true"
     secondsOfInactivityBeforeIdling: 1800
     storage:
       pvcStrategy: per-workspace
