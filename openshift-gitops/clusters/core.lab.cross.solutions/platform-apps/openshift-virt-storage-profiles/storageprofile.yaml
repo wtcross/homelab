@@ -10,3 +10,14 @@ spec:
         - ReadWriteOnce
       volumeMode:
         Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: truenas-iscsi-nonroot
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode:
+        Block
