@@ -10,9 +10,7 @@ spec:
         resources:
           kinds:
             - Namespace
-          selector:
-            matchLabels:
-              workspace-namespace: "true"
+          name: "*-devspaces"
       generate:
         kind: NetworkPolicy
         apiVersion: networking.k8s.io/v1
