@@ -14,7 +14,6 @@ storageClasses:
       # for block-based storage can be ext3, ext4, xfs
       # for nfs should be nfs
       fsType: ext4
-    secrets:
       # https://github.com/democratic-csi/democratic-csi/blob/master/docs/storage-class-parameters.md#enabling-chap-authentication
       csi.storage.k8s.io/provisioner-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/provisioner-secret-namespace: democratic-csi
@@ -26,6 +25,15 @@ storageClasses:
       csi.storage.k8s.io/node-publish-secret-namespace: democratic-csi
       csi.storage.k8s.io/controller-expand-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/controller-expand-secret-namespace: democratic-csi
+    secrets:
+      provisioner-secret:
+        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+      controller-publish-secret:
+        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+      node-stage-secret:
+        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+      controller-expand-secret:
+        node-db.node.session.auth.authmethod: CHAP_MUTUAL
 
       # if true, volumes created from other snapshots will be
       # zfs send/received instead of zfs cloned
@@ -38,13 +46,15 @@ storageClasses:
 # if your cluster supports snapshots you may enable below
 volumeSnapshotClasses:
   - name: truenas-iscsi-nonroot
-# if true, snapshots will be created with zfs send/receive
-#    parameters:
+    parameters:
+      # if true, snapshots will be created with zfs send/receive
 #      detachedSnapshots: "false"
-    secrets:
       # https://github.com/democratic-csi/democratic-csi/blob/master/docs/storage-class-parameters.md#enabling-chap-authentication
       csi.storage.k8s.io/snapshotter-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/snapshotter-secret-namespace: democratic-csi
+    secrets:
+      snapshotter-secret:
+        node-db.node.session.auth.authmethod: CHAP_MUTUAL
 
 node:
   rbac:
