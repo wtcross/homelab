@@ -6,6 +6,7 @@ resources:
   - git-config-map.yaml
   - 01-cluster-version.yaml
   - 02-machineconfigs.yaml
+  - 03-aggregate-kyverno.yaml
   - 03-aggregate-nmstate.yaml
   - 03-aggregate-node-feature-discovery.yaml
   - 04-storage-network.yaml
