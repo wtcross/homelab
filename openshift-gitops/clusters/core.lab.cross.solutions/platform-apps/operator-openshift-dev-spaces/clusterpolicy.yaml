@@ -10,7 +10,7 @@ spec:
         resources:
           kinds:
             - Namespace
-          name: "*-devspaces"
+          name: "che*-*-devspaces-*"
       generate:
         kind: NetworkPolicy
         apiVersion: networking.k8s.io/v1
