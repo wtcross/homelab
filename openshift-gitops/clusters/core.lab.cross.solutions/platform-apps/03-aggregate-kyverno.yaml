@@ -21,3 +21,9 @@ spec:
       prune: true
       allowEmpty: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - Replace=true
+
+# TODO: make adjustments per the docs:
+#       https://kyverno.io/docs/installation/platform-notes/#notes-for-argocd-users
