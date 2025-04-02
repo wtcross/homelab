@@ -14,7 +14,7 @@ storageClasses:
       # for block-based storage can be ext3, ext4, xfs
       # for nfs should be nfs
       fsType: ext4
-
+    secrets:
       # https://github.com/democratic-csi/democratic-csi/blob/master/docs/storage-class-parameters.md#enabling-chap-authentication
       csi.storage.k8s.io/provisioner-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/provisioner-secret-namespace: democratic-csi
@@ -39,8 +39,9 @@ storageClasses:
 volumeSnapshotClasses:
   - name: truenas-iscsi-nonroot
 # if true, snapshots will be created with zfs send/receive
-    parameters:
+#    parameters:
 #      detachedSnapshots: "false"
+    secrets:
       # https://github.com/democratic-csi/democratic-csi/blob/master/docs/storage-class-parameters.md#enabling-chap-authentication
       csi.storage.k8s.io/snapshotter-secret-name: truenas-iscsi-chap
       csi.storage.k8s.io/snapshotter-secret-namespace: democratic-csi
