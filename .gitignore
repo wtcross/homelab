@@ -11,3 +11,4 @@ nfs-driver-config-file.yaml
 iscsi-driver-config-file.yaml
 freenas-nfs-driver-config.yaml
 freenas-iscsi-driver-config.yaml
+truenas-iscsi-chap.yaml
