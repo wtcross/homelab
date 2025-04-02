@@ -10,7 +10,8 @@ resources:
   - 03-aggregate-node-feature-discovery.yaml
   - 04-storage-network.yaml
   - 05-storage-network-attachment.yaml
-  - 06-helm-democratic-csi.yaml
+  - 06-helm-democratic-csi-nfs.yaml
+  - 06-helm-democratic-csi-iscsi.yaml
   - 07-helm-consul.yaml
   - 08-helm-vault.yaml
   - 09-operator-eso.yaml
