@@ -24,6 +24,7 @@ resources:
   - 20-operator-openshift-devspaces.yaml
   - 21-instance-openshift-devspaces.yaml
   - 22-devspaces-policies.yaml
+  - 50-tyler-vms.yaml
 #  - 30-operator-ansible-automation-platform.yaml
 
 replacements:
