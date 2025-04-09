@@ -14,7 +14,7 @@ resources:
   - 06-helm-democratic-csi-fast-nfs.yaml
   - 06-helm-democratic-csi-fast-iscsi.yaml
   - 06-helm-democratic-csi-tank-nfs.yaml
-#  - 07-helm-consul.yaml
+  - 07-helm-consul.yaml
 #  - 08-helm-vault.yaml
 #  - 09-operator-eso.yaml
 #  - 10-instance-eso.yaml
