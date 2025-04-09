@@ -1,0 +1,80 @@
+---
+csiDriver:
+  name: "fast.nfs"
+
+storageClasses:
+  - name: fast-nfs
+    defaultClass: false
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+  - name: fast-nfs-immediate
+    defaultClass: false
+    annotations:
+      storageclass.kubevirt.io/is-default-virt-class: "true"
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+
+# if your cluster supports snapshots you may enable below
+volumeSnapshotClasses:
+  - name: fast-nfs
+    parameters:
+    # if true, snapshots will be created with zfs send/receive
+    # detachedSnapshots: "false"
+    secrets:
+      snapshotter-secret:
+
+node:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    localtimeHostPath: false
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+  cleanup:
+    image: ghcr.io/containerd/busybox:1.36
+
+controller:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+
+driver:
+  existingConfigSecret: fast-nfs-driver-config
+  config:
+    driver: freenas-nfs
+
+csiProxy:
+  enabled: true
+  image: ghcr.io/democratic-csi/csi-grpc-proxy:latest

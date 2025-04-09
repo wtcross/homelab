@@ -1,0 +1,31 @@
+---
+fullnameOverride: "consul"
+nameOverride: ""
+
+global:
+  enabled: true
+  openshift:
+    enabled: true
+  argocd:
+    enabled: true
+  gossipEncryption:
+    autoGenerate: true
+  tls:
+    enabled: true
+    enableAutoEncrypt: true
+    verify: true
+
+server:
+  replicas: 3
+  storage: 20Gi
+  storageClass: fast-nfs
+
+ui:
+  enabled: true
+
+client:
+  enabled: true
+
+metrics:
+  enabled: true
+  enableAgentMetrics: true

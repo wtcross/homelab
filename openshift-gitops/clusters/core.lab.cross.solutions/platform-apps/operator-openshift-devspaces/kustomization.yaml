@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
+resources:
+  - https://github.com/wtcross/gitops-catalog/openshift-dev-spaces/operator/overlays/stable?ref=main
+  - namespace.yaml
+  - networkpolicy.yaml

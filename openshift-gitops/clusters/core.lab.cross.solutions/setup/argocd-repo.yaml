@@ -1,0 +1,16 @@
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: repo-lab-gitops
+  namespace: openshift-gitops
+  labels:
+    argocd.argoproj.io/secret-type: repository
+  annotations:
+    managed-by: argocd.argoproj.io
+stringData:
+  name: lab-gitops
+  project: local-cluster
+  type: git
+  url: https://github.com/wtcross/homelab.git
+type: Opaque

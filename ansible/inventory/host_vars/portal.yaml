@@ -1,0 +1,4 @@
+---
+ansible_host: 192.168.10.2
+eth_mac_address: 94:c6:91:af:e7:58
+ip4_gateway: 192.168.10.1

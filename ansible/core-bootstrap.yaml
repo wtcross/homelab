@@ -1,0 +1,79 @@
+---
+# TODO
+#- name: Create RoleBinding for initial cluster-admin user
+
+# TODO (probably use lookup mappingMethod and use Ansible to create users)
+#- name: Configure Google OAuth
+
+- name: Bootstrap the cluster with GitOps
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Create the openshift-gitops namespace
+      kubernetes.core.k8s:
+        name: openshift-gitops
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Install the GitOps operator and deploy default ArgoCD instance
+      command: oc apply -k ../openshift-gitops/clusters/core.lab.cross.solutions/bootstrap-gitops
+      register: oc_apply_result
+      changed_when: "'configured' in oc_apply_result.stdout or 'created' in oc_apply_result.stdout"
+
+    - name: Show results
+      debug:
+        var: oc_apply_result.stdout_lines
+
+    - name: Wait until GitOps operator reaches the desired status
+      kubernetes.core.k8s_info:
+        api_version: argoproj.io/v1beta1
+        namespace: openshift-gitops
+        kind: ArgoCD
+        name: openshift-gitops
+      register: argocd
+      retries: 20
+      delay: 5
+      until: >
+        argocd.resources | length > 0 and
+        argocd.resources[0].status.phase == 'Available'
+
+    - name: Set up the local project and create apps
+      command: oc apply -k ../openshift-gitops/clusters/core.lab.cross.solutions/setup
+      register: oc_apply_result
+      changed_when: "'configured' in oc_apply_result.stdout or 'created' in oc_apply_result.stdout"
+
+    - name: Show results
+      debug:
+        var: oc_apply_result.stdout_lines
+
+    - name: Create the democratic-csi namespace
+      kubernetes.core.k8s:
+        state: present
+        name: democratic-csi
+        api_version: v1
+        kind: Namespace
+
+    - name: Create the democratic-csi driver config secrets
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: "{{ item }}-driver-config"
+            namespace: democratic-csi
+          data:
+            driver-config-file.yaml: "{{ lookup('ansible.builtin.file', '../.priv/' ~ item ~ '-driver-config-file.yaml' ) | b64encode }}"
+          type: Opaque
+      loop:
+        - fast-iscsi
+        - fast-nfs
+        - tank-nfs
+
+    - name: Create the democratic-csi iSCSI mutal CHAP secret
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('ansible.builtin.file', '../.priv/iscsi-chap.yaml') }}"

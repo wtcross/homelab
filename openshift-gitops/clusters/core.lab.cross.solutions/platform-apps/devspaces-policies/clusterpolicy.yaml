@@ -1,0 +1,77 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: devspaces-workspace-networkpolicy
+spec:
+  rules:
+    - name: add-networkpolicy-ingress-devspaces-to-workspace
+      match:
+        any:
+          - resources:
+              kinds:
+                - Namespace
+              name: "che*-*-devspaces-*"
+              operations:
+                - CREATE
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - openshift-operators
+                - openshift-devspaces
+      generate:
+        generateExisting: true
+        synchronize: true
+        kind: NetworkPolicy
+        apiVersion: networking.k8s.io/v1
+        name: allow-ingress-devspaces-to-workspace
+        namespace: "{{ request.object.metadata.name }}"
+        data:
+          metadata:
+            labels:
+              created-by: kyverno-policy-devspaces-workspace-networkpolicy
+          spec:
+            podSelector: {}
+            ingress:
+              - from:
+                  - namespaceSelector:
+                      matchLabels:
+                        kubernetes.io/metadata.name: openshift-devspaces
+            policyTypes:
+              - Ingress
+    - name: add-networkpolicy-ingress-workspace-to-devspaces
+      match:
+        any:
+          - resources:
+              kinds:
+                - Namespace
+              name: "che*-*-devspaces-*"
+              operations:
+                - CREATE
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - openshift-operators
+                - openshift-devspaces
+      generate:
+        generateExisting: true
+        synchronize: true
+        kind: NetworkPolicy
+        apiVersion: networking.k8s.io/v1
+        name: allow-ingress-workspace-to-devspaces
+        namespace: openshift-devspaces
+        data:
+          metadata:
+            labels:
+              created-by: kyverno-policy-devspaces-workspace-networkpolicy
+          spec:
+            podSelector: {}
+            ingress:
+              - from:
+                  - namespaceSelector:
+                      matchLabels:
+                        kubernetes.io/metadata.name: "{{ request.object.metadata.name }}"
+            policyTypes:
+              - Ingress

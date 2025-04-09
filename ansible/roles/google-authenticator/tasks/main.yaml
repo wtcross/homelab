@@ -1,0 +1,77 @@
+---
+
+- name: Install the google-authenticator package
+  become: true
+  dnf:
+    name: google-authenticator
+    state: latest
+
+- name: Generate the google-authenticator config (secret and recovery codes)
+  become: false
+  ansible.builtin.expect:
+    command: google-authenticator -t -d -f -r 3 -R 30 -W -Q NONE -e 6 -l "{{ inventory_hostname }}"
+    creates: ~/.google_authenticator
+    responses:
+      "Enter code from app \\(-1 to skip\\): ": "-1"
+  register: google_authenticator_task
+  no_log: true
+
+- name: Get the secret from the google-authenticator file
+  when: google_authenticator_task is changed
+  become: false
+  ansible.builtin.shell:
+    cmd: cat ~/.google_authenticator | head -n 1
+  changed_when: false
+  register: google_authenticator_secret
+
+- name: Get the recovery codes from the google-authenticator file
+  when: google_authenticator_task is changed
+  become: false
+  ansible.builtin.shell:
+    cmd: cat ~/.google_authenticator | grep -E '^[[:digit:]]+'
+  changed_when: false
+  register: google_authenticator_recovery_codes
+
+- name: Store the machine-specific TOTP secret 1password
+  when: google_authenticator_task is changed
+  become: false
+  block:
+    - name: Delete the existing field for the TOTP
+      ansible.builtin.shell:
+        cmd: |
+          op item get --vault='{{ op_vault }}' {{ totp_credential_id }} --format json | jq '(.fields[] | select(.label == "totp") | .type) = "delete" | (.fields[] | select(.label == "totp") | .value) = ""' | op item edit --vault='{{ op_vault }}' {{ totp_credential_id }}
+      vars:
+        totp_secret: "{{ google_authenticator_secret.stdout }}"
+        totp_uri: otpauth://totp/Lab:{{ totp_credential_id }}?secret={{ totp_secret }}&issuer=Cross%20Solutions
+      delegate_to: localhost
+
+    - name: Add a TOTP field for the new secret
+      ansible.builtin.shell:
+        cmd: |
+          op item get --vault='{{ op_vault }}' {{ totp_credential_id }} --format json | jq '.fields += [{"id": "TOTP_{{ lookup('pipe', 'date +%s%N') }}", "type": "OTP", "label": "totp", "value": "{{ totp_uri }}"}]' | op item edit --vault='{{ op_vault }}' {{ totp_credential_id }}
+      vars:
+        totp_secret: "{{ google_authenticator_secret.stdout }}"
+        totp_uri: otpauth://totp/Lab:{{ totp_credential_id }}?secret={{ totp_secret }}&issuer=Cross%20Solutions
+      delegate_to: localhost
+
+- name: Store the machine-specific TOTP recovery codes in 1password
+  when: google_authenticator_task is changed
+  become: false
+  block:
+    - name: Delete the existing field for the TOTP recovery codes
+      become: false
+      ansible.builtin.shell:
+        cmd: |
+          op item get --vault='{{ op_vault }}' {{ totp_credential_id }} --format json | jq '(.fields[] | select(.label == "totp-recovery-codes") | .type) = "delete" | (.fields[] | select(.label == "totp-recovery-codes") | .value) = ""' | op item edit --vault='{{ op_vault }}' {{ totp_credential_id }}
+      vars:
+        totp_recovery_codes: "{{ google_authenticator_recovery_codes.stdout }}"
+      delegate_to: localhost
+
+    - name: Add TOTP recovery codes field
+      become: false
+      ansible.builtin.shell:
+        cmd: |
+          op item get --vault='{{ op_vault }}' {{ totp_credential_id }} --format json | jq '.fields += [{"id": "RECOVERY_CODES_{{ lookup('pipe', 'date +%s%N') }}", "type": "SECRET", "label": "totp-recovery-codes", "value": "{{ totp_recovery_codes }}"}]' | op item edit --vault='{{ op_vault }}' {{ totp_credential_id }}
+      vars:
+        totp_recovery_codes: "{{ google_authenticator_recovery_codes.stdout | replace('\n', ' ') }}"
+      delegate_to: localhost

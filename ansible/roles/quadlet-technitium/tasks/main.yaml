@@ -1,0 +1,203 @@
+- emmc
+- sandisk
+- lexar
+
+---
+- name: Create the {{ _tdns_user }} group
+  become: yes
+  ansible.builtin.group:
+    state: present
+    name: "{{ _tdns_group }}"
+    gid: "{{ _tdns_gid }}"
+
+- name: Create the {{ _tdns_user }} user
+  become: yes
+  ansible.builtin.user:
+    state: present
+    system: yes
+    name: "{{ _tdns_user }}"
+    create_home: yes
+    shell: /sbin/nologin
+    uid: "{{ _tdns_uid }}"
+
+- name: Get user info
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ _tdns_user }}"
+
+- name: Set subuids
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/subuid"
+    regexp: "{{ _tdns_user }}"
+    line: "{{ _tdns_user }}:{{ getent_passwd[_tdns_user].1 | int | bitwise_shift_left(subuid_bitshift) }}:65536"
+    backup: true
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  register: set_subuid
+
+
+- name: Set subgids
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/subgid"
+    regexp: "{{ _tdns_user }}"
+    line: "{{ _tdns_user }}:{{ getent_passwd[_tdns_user].2 | int | bitwise_shift_left(subgid_bitshift) }}:65536"
+    backup: true
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  register: set_subgid
+
+- name: Migrate podman storage to reflect new UID/GID mappings
+  become: yes
+  become_user: "{{ _tdns_user }}"
+  ansible.builtin.command:
+    cmd: podman system migrate
+  when: set_subuid is changed or set_subgid is changed
+
+- name: Enable lingering for {{ _tdns_user }}
+  become: yes
+  ansible.builtin.command:
+    cmd: loginctl enable-linger {{ _tdns_user }}
+    creates: /var/lib/systemd/linger/{{ _tdns_user }}
+  register: enable_linger
+#  changed_when: enable_linger.start and enable_linger.rc == 0
+
+- name: Restart the systemd-logind service so lingering for {{ _tdns_user }} takes effect
+  become: yes
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: systemd-logind
+  when: enable_linger is changed
+
+- name: Create a directory for the technitium data volume
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /home/{{ _tdns_user }}/.local/share/technitium
+    owner: "{{ _tdns_user }}"
+    group: "{{ _tdns_group }}"
+    recurse: yes
+    setype: container_file_t
+    seuser: user_u
+#    seuser: system_u
+
+- name: Ensure the systemd quadlet unit directory exists for {{ _tdns_user }}
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /home/{{ _tdns_user }}/.config/containers/systemd
+    owner: "{{ _tdns_user }}"
+    group: "{{ _tdns_group }}"
+    mode: "0750"
+
+- name: Create the podman auth.json file
+  become: yes
+  ansible.builtin.copy:
+    src: /run/user/1000/containers/auth.json
+    dest: /run/user/{{ _tdns_uid }}/containers/auth.json
+    owner: "{{ _tdns_user }}"
+    group: "{{ _tdns_group }}"
+    mode: "600"
+
+# fix
+- name: Pull latest version of the technitium image
+  become: yes
+  become_user: "{{ _tdns_user }}"
+  ansible.builtin.command:
+    cmd: podman pull docker.io/technitium/dns-server:latest
+
+- name: Ensure technitium quadlet units are in place
+  become: yes
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /home/{{ _tdns_user }}/.config/containers/systemd/{{ item }}
+    owner: "{{ _tdns_user }}"
+    group: "{{ _tdns_group }}"
+    mode: "0644"
+  loop:
+    - technitium.kube
+    - technitium.network
+    - technitium.yaml
+  register: copy_units
+
+#- name: Trigger user session to ensure systemd --user instance starts
+#  become: yes
+#  ansible.builtin.command:
+#    cmd: systemd-run --uid={{ _tdns_uid }} --gid={{ _tdns_gid }} --pty /bin/true
+#  register: user_session
+#  changed_when: false
+
+- name: Reload the user-level systemd daemon if any quadlet units changed
+  become: yes
+  become_user: "{{ _tdns_user }}"
+#  environment:
+#    XDG_RUNTIME_DIR: /run/user/{{ _tdns_uid }}
+#    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _tdns_uid }}/bus"
+  ansible.builtin.command:
+    cmd: systemctl --user daemon-reload
+#  ansible.builtin.systemd_service:
+#    daemon_reload: yes
+#    scope: user
+  when: copy_units is changed
+
+- name: Restart the technitium service if any quadlet units changed
+  become: yes
+  become_user: "{{ _tdns_user }}"
+#  environment:
+#    XDG_RUNTIME_DIR: /run/user/2000
+  ansible.builtin.systemd_service:
+    state: restarted
+    scope: user
+    name: technitium
+  when: copy_units is changed
+
+- name: Ensure the technitium service is enabled and started
+  become: yes
+  become_user: "{{ _tdns_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/2000
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    scope: user
+    name: technitium
+
+- name: Ensure appropriate firewall rules are in place
+  become: yes
+  block:
+    - name: Allow web console access
+      ansible.posix.firewalld:
+        state: enabled
+        permanent: yes
+        immediate: yes
+        zone: public
+        port: 53443/tcp
+
+    - name: Forward ports for DNS/HTTP
+      ansible.posix.firewalld:
+        state: enabled
+        permanent: yes
+        immediate: yes
+        zone: public
+        rich_rule: rule family=ipv4 forward-port port=443 protocol=tcp to-port=5443
+
+    - name: Forward ports for DNS/UDP
+      ansible.posix.firewalld:
+        state: enabled
+        permanent: yes
+        immediate: yes
+        zone: public
+        rich_rule: rule family=ipv4 forward-port port=53 protocol=udp to-port=5053
+
+    - name: Forward ports for DNS/TCP
+      ansible.posix.firewalld:
+        state: enabled
+        permanent: yes
+        immediate: yes
+        zone: public
+        rich_rule: rule family=ipv4 forward-port port=53 protocol=tcp to-port=5053

@@ -1,0 +1,29 @@
+---
+- name: Install NTP
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ ntp_package }}"
+    state: present
+
+- name: Configure NTP
+  become: true
+  ansible.builtin.template:
+    src: ntp.conf.j2
+    dest: "{{ ntp_config_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+  register: configure_ntp
+
+- name: Set the timezone
+  become: true
+  ansible.builtin.timezone:
+    name: "{{ ntp_timezone }}"
+
+- name: Restart NTP
+  when: configure_ntp.changed
+  become: true
+  ansible.builtin.service:
+    name: "{{ ntp_service_name }}"
+    state: restarted

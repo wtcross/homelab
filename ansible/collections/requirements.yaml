@@ -1,0 +1,7 @@
+---
+collections:
+  - ansible.posix
+  - community.general
+  - community.okd
+  - kubernetes.core
+  - containers.podman
