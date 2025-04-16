@@ -20,6 +20,22 @@ server:
       termination: edge
   standalone:
     enabled: false
+  disruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vault
+            topologyKey: "kubernetes.io/hostname"
+  terminationGracePeriodSeconds: 30
   ha:
     enabled: true
     replicas: 3
