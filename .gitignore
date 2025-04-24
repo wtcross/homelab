@@ -1,0 +1,10 @@
+.idea/
+.scratch/
+.priv/
+.venv/
+.env
+.env.secret
+ansible/.tmp/
+galaxy-roles/*/
+ansible/collections/ansible_collections/
+*.ignore

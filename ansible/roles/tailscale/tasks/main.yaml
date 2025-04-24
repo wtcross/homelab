@@ -1,0 +1,20 @@
+---
+- name: Add the Tailscale repository
+  become: true
+  ansible.builtin.command: dnf config-manager --add-repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+  args:
+    creates: /etc/yum.repos.d/tailscale.repo
+
+- name: Install Tailscale
+  become: true
+  ansible.builtin.dnf:
+    name: tailscale
+    update_cache: true
+    state: present
+
+- name: Enable the Tailscale service
+  become: true
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: yes
+    state: started

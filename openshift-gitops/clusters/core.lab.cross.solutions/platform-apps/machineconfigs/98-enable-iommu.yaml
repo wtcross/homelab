@@ -1,0 +1,13 @@
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: 98-enable-iommu.yaml
+spec:
+  config:
+    ignition:
+      version: 3.4.0
+  kernelArguments:
+    - amd_iommu=on
