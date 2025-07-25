@@ -5,7 +5,7 @@ metadata:
   name: compute-0-storage-network
 spec:
   nodeSelector:
-    kubernetes.io/hostname: compute-0
+    kubernetes.io/hostname: compute-0.core.lab.cross.solutions
   maxUnavailable: 1
   desiredState:
     interfaces:
@@ -34,7 +34,7 @@ metadata:
   name: compute-1-storage-network
 spec:
   nodeSelector:
-    kubernetes.io/hostname: compute-1
+    kubernetes.io/hostname: compute-1.core.lab.cross.solutions
   maxUnavailable: 1
   desiredState:
     interfaces:
@@ -63,7 +63,7 @@ metadata:
   name: compute-2-storage-network
 spec:
   nodeSelector:
-    kubernetes.io/hostname: compute-2
+    kubernetes.io/hostname: compute-2.core.lab.cross.solutions
   maxUnavailable: 1
   desiredState:
     interfaces:
@@ -92,7 +92,7 @@ metadata:
   name: compute-3-storage-network
 spec:
   nodeSelector:
-    kubernetes.io/hostname: compute-3
+    kubernetes.io/hostname: compute-3.core.lab.cross.solutions
   maxUnavailable: 1
   desiredState:
     interfaces:
@@ -121,7 +121,7 @@ metadata:
   name: compute-4-storage-network
 spec:
   nodeSelector:
-    kubernetes.io/hostname: compute-4
+    kubernetes.io/hostname: compute-4.core.lab.cross.solutions
   maxUnavailable: 1
   desiredState:
     interfaces:
@@ -150,7 +150,7 @@ metadata:
   name: compute-5-storage-network
 spec:
   nodeSelector:
-    kubernetes.io/hostname: compute-5
+    kubernetes.io/hostname: compute-5.core.lab.cross.solutions
   maxUnavailable: 1
   desiredState:
     interfaces:
