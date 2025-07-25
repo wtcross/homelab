@@ -4,7 +4,7 @@ kind: ClusterVersion
 metadata:
   name: version
 spec:
-  channel: stable-4.18
-  clusterID: 77126a09-e860-4078-936c-4f377d6c03cb
+  channel: stable-4.19
+  clusterID: bbc4c48f-8600-43d7-9ab9-662b93dfd0be
   desiredUpdate:
-    version: 4.18.8
+    version: 4.19.4
