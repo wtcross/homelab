@@ -1,0 +1,86 @@
+---
+csiDriver:
+  name: "fast.iscsi"
+
+storageClasses:
+  - name: fast-iscsi
+    defaultClass: false
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+    allowVolumeExpansion: true
+#    storageClassAnnotations:
+#      description: "iSCSI with mutual CHAP"
+    parameters:
+      fsType: ext4
+      # TODO: FIX MUTUAL CHAP AUTH!!!!
+      # https://github.com/democratic-csi/democratic-csi/blob/master/docs/storage-class-parameters.md#enabling-chap-authentication
+#      csi.storage.k8s.io/provisioner-secret-name: iscsi-chap
+#      csi.storage.k8s.io/provisioner-secret-namespace: democratic-csi
+#      csi.storage.k8s.io/controller-publish-secret-name: iscsi-chap
+#      csi.storage.k8s.io/controller-publish-secret-namespace: democratic-csi
+#      csi.storage.k8s.io/node-stage-secret-name: iscsi-chap
+#      csi.storage.k8s.io/node-stage-secret-namespace: democratic-csi
+#      csi.storage.k8s.io/node-publish-secret-name: iscsi-chap
+#      csi.storage.k8s.io/node-publish-secret-namespace: democratic-csi
+#      csi.storage.k8s.io/controller-expand-secret-name: iscsi-chap
+#      csi.storage.k8s.io/controller-expand-secret-namespace: democratic-csi
+    secrets:
+      provisioner-secret:
+#        node-db.node.session.auth.authmethod: CHAP
+      controller-publish-secret:
+#        node-db.node.session.auth.authmethod: CHAP
+      node-stage-secret:
+#        node-db.node.session.auth.authmethod: CHAP
+      controller-expand-secret:
+#        node-db.node.session.auth.authmethod: CHAP
+  - name: fast-iscsi-immediate
+    defaultClass: false
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    parameters:
+      fsType: ext4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      controller-expand-secret:
+# if your cluster supports snapshots you may enable below
+volumeSnapshotClasses:
+  - name: fast-iscsi
+#    parameters:
+      # if true, snapshots will be created with zfs send/receive
+#      detachedSnapshots: "false"
+      # TODO: FIX MUTUAL CHAP AUTH!!!!
+      # https://github.com/democratic-csi/democratic-csi/blob/master/docs/storage-class-parameters.md#enabling-chap-authentication
+#      csi.storage.k8s.io/snapshotter-secret-name: iscsi-chap
+#      csi.storage.k8s.io/snapshotter-secret-namespace: democratic-csi
+    secrets:
+      snapshotter-secret:
+#        node-db.node.session.auth.authmethod: CHAP_MUTUAL
+
+node:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    localtimeHostPath: false
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+
+controller:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    image: ghcr.io/democratic-csi/democratic-csi:latest
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+
+driver:
+  existingConfigSecret: fast-iscsi-driver-config
+  config:
+    driver: freenas-iscsi

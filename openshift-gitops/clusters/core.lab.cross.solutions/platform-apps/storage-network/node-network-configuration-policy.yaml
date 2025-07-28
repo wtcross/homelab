@@ -1,0 +1,174 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-0-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-0.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-storage
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp6s19
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.13
+              prefix-length: 24
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-1-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-1.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-storage
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp6s19
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.14
+              prefix-length: 24
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-2-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-2.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-storage
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp6s19
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.15
+              prefix-length: 24
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-3-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-3.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-storage
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp102s0
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.16
+              prefix-length: 24
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-4-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-4.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-storage
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp102s0
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.17
+              prefix-length: 24
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-5-storage-network
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-5.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: br-storage
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp102s0
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.18
+              prefix-length: 24
