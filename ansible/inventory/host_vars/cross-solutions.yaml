@@ -1,0 +1,43 @@
+---
+aap_hostname: aap.apps.core.lab.cross.solutions
+
+aap_tenant_name: cross-solutions
+
+aap_tenant_env_base: "{{ 'AAP_TENANT_' ~ (aap_tenant_name | trim | upper | regex_replace('[\\-\\.]', '_')) }}"
+
+# Access Management
+aap_tenant_organization_name: "{{ aap_tenant_name }}"
+aap_tenant_organization_description: lab.cross.solutions automation
+
+aap_tenant_teams:
+  - name: "{{ aap_tenant_name }}/administrators"
+    description: Permissions needed to manage everything in organization scope
+    role_definition: Tenant Organization Admin
+  - name: "{{ aap_tenant_name }}/execution-self-service"
+    description: Permission to self-service Automation Execution
+    role_definition: Tenant Organization Automation Execution Self-Service
+  - name: "{{ aap_tenant_name}}/auditors"
+    description: Read access to everything in organization scope
+    role_definition: Tenant Organization Auditor
+
+# Automation Hub
+aap_tenant_collection_remotes:
+  - name: rh-certified
+    tls_validation: true
+    signed_only: true
+    sync_dependencies: true
+    url: https://console.redhat.com/api/automation-hub/content/published/
+    auth_url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    token: "{{ lookup('ansible.builtin.env', aap_tenant_env_base ~ '_RH_AUTOMATION_HUB_TOKEN') }}"
+  - name: rh-validated
+    tls_validation: true
+    signed_only: true
+    sync_dependencies: true
+    url: https://console.redhat.com/api/automation-hub/content/validated/
+    auth_url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    token: "{{ lookup('ansible.builtin.env', aap_tenant_env_base ~ '_RH_AUTOMATION_HUB_TOKEN') }}"
+  - name: community
+    tls_validation: true
+    signed_only: false
+    sync_dependencies: true
+    url: https://galaxy.ansible.com/

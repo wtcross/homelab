@@ -1,0 +1,32 @@
+---
+version: 3
+
+images:
+  base_image:
+    name: registry.redhat.io/ansible-automation-platform-26/ee-minimal-rhel9:latest
+
+dependencies:
+  python: requirements.txt
+  galaxy:
+    collections:
+      - name: redhat.openshift_virtualization
+  exclude:
+    system:
+    - openshift-clients # Exclude this package because its repo requires a red hat subscription and I use a Fedora host
+
+additional_build_steps:
+  prepend_galaxy:
+    # See the Ansible docs for detail on how to configure the ansible-galaxy client using environment variables:
+    # https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html#galaxy-server-config
+    - ENV ANSIBLE_GALAXY_SERVER_LIST=rh_automation_hub_certified,rh_automation_hub_validated
+
+    - ENV ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_CERTIFIED_URL=https://console.redhat.com/api/automation-hub/content/published/
+    - ENV ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_CERTIFIED_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    - ARG ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_CERTIFIED_TOKEN
+
+    - ENV ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_VALIDATED_URL=https://console.redhat.com/api/automation-hub/content/validated/
+    - ENV ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_VALIDATED_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    - ARG ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_VALIDATED_TOKEN
+
+options:
+  package_manager_path: /usr/bin/microdnf

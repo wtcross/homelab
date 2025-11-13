@@ -1,0 +1,5 @@
+---
+- name: Configure the 1password connect server
+  hosts: op-connect
+  gather_facts: true
+  roles:

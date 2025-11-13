@@ -1,0 +1,13 @@
+---
+- name: Verify that all required variables are set
+  become: yes
+  delegate_to: localhost
+  ansible.builtin.fail:
+    msg: Missing required variable: {{ item }}
+  when: lookup('vars', item) is undefined
+  items:
+    - quadlet_uid
+    - quadlet_gid
+    - quadlet_user
+    - quadlet_group
+    - quadlet_service

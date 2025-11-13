@@ -1,0 +1,60 @@
+---
+global:
+  enabled: true
+  openshift: true
+  namespace: vault
+
+server:
+  dataStorage:
+    enabled: false
+  auditStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: fast-nfs
+    mountPath: /vault/audit
+    accessMode: ReadWriteOnce
+  route:
+    enabled: true
+    host: vault.apps.core.lab.cross.solutions
+    tls:
+      termination: edge
+  standalone:
+    enabled: false
+  disruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vault
+            topologyKey: "kubernetes.io/hostname"
+  terminationGracePeriodSeconds: 30
+  ha:
+    enabled: true
+    replicas: 3
+    config: |
+      storage "consul" {
+        address         = "consul-server:8501"
+        scheme          = "https"
+        path            = "vault/"
+        tls_skip_verify = true
+      }
+      listener "tcp" {
+        address     = "0.0.0.0:8200"
+        tls_disable = 1
+      }
+      service_registration "kubernetes" {}
+      ui = true
+
+injector:
+  enabled: true
+
+ui:
+  enabled: true

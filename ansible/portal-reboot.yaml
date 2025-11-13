@@ -1,0 +1,8 @@
+---
+- hosts: portal
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Reboot the system
+      ansible.builtin.reboot:

@@ -1,0 +1,4 @@
+---
+- name: Set up the quadlet service user
+  ansible.builtin.include_role:
+    name: local-quadlet-service-user

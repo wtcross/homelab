@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+  - github.com/minio/operator?ref=v7.1.1
+  - use-nonroot-v2-scc.yaml
+  - allow-minio-operator-sa-nonroot-v2.yaml

@@ -1,0 +1,37 @@
+[project]
+name = "homelab"
+version = "0.1.0"
+description = "All things homelab"
+readme = "README.md"
+requires-python = ">=3.13.8"
+dependencies = [
+    "ansible>=12",
+    "git-filter-repo>=2.47.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "bindep>=2.13.0",
+    "jmespath>=1.0.1",
+    "kubernetes>=34.1.0",
+    "pyrefly>=0.40",
+    "ruff>=0.14",
+    "yamllint>=1.36",
+]
+
+[tool.pyrefly]
+project-includes = ["**/*"]
+project-excludes = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/*venv/**/*",
+]
+
+[tool.uv.workspace]
+members = [
+    "ansible/execution-environments/*"
+]

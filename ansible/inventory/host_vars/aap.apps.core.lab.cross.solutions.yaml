@@ -1,0 +1,122 @@
+---
+ansible_host: localhost
+ansible_connection: local
+ansible_python_interpreter: "{{ playbook_dir }}/../.venv/bin/python3"
+
+aap_hostname: aap.apps.core.lab.cross.solutions
+
+aap_k8s_namespace: ansible-automation-platform
+aap_rh_username: "{{ lookup('ansible.builtin.env', 'AAP_RH_USERNAME') }}"
+aap_rh_password: "{{ lookup('ansible.builtin.env', 'AAP_RH_PASSWORD') }}"
+
+aap_settings:
+  SESSION_COOKIE_AGE: 3600 # seconds
+
+aap_role_definitions:
+  - name: Tenant Organization Admin
+    description: Permissions needed to manage a tenant organization
+    content_type: shared.organization
+    permissions:
+      - shared.view_organization
+      - eda.add_activation
+      - eda.change_activation
+      - eda.delete_activation
+      - eda.disable_activation
+      - eda.enable_activation
+      - eda.restart_activation
+      - eda.view_activation
+      - eda.view_auditrule
+      - eda.add_credentialinputsource
+      - eda.change_credentialinputsource
+      - eda.delete_credentialinputsource
+      - eda.view_credentialinputsource
+      - eda.add_decisionenvironment
+      - eda.change_decisionenvironment
+      - eda.delete_decisionenvironment
+      - eda.view_decisionenvironment
+      - eda.add_edacredential
+      - eda.change_edacredential
+      - eda.delete_edacredential
+      - eda.view_edacredential
+      - eda.add_eventstream
+      - eda.change_eventstream
+      - eda.delete_eventstream
+      - eda.view_eventstream
+      - eda.add_project
+      - eda.change_project
+      - eda.delete_project
+      - eda.sync_project
+      - eda.view_project
+      - eda.view_rulebook
+      - eda.view_rulebookprocess
+      - awx.add_credential
+      - awx.change_credential
+      - awx.delete_credential
+      - awx.use_credential
+      - awx.view_credential
+      - awx.add_executionenvironment
+      - awx.change_executionenvironment
+      - awx.delete_executionenvironment
+      - awx.add_inventory
+      - awx.adhoc_inventory
+      - awx.change_inventory
+      - awx.delete_inventory
+      - awx.update_inventory
+      - awx.use_inventory
+      - awx.view_inventory
+      - awx.change_jobtemplate
+      - awx.delete_jobtemplate
+      - awx.execute_jobtemplate
+      - awx.view_jobtemplate
+      - awx.add_notificationtemplate
+      - awx.change_notificationtemplate
+      - awx.delete_notificationtemplate
+      - awx.view_notificationtemplate
+      - awx.add_project
+      - awx.change_project
+      - awx.delete_project
+      - awx.update_project
+      - awx.use_project
+      - awx.view_project
+      - awx.add_workflowjobtemplate
+      - awx.approve_workflowjobtemplate
+      - awx.change_workflowjobtemplate
+      - awx.delete_workflowjobtemplate
+      - awx.execute_workflowjobtemplate
+      - awx.view_workflowjobtemplate
+  - name: Tenant Organization Auditor
+    description: Permissions needed to view everything related to an organization
+    content_type: shared.organization
+    permissions:
+      - shared.view_organization
+      - awx.view_inventory
+      - awx.view_jobtemplate
+      - awx.view_credential
+      - awx.view_notificationtemplate
+      - awx.view_project
+      - awx.view_workflowjobtemplate
+      - eda.view_activation
+      - eda.view_auditrule
+      - eda.view_credentialinputsource
+      - eda.view_decisionenvironment
+      - eda.view_edacredential
+      - eda.view_eventstream
+      - eda.view_project
+      - eda.view_rulebook
+      - eda.view_rulebookprocess
+  - name: Tenant Organization Automation Execution Self-Service
+    description: Permissions needed to run automation and work with inventory without making changes
+    content_type: shared.organization
+    permissions:
+      - shared.view_organization
+      - awx.update_inventory
+      - awx.use_inventory
+      - awx.view_inventory
+      - awx.execute_jobtemplate
+      - awx.view_jobtemplate
+      - awx.view_notificationtemplate
+      - awx.update_project
+      - awx.use_project
+      - awx.view_project
+      - awx.execute_workflowjobtemplate
+      - awx.view_workflowjobtemplate

@@ -1,0 +1,74 @@
+---
+csiDriver:
+  name: "tank.nfs"
+
+storageClasses:
+  - name: tank-nfs
+    defaultClass: true
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+
+# if your cluster supports snapshots you may enable below
+volumeSnapshotClasses:
+  - name: tank-nfs
+    parameters:
+    # if true, snapshots will be created with zfs send/receive
+    # detachedSnapshots: "false"
+    secrets:
+      snapshotter-secret:
+
+node:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    localtimeHostPath: false
+    image:
+      registry: ghcr.io/democratic-csi/democratic-csi
+      tag: latest
+      pullPolicy: Always
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+  cleanup:
+    image:
+      registry: quay.io/microshift/busybox
+      tag: 1.37
+      pullPolicy: Always
+
+controller:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    image:
+      registry: ghcr.io/democratic-csi/democratic-csi
+      tag: latest
+      pullPolicy: Always
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+
+driver:
+  existingConfigSecret: tank-nfs-driver-config
+  config:
+    driver: freenas-nfs
+
+csiProxy:
+  enabled: true
+  image:
+    registry: ghcr.io/democratic-csi/csi-grpc-proxy
+    tag: latest
+    pullPolicy: Always

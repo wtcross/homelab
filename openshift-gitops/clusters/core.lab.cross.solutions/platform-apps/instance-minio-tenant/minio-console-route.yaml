@@ -1,0 +1,16 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: minio-console
+  namespace: minio
+spec:
+  host: minio-console.apps.core.lab.cross.solutions
+  to:
+    kind: Service
+    name: minio-console
+    weight: 100
+  port:
+    targetPort: 9090
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

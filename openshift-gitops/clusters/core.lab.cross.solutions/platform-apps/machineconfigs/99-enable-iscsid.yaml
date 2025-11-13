@@ -1,0 +1,13 @@
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-enable-iscsid
+spec:
+  config:
+    ignition:
+      version: 3.4.0
+    systemd:
+      units:
+        - enabled: true
+          name: iscsid.service

@@ -1,0 +1,14 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: allow-minio-tenant-sa-nonroot-v2
+  namespace: minio
+subjects:
+- kind: ServiceAccount
+  name: minio-tenant
+  namespace: minio
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: use-nonroot-v2-scc

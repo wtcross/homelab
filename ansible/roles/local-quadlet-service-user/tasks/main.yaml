@@ -1,0 +1,154 @@
+---
+- ansible.builtin.include_tasks: preflight-checks.yaml
+
+- set_fact:
+    _quadlet_volume_base_path: /home/{{ quadlet_user }}/.local/share/quadlet-volumes
+
+- name: Create the {{ quadlet_user }} group
+  become: yes
+  ansible.builtin.group:
+    state: present
+    name: "{{ quadlet_group }}"
+    gid: "{{ quadlet_gid }}"
+
+- name: Create the {{ quadlet_user }} user
+  become: yes
+  ansible.builtin.user:
+    state: present
+    system: yes
+    name: "{{ quadlet_user }}"
+    create_home: yes
+    shell: /sbin/nologin
+    uid: "{{ quadlet_uid }}"
+
+- name: Get user information for the {{ quadlet_user }} user from the passwd database
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ quadlet_user }}"
+
+- name: Set subuids for {{ quadlet_user }} user
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/subuid"
+    regexp: "{{ quadlet_user }}"
+    line: "{{ quadlet_user }}:{{ getent_passwd[quadlet_user].1 | int | bitwise_shift_left(_quadlet_subuid_bitshift) }}:65536"
+    backup: true
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  register: set_subuid
+
+- name: Set subgids for {{ quadlet_user }} user
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/subgid"
+    regexp: "{{ quadlet_user }}"
+    line: "{{ quadlet_user }}:{{ getent_passwd[quadlet_user].2 | int | bitwise_shift_left(_quadlet_subgid_bitshift) }}:65536"
+    backup: true
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  register: set_subgid
+
+- name: Migrate podman storage to reflect new UID/GID mappings
+  become: yes
+  become_user: "{{ quadlet_user }}"
+  ansible.builtin.command:
+    cmd: podman system migrate
+  when: set_subuid is changed or set_subgid is changed
+
+- name: Enable lingering for {{ quadlet_user }} user
+  become: yes
+  ansible.builtin.command:
+    cmd: loginctl enable-linger {{ quadlet_user }}
+    creates: /var/lib/systemd/linger/{{ quadlet_user }}
+  register: enable_linger
+ changed_when: enable_linger.start and enable_linger.rc == 0
+
+- name: Restart the systemd-logind service so lingering for {{ quadlet_user }} takes effect
+  become: yes
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: systemd-logind
+  when: enable_linger is changed
+
+- name: Create a directory for each volume
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: {{ _quadlet_volume_base_path }}/{{ item }}
+    owner: "{{ quadlet_user }}"
+    group: "{{ quadlet_group }}"
+    recurse: yes
+    setype: container_file_t
+    seuser: user_u
+  loop: "{{ quadlet_volume_names | default([]) }}"
+
+- name: Create the systemd quadlet unit directory for {{ quadlet_user }}
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /home/{{ quadlet_user }}/.config/containers/systemd
+    owner: "{{ quadlet_user }}"
+    group: "{{ quadlet_group }}"
+    mode: "0750"
+
+# - name: Ensure technitium quadlet units are in place
+#   become: yes
+#   ansible.builtin.template:
+#     src: "{{ item }}.j2"
+#     dest: /home/{{ quadlet_user }}/.config/containers/systemd/{{ item }}
+#     owner: "{{ quadlet_user }}"
+#     group: "{{ quadlet_group }}"
+#     mode: "0644"
+#   loop:
+#     - technitium.kube
+#     - technitium.network
+#     - technitium.yaml
+#   register: copy_units
+
+- name: Trigger {{ quadlet_user }} user session to ensure systemd --user instance starts
+ become: yes
+ ansible.builtin.command:
+   cmd: systemd-run --uid={{ quadlet_uid }} --gid={{ quadlet_gid }} --pty /bin/true
+ register: user_session
+ changed_when: false
+
+- name: Reload the user-level systemd daemon if any quadlet units changed
+  become: yes
+  become_user: "{{ quadlet_user }}"
+#  environment:
+#    XDG_RUNTIME_DIR: /run/user/{{ quadlet_uid }}
+#    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ quadlet_uid }}/bus"
+  ansible.builtin.command:
+    cmd: systemctl --user daemon-reload
+#  ansible.builtin.systemd_service:
+#    daemon_reload: yes
+#    scope: user
+  when: copy_units is changed
+
+- name: Restart the {{ quadlet_service }} service if any units changed
+  become: yes
+  become_user: "{{ quadlet_user }}"
+#  environment:
+#    XDG_RUNTIME_DIR: /run/user/2000
+  ansible.builtin.systemd_service:
+    state: restarted
+    scope: user
+    name: "{{ quadlet_service }}"
+  when: copy_units is changed
+
+- name: Ensure the {{ quadlet_service }} service is enabled and started
+  become: yes
+  become_user: "{{ quadlet_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/2000
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    scope: user
+    name: "{{ quadlet_service }}"
+
+

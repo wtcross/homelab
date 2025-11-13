@@ -1,0 +1,5 @@
+---
+quadlet_volume_names: []
+
+_quadlet_subuid_bitshift: 16
+_quadlet_subgid_bitshift: "{{ _quadlet_user_subuid_bitshift }}"
