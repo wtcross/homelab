@@ -6,7 +6,7 @@ metadata:
   namespace: minio
 subjects:
 - kind: ServiceAccount
-  name: minio-tenant
+  name: minio
   namespace: minio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
