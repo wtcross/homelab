@@ -1,5 +1,58 @@
 ---
+op_connect_sync_image_uri: ghcr.io/1password/connect-sync:latest
+op_connect_api_image_uri: ghcr.io/1password/connect-api:latest
+
 quadlet_uid: 2000
 quadlet_gid: 2000
 quadlet_user: op
 quadlet_group: op
+quadlet_user_home: /home/{{ quadlet_user }}
+
+quadlet_volume_name: op-data
+quadlet_volume_path: "{{ quadlet_user_home }}/.local/share/quadlet-volumes"
+
+quadlet_volumes:
+  - name: "{{ quadlet_volume_name }}"
+    path: "{{ quadlet_volume_path }}"
+
+quadlet_files:
+  - name: op-connect.network
+    content: |
+      [Network]
+      Label=app=op-connect
+
+  - name: op-connect-sync.container
+    content: |
+      [Install]
+      WantedBy=default.target
+
+      [Unit]
+      Description=1password connect-sync container
+      After=local-fs.target network-online.target ;op-connect-api.service
+      ;Requires=op-connect-api.service
+
+      [Container]
+      ContainerName=op-connect-sync
+      Image={{ op_connect_sync_image_uri }}
+      Network=op-connect.network
+      PublishPort=8080:8080
+      Volume={{ quadlet_volume_path }}:/home/opuser/.op/data:Z
+      Secret=op-credentials,type=mount,target=/home/opuser/.op/1password-credentials.json
+
+  - name: op-connect-api.container
+    content: |
+      [Install]
+      WantedBy=default.target
+
+      [Unit]
+      Description=1password connect-api container
+      After=local-fs.target network-online.target ;op-connect-sync.service
+      ;Requires=op-connect-sync.service
+
+      [Container]
+      ContainerName=op-connect-api
+      Image={{ op_connect_api_image_uri }}
+      Network=op-connect.network
+      PublishPort=8080:8080
+      Volume={{ quadlet_volume_path }}:/home/opuser/.op/data:Z
+      Secret=op-credentials,type=mount,target=/home/opuser/.op/1password-credentials.json

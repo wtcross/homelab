@@ -16,6 +16,7 @@ wheels/
 
 .env.sh
 .bin
+.priv
 
 # Downloaded collections and roles
 ansible/collections/ansible_collections/

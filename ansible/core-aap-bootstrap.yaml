@@ -1,6 +1,6 @@
 ---
 - name: Gather facts needed to configure AAP
-  hosts: aap.apps.core.lab.cross.solutions
+  hosts: aap
   tasks:
     - name: Get the AAP admin password
       kubernetes.core.k8s_info:
@@ -30,7 +30,7 @@
       no_log: true
 
 - name: Configure AAP
-  hosts: aap.apps.core.lab.cross.solutions
+  hosts: aap
   tasks:
     - name: Find available subscriptions
       ansible.controller.subscriptions:
@@ -85,9 +85,10 @@
   hosts: aap_tenants
   tasks:
     - set_fact:
-        aap_admin_username: "{{ hostvars[aap_hostname]['aap_admin_username'] }}"
-        aap_admin_password: "{{ hostvars[aap_hostname]['aap_admin_password'] }}"
-        aap_role_definitions: "{{ hostvars[aap_hostname]['aap_role_definitions'] }}"
+        aap_hostname: "{{ hostvars[aap_inventory_name]['aap_hostname'] }}"
+        aap_admin_username: "{{ hostvars[aap_inventory_name]['aap_admin_username'] }}"
+        aap_admin_password: "{{ hostvars[aap_inventory_name]['aap_admin_password'] }}"
+        aap_role_definitions: "{{ hostvars[aap_inventory_name]['aap_role_definitions'] }}"
 
 - name: Configure Access Management for all tenants
   hosts: aap_tenants
@@ -128,7 +129,7 @@
         body_format: json
         method: POST
         status_code: 201
-        url: https://aap.apps.core.lab.cross.solutions/api/gateway/v1/role_team_assignments/
+        url: https://{{ aap_hostname }}/api/gateway/v1/role_team_assignments/
         url_username: "{{ aap_admin_username }}"
         url_password: "{{ aap_admin_password }}"
         force_basic_auth: true

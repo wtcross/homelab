@@ -1,13 +1,80 @@
 ---
 - name: Verify that all required variables are set
-  become: yes
+  when: lookup('vars', item) is undefined
+  become: no
   delegate_to: localhost
   ansible.builtin.fail:
-    msg: Missing required variable: {{ item }}
-  when: lookup('vars', item) is undefined
-  items:
+    msg: >
+      Missing required variable: {{ item }}
+  loop:
     - quadlet_uid
     - quadlet_gid
     - quadlet_user
     - quadlet_group
     - quadlet_service
+    - quadlet_volumes
+    - quadlet_files
+
+- name: Verify that quadlet_files has correct schema
+  become: no
+  delegate_to: localhost
+  ansible.utils.validate:
+    data: "{{ quadlet_files }}"
+    criteria: |
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "content": { "type": "string" }
+          },
+          "required": ["name", "content"]
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    engine: ansible.utils.jsonschema
+  vars:
+    ansible_jsonschema_draft: draft7
+  register: quadlet_files_validation
+
+- ansible.builtin.fail:
+    msg: |
+      The quadlet_files variable does not have the correct schema. The following errors were found:
+      {%- for error in quadlet_files_validation.errors %}
+      {{ error }}
+      {% endfor %}
+
+- name: Verify that quadlet_volumes has correct schema
+  become: no
+  delegate_to: localhost
+  ansible.utils.validate:
+    data: "{{ quadlet_volumes }}"
+    criteria: |
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" }
+          },
+          "required": ["name", "path"]
+        },
+        "minItems": 0,
+        "uniqueItems": true
+      }
+    engine: ansible.utils.jsonschema
+  vars:
+    ansible_jsonschema_draft: draft7
+  register: quadlet_volumes_validation
+
+- ansible.builtin.fail:
+    msg: |
+      The quadlet_volumes variable does not have the correct schema. The following errors were found:
+      {%- for error in quadlet_volumes_validation.errors %}
+      {{ error }}
+      {% endfor %}

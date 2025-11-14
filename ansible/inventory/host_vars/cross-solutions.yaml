@@ -1,5 +1,5 @@
 ---
-aap_hostname: aap.apps.core.lab.cross.solutions
+aap_inventory_name: aap
 
 aap_tenant_name: cross-solutions
 
