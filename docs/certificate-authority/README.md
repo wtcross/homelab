@@ -6,9 +6,12 @@
 - [Nitrokey docs on this topic](https://docs.nitrokey.com/nitrokeys/features/openpgp-card/certificate-authority)
 
 ### Commands
+- *list all tokens*: `p11tool --list-tokens`
+- *list 
 
-- *list public keys on the HSM*: `pkcs11-tool -O`
-- *list private keys on the HSM* `pkcs11-tool --login --pin <yourpinhere> --list-objects --type privkey`
+- *list public keys on the HSM*:  `pkcs11-tool --list-objects`
+- *list private keys on the HSM*: `pkcs11-tool --list-objects --login --type privkey`
+- *list all keys on the HSM*:     `pkcs11-tool --list-objects --login`
 
 ## Requirements
 

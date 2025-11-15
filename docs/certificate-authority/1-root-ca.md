@@ -3,7 +3,7 @@
 #### Create the root CA directory structure.
 
 ```
-pki_dir=</path/to/certificate-authority>
+pki_dir=<path-to-certificate-authority-dir>
 mkdir $pki_dir
 cd $pki_dir
 mkdir certs config crl newcerts intermediate intermediate/certs intermediate/crl intermediate/csr intermediate/newcerts
@@ -14,76 +14,74 @@ cd config
 #### Create the root CA
 
 ```
-pkcs11-tool -l --keypairgen --key-type EC:secp384r1 --label root
+pkcs11-tool --login --keypairgen \
+  --key-type EC:secp384r1 \
+  --label root
 ```
 
 #### Create a config file to generate a self-signed public certificate
 
 Fill out the request information in <angle brackets> with information for your CA:
 ```
-# vim create_root_cert.ini
-
+# create_root_cert.ini
 [ ca ]
-# `man ca`
 default_ca = CA_default
 
 [ CA_default ]
-# Directory and file locations.
-dir               = </path/to/certificate-authority>
-certs             = $dir/certs
-crl_dir           = $dir/crl
-new_certs_dir     = $dir/newcerts
-database          = $dir/index.txt
-serial            = $dir/serial
-
-# SHA-1 is deprecated, so use SHA-2 instead.
-default_md        = sha512
-
-name_opt          = ca_default
-cert_opt          = ca_default
-default_days      = 375
-preserve          = no
-policy            = policy_strict
+dir           = <path-to-certificate-authority-dir>
+certs         = $dir/certs
+crl_dir       = $dir/crl
+new_certs_dir = $dir/newcerts
+database      = $dir/index.txt
+serial        = $dir/serial
+default_md    = sha512
+name_opt      = ca_default
+cert_opt      = ca_default
+default_days  = 375
+preserve      = no
+policy        = policy_strict
 
 [ policy_strict ]
-# The root CA should only sign intermediate certificates that match.
-# See the POLICY FORMAT section of `man ca`.
-countryName             = match
-stateOrProvinceName     = match
-organizationName        = match
-organizationalUnitName  = optional
-commonName              = supplied
-emailAddress            = optional
-
-[ req ]
-# Options for the `req` tool (`man req`).
-default_bits        = 4096
-distinguished_name  = req_distinguished_name
-string_mask         = utf8only
-prompt              = no
-
-# SHA-1 is deprecated, so use SHA-2 instead.
-default_md          = sha512
-
-[ req_distinguished_name ]
-C                   = <two lettter country>
-ST                  = <full state name>
-O                   = <your company>
-OU                  = <your company> Certificate Authority
-CN                  = <your company> Root CA
+countryName            = match
+stateOrProvinceName    = match
+organizationName       = match
+organizationalUnitName = optional
+commonName             = supplied
+emailAddress           = optional
 
 [ v3_ca ]
-# Extensions for a typical CA (`man x509v3_config`).
-subjectKeyIdentifier = hash
+subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer
-basicConstraints = critical, CA:true
-keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+basicConstraints       = critical, CA:true
+keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
+
+[ req ]
+default_bits       = 4096
+distinguished_name = req_distinguished_name
+string_mask        = utf8only
+prompt             = no
+
+[ req_distinguished_name ]
+C  = <two lettter country>
+ST = <full state name>
+O  = <your company>
+OU = <your company> Certificate Authority
+CN = <your company> Root CA
 ```
 
 #### Generate the self-signed public certificate from the private key
 
 ```
-openssl req -config create_root_cert.ini -engine pkcs11 -keyform engine -key <root-private-key-id-from-hsm> -new -x509 -days 3650 -sha512 -extensions v3_ca -out ../certs/root.crt
+openssl req \
+  -config create_root_cert.ini \
+  -engine pkcs11 \
+  -keyform engine \
+  -key <root-private-key-id-from-hsm> \
+  -new -x509 \
+  -days 3650 \
+  -sha512 \
+  -extensions v3_ca \
+  -out ../certs/root.crt
 ```
 
 #### Verify that the root certificate was generated correctly
