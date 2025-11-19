@@ -4,6 +4,8 @@
   become: yes
   ansible.posix.firewalld:
     state: enabled
+    permanent: yes
+    immediate: yes
     zone: "{{ item.zone }}"
     source: "{{ item.source }}"
   loop: "{{ base_firewall_zone_sources }}"
