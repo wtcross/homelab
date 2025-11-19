@@ -1,0 +1,44 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - git-config-map.yaml
+  - 01-cluster-version.yaml
+  - 02-machineconfigs.yaml
+  - 03-aggregate-kyverno.yaml
+  - 03-aggregate-nmstate.yaml
+  - 03-aggregate-node-feature-discovery.yaml
+  - 04-storage-network.yaml
+  - 05-storage-network-attachment.yaml
+  - 06-helm-democratic-csi-fast-nfs.yaml
+  - 06-helm-democratic-csi-fast-iscsi.yaml
+  - 06-helm-democratic-csi-tank-nfs.yaml
+  - 07-operator-minio.yaml
+#  - 07-helm-consul.yaml
+  - 08-instance-minio-tenant.yaml
+#  - 08-helm-vault.yaml
+  - 09-operator-eso.yaml
+  - 10-instance-eso.yaml
+  - 11-operator-openshift-virtualization.yaml
+  - 12-instance-openshift-virtualization.yaml
+  - 13-openshift-virt-storage-profiles.yaml
+  - 20-operator-openshift-devspaces.yaml
+  - 21-instance-openshift-devspaces.yaml
+  - 22-devspaces-policies.yaml
+  - 30-operator-ansible-automation-platform.yaml
+  - 31-instance-ansible-automation-platform.yaml
+  - 50-tyler-vms.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: git-config
+      fieldPath: data.repoBase
+    targets:
+      - select:
+          kind: Application
+          group: argoproj.io
+          labelSelector: has-git-repo-objects=true
+        fieldPaths:
+        - spec.sources.*.repoURL

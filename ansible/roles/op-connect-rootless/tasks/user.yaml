@@ -1,0 +1,74 @@
+---
+- name: Create the {{ op_user }} group
+  become: yes
+  ansible.builtin.group:
+    state: present
+    name: "{{ op_group }}"
+    gid: "{{ op_gid }}"
+
+- name: Create the {{ op_user }} user
+  become: yes
+  ansible.builtin.user:
+    state: present
+    system: yes
+    name: "{{ op_user }}"
+    create_home: yes
+    home: "{{ op_user_home }}"
+    shell: /sbin/nologin
+    uid: "{{ op_uid }}"
+
+- name: Get user information for the {{ op_user }} user from the passwd database
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ op_user }}"
+
+- name: Set subuids for {{ op_user }} user
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/subuid"
+    regexp: "{{ op_user }}"
+    line: "{{ op_user }}:{{ getent_passwd[op_user].1 | int | bitwise_shift_left(_op_subuid_bitshift) }}:65536"
+    backup: true
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  register: set_subuid
+
+- name: Set subgids for {{ op_user }} user
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/subgid"
+    regexp: "{{ op_user }}"
+    line: "{{ op_user }}:{{ getent_passwd[op_user].2 | int | bitwise_shift_left(_op_subgid_bitshift) }}:65536"
+    backup: true
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  register: set_subgid
+
+- name: Migrate podman storage to reflect new UID/GID mappings
+  become: yes
+  become_user: "{{ op_user }}"
+  ansible.builtin.command:
+    cmd: podman system migrate
+  when: set_subuid is changed or set_subgid is changed
+
+- name: Enable lingering for {{ op_user }} user
+  become: yes
+  ansible.builtin.command:
+    argv:
+      - /bin/loginctl
+      - enable-linger
+      - "{{ op_user }}"
+    creates: /var/lib/systemd/linger/{{ op_user }}
+  register: enable_linger
+  changed_when: enable_linger.start is not none and enable_linger.rc == 0
+
+- name: Restart the systemd-logind service so lingering for {{ op_user }} takes effect
+  become: yes
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: systemd-logind
+  when: enable_linger is changed

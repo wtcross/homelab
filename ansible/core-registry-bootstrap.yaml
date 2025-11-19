@@ -1,0 +1,6 @@
+---
+- name: Gather facts needed to configure AAP
+  hosts: aap.apps.core.lab.cross.solutions
+  tasks:
+    - name: Ensure
+      dubzland.minio.minio_bucket:

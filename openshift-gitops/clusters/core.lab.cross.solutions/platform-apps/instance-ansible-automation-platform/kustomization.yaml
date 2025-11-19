@@ -1,0 +1,9 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+  - aap.yaml
+  - aap-openshift-virt-reader-sa.yaml
+  - aap-openshift-virt-reader-sa-token.yaml
+  - consolelink.yaml

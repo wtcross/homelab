@@ -1,0 +1,14 @@
+---
+op_vault: lab.cross.solutions
+
+base_firewall_zone_sources:
+  - zone: trusted
+    source: 192.168.10.0/24
+  - zone: trusted
+    source: 192.168.20.0/24
+
+base_firewall_zone_rich_rules:
+  - zone: trusted
+    rule: rule family="ipv4" source address="192.168.10.0/24" port protocol="tcp" port="3223" accept
+  - zone: trusted
+    rule: rule family="ipv4" source address="192.168.20.0/24" port protocol="tcp" port="3223" accept

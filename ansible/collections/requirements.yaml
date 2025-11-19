@@ -1,0 +1,11 @@
+---
+collections:
+  - ansible.utils
+  - ansible.posix
+  - community.general
+  - containers.podman
+  - kubernetes.core
+  - ansible.platform
+  - ansible.controller
+  - ansible.hub
+  - dubzland.minio

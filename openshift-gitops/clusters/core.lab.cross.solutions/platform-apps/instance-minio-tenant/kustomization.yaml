@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+  - minio-console-sa.yaml
+  - use-nonroot-v2-scc.yaml
+  - allow-minio-tenant-sa-nonroot-v2.yaml
+  - tenant.yaml
+  - minio-s3-route.yaml
+  - minio-console-route.yaml
