@@ -21,6 +21,12 @@ maybe_install_binaries() {
         curl -L https://dl.min.io/aistor/mc/release/linux-amd64/mc -o "${mc_path}"
         chmod +x "${mc_path}"
     fi
+
+    local flightctl_path="${WORKSPACE_DIR}/.bin/flightctl"
+    if [[ ! -f "${flightctl_path}" ]]; then
+        curl -L https://github.com/flightctl/flightctl/releases/download/latest/flightctl-linux-amd64 -o "${flightctl_path}"
+        chmod +x "${flightctl_path}"
+    fi
 }
 
 maybe_install_os_deps() {
