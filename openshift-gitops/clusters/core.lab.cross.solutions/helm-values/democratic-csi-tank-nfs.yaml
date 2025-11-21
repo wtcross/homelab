@@ -40,8 +40,8 @@ node:
       registry: ghcr.io/democratic-csi/democratic-csi
       tag: latest
       pullPolicy: Always
-  podAnnotations:
-    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+  # podAnnotations:
+  #   k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
   cleanup:
     image:
       registry: quay.io/microshift/busybox
@@ -58,8 +58,8 @@ controller:
       registry: ghcr.io/democratic-csi/democratic-csi
       tag: latest
       pullPolicy: Always
-  podAnnotations:
-    k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
+  # podAnnotations:
+  #   k8s.v1.cni.cncf.io/networks: democratic-csi/lab-storage
 
 driver:
   existingConfigSecret: tank-nfs-driver-config
