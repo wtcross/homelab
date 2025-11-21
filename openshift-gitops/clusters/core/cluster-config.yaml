@@ -1,0 +1,8 @@
+cluster:
+  name: core
+  address: https://kubernetes.default.svc
+
+features:
+  platform: "true"
+  virtualization: "true"
+  management: "true"

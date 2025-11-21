@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infra
+  namespace: openshift-gitops
+  annotations:
+    # Ensure this is created before ApplicationSets in the root app
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: "Base infra layer for all clusters"
+  sourceRepos:
+    - 'https://github.com/wtcross/homelab.git'
+  destinations:
+    - namespace: '*'
+      server: 'https://kubernetes.default.svc'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

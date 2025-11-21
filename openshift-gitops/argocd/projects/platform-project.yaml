@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: openshift-gitops
+  annotations:
+    # Ensure this is created before ApplicationSets in the root app
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: "Shared platform services for all clusters"
+  sourceRepos:
+    - 'https://github.com/wtcross/homelab.git'
+  destinations:
+    - namespace: '*'
+      server: 'https://kubernetes.default.svc'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
