@@ -19,6 +19,22 @@ storageClasses:
       node-stage-secret:
       node-publish-secret:
       controller-expand-secret:
+  - name: tank-nfs-immediate
+    defaultClass: false
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
 
 # if your cluster supports snapshots you may enable below
 volumeSnapshotClasses:
