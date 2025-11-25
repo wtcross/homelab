@@ -5,7 +5,7 @@ resources:
   - ../../../components/05-infra/infra-secrets
   - ../../../components/05-infra/nmstate
   - ../../../components/05-infra/node-feature-discovery
-  # - nncp-br-storage.yaml
+  - nncp-br-storage.yaml
   # - ../../../components/05-infra/storage
   # - csi-driver-fast-iscsi
   # - csi-driver-fast-nfs
