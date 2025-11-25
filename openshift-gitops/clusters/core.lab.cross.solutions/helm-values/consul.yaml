@@ -1,0 +1,68 @@
+---
+fullnameOverride: "consul"
+nameOverride: ""
+
+global:
+  enabled: true
+  openshift:
+    enabled: true
+  argocd:
+    enabled: true
+  gossipEncryption:
+    autoGenerate: true
+  tls:
+    enabled: true
+    enableAutoEncrypt: true
+    verify: true
+
+connectInject:
+  enabled: true
+  apiGateway:
+    manageExternalCRDs: false
+    manageNonStandardCRDs: true
+  disruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+  affinity: |
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - consul
+            topologyKey: "kubernetes.io/hostname"
+
+server:
+  replicas: 3
+  storage: 20Gi
+  storageClass: fast-nfs
+  disruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+  affinity: |
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - consul
+            topologyKey: "kubernetes.io/hostname"
+  terminationGracePeriodSeconds: 30
+
+ui:
+  enabled: true
+
+client:
+  enabled: true
+
+metrics:
+  enabled: true
+  enableAgentMetrics: true

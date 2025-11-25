@@ -1,0 +1,245 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-0-storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-0.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: ovs-enp6s19
+        type: ovs-interface
+        state: up
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.13
+              prefix-length: 24
+      - name: br-storage
+        description: ovs bridge dedicated to the storage network
+        state: up
+        type: ovs-bridge
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: enp6s19
+            - name: ovs-enp6s19
+    ovn:
+      bridge-mappings:
+        - localnet: storage-network
+          bridge: br-storage
+          state: present
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-1-storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-1.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: ovs-enp6s19
+        type: ovs-interface
+        state: up
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.14
+              prefix-length: 24
+      - name: br-storage
+        description: ovs bridge dedicated to the storage network
+        state: up
+        type: ovs-bridge
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: enp6s19
+            - name: ovs-enp6s19
+    ovn:
+      bridge-mappings:
+        - localnet: storage-network
+          bridge: br-storage
+          state: present
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-2-storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-2.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: ovs-enp6s19
+        type: ovs-interface
+        state: up
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.15
+              prefix-length: 24
+      - name: br-storage
+        description: ovs bridge dedicated to the storage network
+        state: up
+        type: ovs-bridge
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: enp6s19
+            - name: ovs-enp6s19
+    ovn:
+      bridge-mappings:
+        - localnet: storage-network
+          bridge: br-storage
+          state: present
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-3-storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-3.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: ovs-enp102s0
+        type: ovs-interface
+        state: up
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.16
+              prefix-length: 24
+      - name: br-storage
+        description: ovs bridge dedicated to the storage network
+        state: up
+        type: ovs-bridge
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: enp102s0
+            - name: ovs-enp102s0
+    ovn:
+      bridge-mappings:
+        - localnet: storage-network
+          bridge: br-storage
+          state: present
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-4-storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-4.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: ovs-enp102s0
+        type: ovs-interface
+        state: up
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.17
+              prefix-length: 24
+      - name: br-storage
+        description: ovs bridge dedicated to the storage network
+        state: up
+        type: ovs-bridge
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: enp102s0
+            - name: ovs-enp102s0
+    ovn:
+      bridge-mappings:
+        - localnet: storage-network
+          bridge: br-storage
+          state: present
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: compute-5-storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: compute-5.core.lab.cross.solutions
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: ovs-enp102s0
+        type: ovs-interface
+        state: up
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.11.18
+              prefix-length: 24
+      - name: br-storage
+        description: ovs bridge dedicated to the storage network
+        state: up
+        type: ovs-bridge
+        bridge:
+          options:
+            stp:
+              enabled: true
+          port:
+            - name: enp102s0
+            - name: ovs-enp102s0
+    ovn:
+      bridge-mappings:
+        - localnet: storage-network
+          bridge: br-storage
+          state: present

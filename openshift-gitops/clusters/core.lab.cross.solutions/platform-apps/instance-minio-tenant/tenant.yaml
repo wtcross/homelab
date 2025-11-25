@@ -1,0 +1,29 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  serviceAccountName: minio
+  requestAutoCert: false             # Disable automatic TLS certificate generation
+  image: public.ecr.aws/bitnami/minio:2025.10.15
+  imagePullPolicy: IfNotPresent
+  mountPath: /export
+  pools:
+    - name: pool-0                   # Single zone (pool) configuration
+      servers: 4                     # 4 MinIO server pods (for high availability)
+      volumesPerServer: 1            # 1 volume (PV) per server
+      volumeClaimTemplate:
+        metadata:
+          name: minio-data
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Gi
+          storageClassName: fast-iscsi
+  configuration:
+    name: minio-config
+  # users:
+  # - name: storage-user  # (Optional) reference to additional user secret if created

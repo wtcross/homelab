@@ -1,0 +1,28 @@
+---
+version: 3
+
+images:
+  base_image:
+    name: registry.redhat.io/ansible-automation-platform-26/ee-minimal-rhel9:latest
+
+dependencies:
+  python: requirements.txt
+  galaxy:
+    collections:
+      - name: kubernetes.core
+      - name: ansible.platform
+      - name: ansible.controller
+      - name: ansible.hub
+  exclude:
+    system:
+    - openshift-clients
+
+additional_build_steps:
+  prepend_galaxy:
+    - ENV ANSIBLE_GALAXY_SERVER_LIST=rh_automation_hub_certified
+    - ENV ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_CERTIFIED_URL=https://console.redhat.com/api/automation-hub/content/published/
+    - ENV ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_CERTIFIED_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    - ARG ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_CERTIFIED_TOKEN
+
+options:
+  package_manager_path: /usr/bin/microdnf

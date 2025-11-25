@@ -1,0 +1,30 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: consul
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "7"
+spec:
+  destination:
+    namespace: vault
+    server: https://kubernetes.default.svc
+  project: local-cluster
+  sources:
+    - repoURL: 'https://helm.releases.hashicorp.com'
+      chart: consul
+      targetRevision: 1.6.3
+      helm:
+        valueFiles:
+          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/consul.yaml
+    - repoURL: 'https://github.com/wtcross/homelab'
+      targetRevision: main
+      ref: values
+  syncPolicy:
+    automated:
+      allowEmpty: false
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

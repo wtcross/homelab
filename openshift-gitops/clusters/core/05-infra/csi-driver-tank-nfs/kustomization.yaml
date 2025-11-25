@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "6"
+
+resources:
+  - secret-tank-nfs-driver-config.yaml
+
+helmCharts:
+  - name: democratic-csi
+    repo: 'https://democratic-csi.github.io/charts/'
+    releaseName: democratic-csi-tank-nfs
+    version: 0.15.0
+    valuesFile: helm-values/tank-nfs.yaml
+    namespace: democratic-csi
+    includeCRDs: false

@@ -1,0 +1,66 @@
+---
+- name: Verify that base_firewall_zone_rich_rules has correct schema
+  become: no
+  delegate_to: localhost
+  ansible.utils.validate:
+    data: "{{ base_firewall_zone_rich_rules }}"
+    criteria: |
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "zone": { "type": "string" },
+            "rule": { "type": "string" }
+          },
+          "required": ["zone", "rule"]
+        },
+        "minItems": 0,
+        "uniqueItems": true
+      }
+    engine: ansible.utils.jsonschema
+  vars:
+    ansible_jsonschema_draft: draft7
+  register: base_firewall_zone_rich_rules_validation
+
+- when: "'errors' in base_firewall_zone_rich_rules_validation"
+  ansible.builtin.fail:
+    msg: |
+      The base_firewall_zone_rich_rules variable does not have the correct schema. The following errors were found:
+      {%- for error in base_firewall_zone_rich_rules_validation.errors %}
+      {{ error }}
+      {% endfor %}
+
+- name: Verify that base_firewall_zone_sources has correct schema
+  become: no
+  delegate_to: localhost
+  ansible.utils.validate:
+    data: "{{ base_firewall_zone_sources }}"
+    criteria: |
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "zone": { "type": "string" },
+            "source": { "type": "string" }
+          },
+          "required": ["zone", "source"]
+        },
+        "minItems": 0,
+        "uniqueItems": true
+      }
+    engine: ansible.utils.jsonschema
+  vars:
+    ansible_jsonschema_draft: draft7
+  register: base_firewall_zone_sources_validation
+
+- when: "'errors' in base_firewall_zone_sources_validation"
+  ansible.builtin.fail:
+    msg: |
+      The base_firewall_zone_sources variable does not have the correct schema. The following errors were found:
+      {%- for error in base_firewall_zone_sources_validation.errors %}
+      {{ error }}
+      {% endfor %}

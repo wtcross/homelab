@@ -1,0 +1,19 @@
+apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+  name: storage-network
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  namespaceSelector:
+    matchLabels:
+      cluster-udn: storage
+  network:
+    topology: Localnet
+    localnet:
+      role: Secondary
+      physicalNetworkName: br-storage
+      ipam:
+        lifecycle: Persistent
+      excludeSubnets: ["192.168.11.0/26"]
+      subnets: ["192.168.0.0/16"]

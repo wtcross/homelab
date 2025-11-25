@@ -1,0 +1,254 @@
+---
+# TODO
+#- name: Create RoleBinding for initial cluster-admin user
+
+# TODO (probably use lookup mappingMethod and use Ansible to create users)
+#- name: Configure Google OAuth
+
+- name: Bootstrap the cluster with GitOps
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    # TODO: Automate checking usb4 plug status and authorize whichever one has the SFP+ adapter plugged in.
+    # The following command authorizes the SFP+ adapter when using the LEFT USB4 port on the UM790 Pro:
+    #   echo 1 > /sys/bus/thunderbolt/devices/domain1/1-0/1-2/authorized
+
+    # TODO: Apply custom ingress and api certs
+
+    - name: Create the openshift-gitops namespace
+      kubernetes.core.k8s:
+        name: openshift-gitops
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Install the GitOps operator and deploy default ArgoCD instance
+      command: oc apply -k ../openshift-gitops/clusters/core.lab.cross.solutions/bootstrap-gitops
+      register: oc_apply_result
+      changed_when: "'configured' in oc_apply_result.stdout or 'created' in oc_apply_result.stdout"
+
+    - name: Show results
+      debug:
+        var: oc_apply_result.stdout_lines
+
+    - name: Wait until GitOps operator reaches the desired status
+      kubernetes.core.k8s_info:
+        api_version: argoproj.io/v1beta1
+        namespace: openshift-gitops
+        kind: ArgoCD
+        name: openshift-gitops
+      register: argocd
+      retries: 20
+      delay: 5
+      until: >
+        argocd.resources | length > 0 and
+        argocd.resources[0].status.phase == 'Available'
+
+    - name: Set up the local project and create apps
+      command: oc apply -k ../openshift-gitops/clusters/core.lab.cross.solutions/setup
+      register: oc_apply_result
+      changed_when: "'configured' in oc_apply_result.stdout or 'created' in oc_apply_result.stdout"
+
+    - name: Show results
+      debug:
+        var: oc_apply_result.stdout_lines
+
+    # - name: Create the democratic-csi namespace
+    #   kubernetes.core.k8s:
+    #     state: present
+    #     name: democratic-csi
+    #     api_version: v1
+    #     kind: Namespace
+
+    - name: Create the democratic-csi driver config secrets
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: "{{ item.name }}"
+            namespace: democratic-csi
+          data:
+            driver-config-file.yaml: "{{ item.config | to_yaml(sort_keys=false) | b64encode }}"
+          type: Opaque
+      loop:
+        - name: fast-iscsi-driver-config
+          config:
+            driver: freenas-iscsi
+            instance_id: fast-iscsi
+            httpConnection:
+              protocol: https
+              host: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              port: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_PORT') }}"
+              apiKey: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_API_KEY') }}"
+              username: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_USERNAME') }}"
+              allowInsecure: true
+              apiVersion: 2
+            sshConnection:
+              host: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              port: "{{ lookup('ansible.builtin.env', 'NAS_SSH_PORT') }}"
+              username: "{{ lookup('ansible.builtin.env', 'NAS_SSH_USERNAME') }}"
+              privateKey: "{{ lookup('ansible.builtin.env', 'NAS_SSH_PRIVATE_KEY_B64') | ansible.builtin.b64decode }}"
+            zfs:
+              cli:
+                sudoEnabled: true
+                paths:
+                  zfs: /sbin/zfs
+                  zpool: /sbin/zpool
+                  sudo: /usr/bin/sudo
+                  chroot: /usr/sbin/chroot
+              datasetParentName: fast/csi/core/iscsi/vols
+              detachedSnapshotsDatasetParentName: fast/csi/core/iscsi/snaps
+              zvolCompression:
+              zvolDedup:
+              zvolEnableReservation: false
+              zvolBlocksize:
+            iscsi:
+              targetPortal: "{{ lookup('ansible.builtin.env', 'NAS_HOST') ~ ':' ~ lookup('ansible.builtin.env', 'NAS_ISCSI_PORT') }}"
+              targetPortals: []
+              interface:
+              namePrefix: csi-
+              nameSuffix: "-core"
+              targetGroups:
+                - targetGroupPortalGroup: 3
+                  targetGroupInitiatorGroup: 11
+                  # TODO: FIX MUTUAL CHAP AUTH!!!!
+                  targetGroupAuthGroup: #1
+                  targetGroupAuthType: None #CHAP_MUTUAL
+              extentInsecureTpc: true
+              extentXenCompat: false
+              extentDisablePhysicalBlocksize: true
+              extentBlocksize: 4096
+              extentRpm: SSD
+              extentAvailThreshold: 85
+
+        - name: fast-nfs-driver-config
+          config:
+            driver: freenas-nfs
+            instance_id: fast-nfs
+            httpConnection:
+              protocol: https
+              host: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              port: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_PORT') }}"
+              apiKey: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_API_KEY') }}"
+              username: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_USERNAME') }}"
+              allowInsecure: true
+              apiVersion: 2
+            sshConnection:
+              host: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              port: "{{ lookup('ansible.builtin.env', 'NAS_SSH_PORT') }}"
+              username: "{{ lookup('ansible.builtin.env', 'NAS_SSH_USERNAME') }}"
+              privateKey: "{{ lookup('ansible.builtin.env', 'NAS_SSH_PRIVATE_KEY_B64') | ansible.builtin.b64decode }}"
+            zfs:
+              cli:
+                sudoEnabled: true
+                paths:
+                  zfs: /sbin/zfs
+                  zpool: /sbin/zpool
+                  sudo: /usr/bin/sudo
+                  chroot: /usr/sbin/chroot
+              datasetParentName: fast/csi/core/nfs/vols
+              detachedSnapshotsDatasetParentName: fast/csi/core/nfs/snaps
+              datasetEnableQuotas: true
+              datasetEnableReservation: false
+              datasetPermissionsMode: "0777"
+              datasetPermissionsUser: 0
+              datasetPermissionsGroup: 0
+            nfs:
+              shareHost: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              shareAlldirs: false
+              shareAllowedHosts: []
+              shareAllowedNetworks: []
+              shareMaprootUser: root
+              shareMaprootGroup: wheel
+              shareMapallUser: ""
+              shareMapallGroup: ""
+
+        - name: tank-nfs-driver-config
+          config:
+            driver: freenas-nfs
+            instance_id: tank-nfs
+            httpConnection:
+              protocol: https
+              host: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              port: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_PORT') }}"
+              apiKey: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_API_KEY') }}"
+              username: "{{ lookup('ansible.builtin.env', 'NAS_HTTP_USERNAME') }}"
+              allowInsecure: true
+              apiVersion: 2
+            sshConnection:
+              host: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              port: "{{ lookup('ansible.builtin.env', 'NAS_SSH_PORT') }}"
+              username: "{{ lookup('ansible.builtin.env', 'NAS_SSH_USERNAME') }}"
+              privateKey: "{{ lookup('ansible.builtin.env', 'NAS_SSH_PRIVATE_KEY_B64') | ansible.builtin.b64decode }}"
+            zfs:
+              cli:
+                sudoEnabled: true
+                paths:
+                  zfs: /sbin/zfs
+                  zpool: /sbin/zpool
+                  sudo: /usr/bin/sudo
+                  chroot: /usr/sbin/chroot
+              datasetParentName: tank/csi/core/nfs/vols
+              detachedSnapshotsDatasetParentName: tank/csi/core/nfs/snaps
+              datasetEnableQuotas: true
+              datasetEnableReservation: false
+              datasetPermissionsMode: "0777"
+              datasetPermissionsUser: 0
+              datasetPermissionsGroup: 0
+            nfs:
+              shareHost: "{{ lookup('ansible.builtin.env', 'NAS_HOST') }}"
+              shareAlldirs: false
+              shareAllowedHosts: []
+              shareAllowedNetworks: []
+              shareMaprootUser: root
+              shareMaprootGroup: wheel
+              shareMapallUser: ""
+              shareMapallGroup: ""
+
+    - name: Create the democratic-csi iSCSI mutal CHAP secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: truenas-iscsi-chap
+            namespace: democratic-csi
+          stringData:
+            # Client Credentials
+            user: "{{ lookup('ansible.builtin.env', 'NAS_ISCSI_CHAP_USER') }}"
+            password: "{{ lookup('ansible.builtin.env', 'NAS_ISCSI_CHAP_PASSWORD') }}"
+            # Mutual CHAP Credentials. If these are specified mutual CHAP will be enabled.
+            mutualUser: "{{ lookup('ansible.builtin.env', 'NAS_ISCSI_MUTUAL_CHAP_USER') }}"
+            mutualPassword: "{{ lookup('ansible.builtin.env', 'NAS_ISCSI_MUTUAL_CHAP_PASSWORD') }}"
+
+    # - name: Create the minio namespace
+    #   kubernetes.core.k8s:
+    #     state: present
+    #     name: minio
+    #     api_version: v1
+    #     kind: Namespace
+
+    # - name: Create the minio-config secret
+    #   kubernetes.core.k8s:
+    #     state: present
+    #     definition:
+    #       apiVersion: v1
+    #       kind: Secret
+    #       metadata:
+    #         name: minio-config
+    #         namespace: minio
+    #       data:
+    #         config.env: "{{ config | b64encode }}"
+    #       type: Opaque
+    #   vars:
+    #     config: |
+    #       export MINIO_ROOT_USER="{{ lookup('ansible.builtin.env', 'MINIO_ROOT_USER') }}"
+    #       export MINIO_ROOT_PASSWORD="{{ lookup('ansible.builtin.env', 'MINIO_ROOT_PASSWORD') }}"
+    #       export MINIO_STORAGE_CLASS_STANDARD="EC:2"
+    #       export MINIO_BROWSER="on"
+    #       export CONSOLE_TLS_ENABLE="on"
