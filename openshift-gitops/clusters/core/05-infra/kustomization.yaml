@@ -6,10 +6,10 @@ resources:
   - ../../../components/05-infra/nmstate
   - ../../../components/05-infra/node-feature-discovery
   - nncp-br-storage.yaml
-  - ../../../components/05-infra/storage
-  - csi-driver-fast-iscsi
-  - csi-driver-fast-nfs
-  - csi-driver-tank-nfs
+  # - ../../../components/05-infra/storage
+  # - csi-driver-fast-iscsi
+  # - csi-driver-fast-nfs
+  # - csi-driver-tank-nfs
 
 patches:
   - target:
