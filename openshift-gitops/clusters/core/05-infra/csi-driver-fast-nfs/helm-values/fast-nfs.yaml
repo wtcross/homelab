@@ -87,5 +87,5 @@ csiProxy:
   enabled: true
   image:
     registry: ghcr.io/democratic-csi/csi-grpc-proxy
-    tag: next
+    tag: latest
     pullPolicy: Always
