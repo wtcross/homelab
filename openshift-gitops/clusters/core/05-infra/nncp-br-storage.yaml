@@ -4,7 +4,6 @@ metadata:
   name: compute-0-storage-network
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   nodeSelector:
     kubernetes.io/hostname: compute-0.core.lab.cross.solutions
@@ -46,7 +45,6 @@ metadata:
   name: compute-1-storage-network
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   nodeSelector:
     kubernetes.io/hostname: compute-1.core.lab.cross.solutions
@@ -88,7 +86,6 @@ metadata:
   name: compute-2-storage-network
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   nodeSelector:
     kubernetes.io/hostname: compute-2.core.lab.cross.solutions
@@ -130,7 +127,6 @@ metadata:
   name: compute-3-storage-network
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   nodeSelector:
     kubernetes.io/hostname: compute-3.core.lab.cross.solutions
@@ -172,7 +168,6 @@ metadata:
   name: compute-4-storage-network
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   nodeSelector:
     kubernetes.io/hostname: compute-4.core.lab.cross.solutions
@@ -214,7 +209,6 @@ metadata:
   name: compute-5-storage-network
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   nodeSelector:
     kubernetes.io/hostname: compute-5.core.lab.cross.solutions
