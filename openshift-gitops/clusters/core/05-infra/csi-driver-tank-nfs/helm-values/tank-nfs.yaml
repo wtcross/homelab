@@ -54,7 +54,7 @@ node:
     localtimeHostPath: false
     image:
       registry: ghcr.io/democratic-csi/democratic-csi
-      tag: latest
+      tag: next
       pullPolicy: Always
   podAnnotations:
     k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
@@ -72,7 +72,7 @@ controller:
     enabled: true
     image:
       registry: ghcr.io/democratic-csi/democratic-csi
-      tag: latest
+      tag: next
       pullPolicy: Always
   podAnnotations:
     k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
@@ -86,5 +86,5 @@ csiProxy:
   enabled: true
   image:
     registry: ghcr.io/democratic-csi/csi-grpc-proxy
-    tag: latest
+    tag: next
     pullPolicy: Always
