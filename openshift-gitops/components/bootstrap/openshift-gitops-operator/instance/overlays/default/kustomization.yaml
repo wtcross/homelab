@@ -15,3 +15,4 @@ components:
   - ../../components/health-check-olm
   - ../../components/health-check-openshift-builds
   - ../../components/kustomize-build-enable-helm
+  - ../../components/application-controller-cluster-admin
