@@ -57,7 +57,7 @@ node:
       tag: latest
       pullPolicy: Always
   podAnnotations:
-    k8s.v1.cni.cncf.io/networks: storage-network
+    k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
   cleanup:
     image:
       registry: quay.io/microshift/busybox
@@ -75,7 +75,7 @@ controller:
       tag: latest
       pullPolicy: Always
   podAnnotations:
-    k8s.v1.cni.cncf.io/networks: storage-network
+    k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
 
 driver:
   existingConfigSecret: tank-nfs-driver-config

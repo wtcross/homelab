@@ -71,7 +71,7 @@ node:
       tag: latest
       pullPolicy: Always
   podAnnotations:
-    k8s.v1.cni.cncf.io/networks: storage-network
+    k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
 
 controller:
   rbac:
@@ -84,7 +84,7 @@ controller:
       tag: latest
       pullPolicy: Always
   podAnnotations:
-    k8s.v1.cni.cncf.io/networks: storage-network
+    k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
 
 driver:
   existingConfigSecret: fast-iscsi-driver-config
