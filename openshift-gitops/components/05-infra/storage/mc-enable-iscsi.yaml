@@ -1,0 +1,16 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-enable-iscsid
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  config:
+    ignition:
+      version: 3.5.0
+    systemd:
+      units:
+        - enabled: true
+          name: iscsid.service

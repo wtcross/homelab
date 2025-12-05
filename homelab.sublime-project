@@ -1,0 +1,38 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "lsp_format_on_save": true,
+    "LSP": {
+      "LSP-ruff": {
+        "enabled": true,
+        "initializationOptions": {
+          "settings": {}
+        },
+        "command": [
+          "$project_path/.venv/bin/ruff",
+          "server"
+        ],
+        "schemes": [
+          "file",
+          "buffer"
+        ],
+        "selector": "source.python"
+      },
+      "LSP-pyrefly": {
+        "enabled": true,
+        "command": [
+          "$project_path/.venv/bin/pyrefly",
+          "lsp"
+        ],
+        "selector": "source.python"
+      },
+      "LSP-marksman": {
+        "enabled": true
+      }
+    }
+  }
+}

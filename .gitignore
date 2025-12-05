@@ -1,0 +1,25 @@
+*.ignore
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Sublime Text
+*.sublime-workspace
+
+.env.sh
+.bin
+.priv
+
+# Downloaded collections and roles
+ansible/collections/ansible_collections/
+galaxy-roles/*/
+
+ansible/.tmp/

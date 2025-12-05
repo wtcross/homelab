@@ -1,0 +1,33 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: br-lab-external
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  nodeSelector:
+    node-role.kubernetes.io/worker: ""
+  desiredState:
+    interfaces:
+      - name: enp6s20
+        type: ethernet
+        state: up
+        ipv4:
+          enabled: false
+          dhcp: false
+        ipv6:
+          enabled: false
+      - name: br-lab-external
+        type: ovs-bridge
+        state: up
+        description: "OVS bridge for 192.168.12.0/24 lab-vms network"
+        bridge:
+          options:
+            stp: true
+          port:
+            - name: enp6s20
+    ovn:
+      bridge-mappings:
+        - localnet: lab-external-net
+          bridge: br-lab-external
+          state: present

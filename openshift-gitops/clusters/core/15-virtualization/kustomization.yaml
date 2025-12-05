@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../components/15-virtualization/operator-openshift-virtualization
+  - ../../../components/15-virtualization/instance-openshift-virtualization
+  - internal-vms
+  - external-vms

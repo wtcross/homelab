@@ -1,0 +1,22 @@
+---
+- name: Add trusted sources
+  when: base_firewall_zone_sources is defined and base_firewall_zone_sources|length > 0
+  become: yes
+  ansible.posix.firewalld:
+    state: enabled
+    permanent: yes
+    immediate: yes
+    zone: "{{ item.zone }}"
+    source: "{{ item.source }}"
+  loop: "{{ base_firewall_zone_sources }}"
+
+- name: Add baseline config zone rich rules
+  when: base_firewall_zone_rich_rules is defined and base_firewall_zone_rich_rules|length > 0
+  become: yes
+  ansible.posix.firewalld:
+    state: enabled
+    permanent: yes
+    immediate: yes
+    zone: "{{ item.zone }}"
+    rich_rule: "{{ item.rule }}"
+  loop: "{{ base_firewall_zone_rich_rules }}"

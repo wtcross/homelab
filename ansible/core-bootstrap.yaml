@@ -1,0 +1,167 @@
+---
+- name: Add lab.cross.solutions CA to the cluster's trustedCA bundle
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Create lab CA ConfigMap
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: cross-solutions-ca
+            namespace: openshift-config
+          data:
+            ca-bundle.crt: |
+              {{ lookup('file', lookup('env','CORE_CA_BUNDLE_PATH')) }}
+
+    - name: Trust lab CA in cluster proxy
+      kubernetes.core.k8s:
+        api_version: config.openshift.io/v1
+        kind: Proxy
+        name: cluster
+        merge_type: merge
+        definition:
+          spec:
+            trustedCA:
+              name: cross-solutions-ca
+
+- name: Replace the default ingress wildcard certificate
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Create ingress wildcard TLS secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: core-ingress-cert-chain
+            namespace: openshift-ingress
+          type: kubernetes.io/tls
+          stringData:
+            tls.crt: "{{ lookup('file', lookup('env','CORE_INGRESS_WILDCARD_CERT_PATH')) }}"
+            tls.key: "{{ lookup('file', lookup('env','CORE_INGRESS_WILDCARD_KEY_PATH')) }}"
+
+    - name: Patch IngressController with custom default cert
+      kubernetes.core.k8s:
+        api_version: operator.openshift.io/v1
+        kind: IngressController
+        name: default
+        namespace: openshift-ingress-operator
+        merge_type: merge
+        definition:
+          spec:
+            defaultCertificate:
+              name: core-ingress-cert-chain
+
+- name: Replace the default api wildcard certificate
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Create API server named TLS secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: core-api-cert-chain
+            namespace: openshift-config
+          type: kubernetes.io/tls
+          stringData:
+            tls.crt: "{{ lookup('file', lookup('env','CORE_API_WILDCARD_CERT_PATH')) }}"
+            tls.key: "{{ lookup('file', lookup('env','CORE_API_WILDCARD_KEY_PATH')) }}"
+
+    - name: Configure API server with custom certificate
+      kubernetes.core.k8s:
+        api_version: config.openshift.io/v1
+        kind: APIServer
+        name: cluster
+        merge_type: merge
+        definition:
+          spec:
+            servingCerts:
+              namedCertificates:
+                - names:
+                    - api.core.lab.cross.solutions
+                  servingCertificate:
+                    name: core-api-cert-chain
+
+- name: Bootstrap the cluster with OpenShift GitOps
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Install the OpenShift GitOps operator
+      command: oc apply -k ../openshift-gitops/components/bootstrap/openshift-gitops-operator/operator/overlays/default
+      register: install_gitops_operator
+      changed_when: "'configured' in install_gitops_operator.stdout or 'created' in install_gitops_operator.stdout"
+
+    - name: Wait until the GitOps operator reaches the desired status
+      kubernetes.core.k8s_info:
+        api_version: argoproj.io/v1beta1
+        namespace: openshift-gitops
+        kind: ArgoCD
+        name: openshift-gitops
+      register: gitops_operator
+      retries: 30
+      delay: 5
+      until: >
+        gitops_operator.resources | length > 0 and
+        'phase' in gitops_operator.resources[0].status and
+        gitops_operator.resources[0].status.phase == 'Available'
+
+    - name: Deploy a ArgoCD instance
+      command: oc apply -k ../openshift-gitops/components/bootstrap/openshift-gitops-operator/instance/overlays/default
+      register: deploy_argocd_instance
+      changed_when: "'configured' in deploy_argocd_instance.stdout or 'created' in deploy_argocd_instance.stdout"
+
+    - name: Wait until the ArgoCD instance reaches Available phase
+      kubernetes.core.k8s_info:
+        api_version: argoproj.io/v1beta1
+        namespace: openshift-gitops
+        kind: ArgoCD
+        name: openshift-gitops
+      register: argocd
+      retries: 30
+      delay: 5
+      until: >
+        argocd.resources | length > 0 and
+        argocd.resources[0].status.phase == 'Available'
+
+    - name: Create the external-secrets namespace
+      kubernetes.core.k8s:
+        name: external-secrets
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Create the GCP access credentials secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name:  infra-secrets-reader-credentials
+            namespace: external-secrets
+          data:
+            secret-access-credentials: "{{ lookup('ansible.builtin.file', gcp_credential_path) | ansible.builtin.b64encode }}"
+          type: Opaque
+      vars:
+        gcp_credential_path: "{{ lookup('ansible.builtin.env', 'INFRA_SECRET_CREDENTIAL_PATH') }}"
+
+    - name: Create the boostrap application
+      command: oc apply -k ../openshift-gitops/argocd
+      register: create_bootstrap_application
+      changed_when: "'configured' in create_bootstrap_application.stdout or 'created' in create_bootstrap_application.stdout"

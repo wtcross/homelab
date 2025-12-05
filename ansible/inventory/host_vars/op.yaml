@@ -1,0 +1,14 @@
+---
+ansible_host: op.lab.cross.solutions
+ansible_user: ansible
+ansible_ssh_port: 3223
+ansible_python_interpreter: /usr/bin/python3.12
+
+
+# ansible_host: localhost
+# ansible_user: tyler
+# ansible_connection: local
+# ansible_python_interpreter: /usr/bin/python3
+
+op_tls_key_local_path: "{{ playbook_dir }}/../.priv/op.lab.key.pem"
+op_tls_fullchain_local_path: "{{ playbook_dir }}/../.priv/op.lab.fullchain.pem"

@@ -1,0 +1,65 @@
+---
+- ansible.builtin.include_tasks: preflight-checks.yaml
+
+- name: Create a podman secret for 1password-credentials.json
+  become: yes
+  containers.podman.podman_secret:
+    state: present
+    name: op-credentials
+    data: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../.priv/1password-credentials.json') }}"
+
+- name: Create a podman secret for TLS key
+  become: yes
+  containers.podman.podman_secret:
+    state: present
+    name: op-connect-tls-key
+    data: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../.priv/' ~ op_tls_key_name) }}"
+
+- name: Create a podman secret for TLS cert
+  become: yes
+  containers.podman.podman_secret:
+    state: present
+    name: op-connect-tls-fullchain
+    data: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../.priv/' ~ op_tls_fullchain_name) }}"
+
+- name: Ensure op-connect quadlet files are in place
+  become: yes
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: /etc/containers/systemd/{{ item.name }}
+    mode: "0644"
+  loop: "{{ op_quadlet_files }}"
+  register: copy_op_quadlet_files
+
+- name: Reload the systemd daemon if any quadlet units changed
+  when: copy_op_quadlet_files.changed
+  become: yes
+  ansible.builtin.systemd_service:
+    daemon_reload: yes
+
+- name: Restart the op-connect services if any units changed
+  when: copy_op_quadlet_files.changed
+  become: yes
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: "{{ item }}"
+  loop:
+    - op-connect-api
+    - op-connect-sync
+
+- name: Ensure the op-connect services are enabled and started
+  become: yes
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    name: "{{ item }}"
+  loop:
+    - op-connect-api
+    - op-connect-sync
+
+- name: Allow HTTPS traffic in the public zone
+  become: yes
+  ansible.posix.firewalld:
+    state: enabled
+    service: https
+    permanent: true

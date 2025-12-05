@@ -1,0 +1,17 @@
+apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+  name: lab-external
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  namespaceSelector:
+    matchLabels:
+      cluster-udn: lab-external
+  network:
+    topology: Localnet
+    localnet:
+      role: Secondary
+      physicalNetworkName: lab-external-net
+      ipam:
+        mode: Disabled

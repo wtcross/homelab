@@ -1,0 +1,91 @@
+---
+op_connect_sync_image_uri: ghcr.io/1password/connect-sync:latest
+op_connect_api_image_uri: ghcr.io/1password/connect-api:latest
+
+op_tls_key_name: op.lab.key.pem
+op_tls_fullchain_name: op.lab.fullchain.pem
+
+_op_data_mount_target: /home/opuser/.op/data
+_op_credentials_mount_target: /home/opuser/.op/1password-credentials.json
+_op_tls_key_mount_target: /home/opuser/.op/{{ op_tls_key_name }}
+_op_tls_fullchain_mount_target: /home/opuser/.op/{{ op_tls_fullchain_name }}
+
+_op_api_internal_https_port: 4443
+_op_internal_bus_port: 11223
+
+op_quadlet_files:
+  - name: op-connect.network
+    content: |
+      [Unit]
+      Description=1Password Connect
+
+      [Network]
+      Label=app=op-connect
+      NetworkName=op-connect
+      Driver=bridge
+      Options=com.docker.network.bridge.name=op-connect
+
+  - name: op-data.volume
+    content: |
+      [Unit]
+      Description=Shared storage volume for 1Password Connect services
+
+      [Volume]
+      Label=app=op-connect
+      VolumeName=op-data
+
+  - name: op-connect-sync.container
+    content: |
+      [Unit]
+      Description=1Password Connect Sync Service
+      After=network-online.target
+
+      [Service]
+      Restart=on-failure
+
+      [Install]
+      WantedBy=default.target
+
+      [Container]
+      ContainerName=op-connect-sync
+      Label=app=op-connect
+      Image={{ op_connect_sync_image_uri }}
+      Network=op-connect.network
+      Volume=op-data:{{ _op_data_mount_target }}
+      Secret=op-credentials,type=mount,target={{ _op_credentials_mount_target }}
+      Environment=OP_SESSION={{ _op_credentials_mount_target }}
+      Environment=XDG_DATA_HOME={{ _op_data_mount_target }}
+      Environment=OP_BUS_PORT={{ _op_internal_bus_port }}
+      Environment=OP_BUS_PEERS=op-connect-api:{{ _op_internal_bus_port }}
+      Environment=OP_LOG_LEVEL=DEBUG
+
+  - name: op-connect-api.container
+    content: |
+      [Unit]
+      Description=1Password Connect API Service
+      After=network-online.target
+
+      [Service]
+      Restart=on-failure
+
+      [Install]
+      WantedBy=default.target
+
+      [Container]
+      ContainerName=op-connect-api
+      Label=app=op-connect
+      Image={{ op_connect_api_image_uri }}
+      Network=op-connect.network
+      PublishPort=443:{{ _op_api_internal_https_port }}
+      Volume=op-data:{{ _op_data_mount_target }}
+      Secret=op-credentials,type=mount,target={{ _op_credentials_mount_target }}
+      Secret=op-connect-tls-key,type=mount,target={{ _op_tls_key_mount_target }}
+      Secret=op-connect-tls-fullchain,type=mount,target={{ _op_tls_fullchain_mount_target }}
+      Environment=OP_SESSION={{ _op_credentials_mount_target }}
+      Environment=XDG_DATA_HOME={{ _op_data_mount_target }}
+      Environment=OP_TLS_KEY_FILE=/home/opuser/.op/{{ op_tls_key_name }}
+      Environment=OP_TLS_CERT_FILE=/home/opuser/.op/{{ op_tls_fullchain_name }}
+      Environment=OP_HTTPS_PORT={{ _op_api_internal_https_port }}
+      Environment=OP_BUS_PORT={{ _op_internal_bus_port }}
+      Environment=OP_BUS_PEERS=op-connect-sync:{{ _op_internal_bus_port }}
+      Environment=OP_LOG_LEVEL=DEBUG

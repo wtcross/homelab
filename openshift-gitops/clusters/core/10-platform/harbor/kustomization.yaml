@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - secret-harbor-admin-password.yaml
+  - secret-harbor-core-secret.yaml
+  - secret-harbor-jobservice-secret.yaml
+  - secret-harbor-registry-secret.yaml
+  - secret-harbor-registry-creds.yaml
+  - secret-harbor-secret-key.yaml
+  - secret-harbor-ca-bundle.yaml
+  - ../../../../components/10-platform/harbor

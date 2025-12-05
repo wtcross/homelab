@@ -1,0 +1,8 @@
+---
+_tdns_uid: 2000
+_tdns_gid: 2000
+_tdns_user: technitium
+_tdns_group: technitium
+
+subuid_bitshift: 16
+subgid_bitshift: "{{ subuid_bitshift }}"

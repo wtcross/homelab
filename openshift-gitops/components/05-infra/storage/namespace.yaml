@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    openshift.io/display-name: "Democratic CSI"
+  labels:
+    cluster-udn: storage
+  name: democratic-csi

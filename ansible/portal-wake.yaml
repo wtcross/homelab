@@ -1,0 +1,19 @@
+---
+- hosts: portal
+  gather_facts: false
+  become: false
+
+  tasks:
+    - name: Send a magic packet to wake up the system
+      community.general.wakeonlan:
+        mac: "{{ eth_mac_address }}"
+        broadcast: "{{ ansible_host }}"
+      delegate_to: localhost
+
+    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}"
+        search_regex: OpenSSH
+        delay: 10
+      connection: local

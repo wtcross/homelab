@@ -1,0 +1,23 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aggregate-nmstate
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  labels:
+    has-git-repo-objects: "true"
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://github.com/wtcross/homelab
+      targetRevision: main
+      path: openshift-gitops/clusters/core.lab.cross.solutions/platform-apps/aggregate-nmstate
+  project: local-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true

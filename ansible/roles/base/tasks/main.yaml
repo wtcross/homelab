@@ -1,0 +1,3 @@
+---
+- ansible.builtin.include_tasks: preflight-checks.yaml
+- ansible.builtin.include_tasks: firewall.yaml

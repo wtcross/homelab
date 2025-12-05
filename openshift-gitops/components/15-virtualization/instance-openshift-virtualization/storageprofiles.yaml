@@ -1,0 +1,68 @@
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: tank-nfs
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteMany
+        - ReadWriteOnce
+      volumeMode:
+        Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-nfs
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteMany
+        - ReadWriteOnce
+      volumeMode:
+        Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-nfs-immediate
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteMany
+        - ReadWriteOnce
+      volumeMode:
+        Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-iscsi
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode:
+        Block
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-iscsi-immediate
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode:
+        Block

@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aap-openshift-virt-reader-token
+  namespace: ansible-automation-platform
+  annotations:
+    kubernetes.io/service-account.name: aap-openshift-virt-reader
+type: kubernetes.io/service-account-token

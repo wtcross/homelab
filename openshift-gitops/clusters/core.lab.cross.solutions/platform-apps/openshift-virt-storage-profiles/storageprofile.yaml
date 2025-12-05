@@ -1,0 +1,58 @@
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: tank-nfs
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteMany
+        - ReadWriteOnce
+      volumeMode:
+        Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-nfs
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteMany
+        - ReadWriteOnce
+      volumeMode:
+        Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-nfs-immediate
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteMany
+        - ReadWriteOnce
+      volumeMode:
+        Filesystem
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-iscsi
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode:
+        Block
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: fast-iscsi-immediate
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode:
+        Block

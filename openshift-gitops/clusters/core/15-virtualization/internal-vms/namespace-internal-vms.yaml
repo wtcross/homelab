@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: internal-vms
+  annotations:
+    openshift.io/display-name: "Internal VMs (pod network only)"

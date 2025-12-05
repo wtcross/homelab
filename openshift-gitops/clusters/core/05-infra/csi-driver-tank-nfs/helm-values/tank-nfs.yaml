@@ -1,0 +1,103 @@
+---
+csiDriver:
+  name: "tank.nfs"
+
+storageClasses:
+  - name: tank-nfs
+    defaultClass: true
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+  - name: tank-nfs-immediate
+    defaultClass: false
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - noatime
+      - nfsvers=4
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+
+# if your cluster supports snapshots you may enable below
+volumeSnapshotClasses:
+  - name: tank-nfs
+    parameters:
+    # if true, snapshots will be created with zfs send/receive
+    # detachedSnapshots: "false"
+    secrets:
+      snapshotter-secret:
+
+node:
+  rbac:
+    openshift:
+      privileged: true
+  driver:
+    enabled: true
+    localtimeHostPath: false
+    image:
+      registry: ghcr.io/democratic-csi/democratic-csi
+      tag: next
+      pullPolicy: Always
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
+  cleanup:
+    image:
+      registry: quay.io/microshift/busybox
+      tag: 1.37
+      pullPolicy: Always
+
+controller:
+  rbac:
+    openshift:
+      privileged: false
+  extraVolumes:
+    - name: lab-ca-bundle
+      secret:
+        secretName: lab-ca-bundle
+        items:
+          - key: ca-bundle.pem
+            path: ca-bundle.pem
+  driver:
+    enabled: true
+    image:
+      registry: ghcr.io/democratic-csi/democratic-csi
+      tag: next
+      pullPolicy: Always
+    extraEnv:
+      - name: NODE_EXTRA_CA_CERTS
+        value: /tmp/lab-certs/ca-bundle.pem
+    extraVolumeMounts:
+      - name: lab-ca-bundle
+        mountPath: /tmp/lab-certs
+  podAnnotations:
+    k8s.v1.cni.cncf.io/networks: democratic-csi/storage-network
+
+driver:
+  existingConfigSecret: tank-nfs-driver-config
+  config:
+    driver: freenas-nfs
+
+csiProxy:
+  enabled: true
+  image:
+    registry: ghcr.io/democratic-csi/csi-grpc-proxy
+    tag: latest
+    pullPolicy: Always

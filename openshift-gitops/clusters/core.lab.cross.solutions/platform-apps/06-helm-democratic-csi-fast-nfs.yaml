@@ -1,0 +1,30 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm-democratic-csi-fast-nfs
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+spec:
+  destination:
+    namespace: democratic-csi
+    server: https://kubernetes.default.svc
+  project: local-cluster
+  sources:
+    - chart: democratic-csi
+      helm:
+        valueFiles:
+          - $values/openshift-gitops/clusters/core.lab.cross.solutions/helm-values/democratic-csi-fast-nfs.yaml
+      repoURL: 'https://democratic-csi.github.io/charts/'
+      targetRevision: 0.15.0
+    - ref: values
+      repoURL: 'https://github.com/wtcross/homelab'
+      targetRevision: main
+  syncPolicy:
+    automated:
+      allowEmpty: false
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

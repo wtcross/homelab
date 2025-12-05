@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "6"
+
+resources:
+  - secret-ca-chain.yaml
+  - secret-fast-iscsi-driver-config.yaml
+
+helmCharts:
+  - name: democratic-csi
+    repo: 'https://democratic-csi.github.io/charts/'
+    releaseName: democratic-csi-fast-iscsi
+    version: 0.15.0
+    valuesFile: helm-values/fast-iscsi.yaml
+    namespace: democratic-csi
+    includeCRDs: false

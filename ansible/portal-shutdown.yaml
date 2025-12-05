@@ -1,0 +1,8 @@
+---
+- hosts: portal
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Shut down the system
+      community.general.shutdown:

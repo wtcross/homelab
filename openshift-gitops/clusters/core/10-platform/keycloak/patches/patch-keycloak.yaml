@@ -1,0 +1,28 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: sso
+  namespace: keycloak
+spec:
+  bootstrapAdmin:
+    user:
+      secret: keycloak-admin-creds
+    service:
+      secret: keycloak-admin-creds
+  http:
+    tlsSecret: keycloak-tls
+  hostname:
+    hostname: keycloak.apps.core.lab.cross.solutions
+  db:
+    vendor: postgres
+    host: keycloak-postgres
+    usernameSecret:
+      name: keycloak-db-creds
+      key: user
+    passwordSecret:
+      name: keycloak-db-creds
+      key: password
+  ingress:
+    enabled: false
+  proxy:
+    headers: xforwarded
