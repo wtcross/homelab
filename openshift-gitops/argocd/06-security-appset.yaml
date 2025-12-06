@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: security
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+
+  generators:
+    - git:
+        repoURL: https://github.com/wtcross/homelab.git
+        revision: main
+        files:
+          - path: "openshift-gitops/clusters/**/cluster-config.yaml"
+
+  template:
+    metadata:
+      name: '{{.cluster.name}}-security'
+      annotations:
+        argocd.argoproj.io/sync-wave: "6"
+    spec:
+      project: infra
+      source:
+        repoURL: https://github.com/wtcross/homelab.git
+        targetRevision: main
+        path: "{{.path.path}}/06-security"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true

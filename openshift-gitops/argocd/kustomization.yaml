@@ -5,6 +5,7 @@ resources:
   - 00-platform-project.yaml
   - 04-external-secrets-appset.yaml
   - 05-infra-appset.yaml
+  - 05-security-appset.yaml
   - 10-platform-appset.yaml
   - 15-virtualization-appset.yaml
   - 20-management-appset.yaml

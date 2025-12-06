@@ -16,12 +16,6 @@ export ANSIBLE_GALAXY_SERVER_RH_AUTOMATION_HUB_VALIDATED_AUTH_URL=https://sso.re
 export ANSIBLE_GALAXY_SERVER_COMMUNITY_URL="https://galaxy.ansible.com/"
 
 maybe_install_binaries() {
-    local mc_path="${WORKSPACE_DIR}/.bin/mc"
-    if [[ ! -f "${mc_path}" ]]; then
-        curl -L https://dl.min.io/aistor/mc/release/linux-amd64/mc -o "${mc_path}"
-        chmod +x "${mc_path}"
-    fi
-
     local flightctl_path="${WORKSPACE_DIR}/.bin/flightctl"
     if [[ ! -f "${flightctl_path}" ]]; then
         curl -L https://github.com/flightctl/flightctl/releases/download/latest/flightctl-linux-amd64 -o "${flightctl_path}"
