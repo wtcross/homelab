@@ -1,0 +1,74 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: labctrl
+  namespace: external-vms
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        name: labctrl-volume
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: rhel9
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources: {}
+  runStrategy: RerunOnFailure
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: labctrl
+    spec:
+      architecture: amd64
+      domain:
+        cpu:
+          cores: 2
+          sockets: 1
+          threads: 1
+        memory:
+          guest: 4Gi
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: pc-q35-rhel9.6.0
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloud-init
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+            - bridge: {}
+              model: virtio
+              name: lab-external
+              state: up
+          logSerialConsole: false
+          rng: {}
+        resources: {}
+      networks:
+        - name: default
+          pod: {}
+        - name: lab-external
+          multus:
+            networkName: lab-external
+      volumes:
+        - name: rootdisk
+          dataVolume:
+            name: labctrl-volume
+        - name: cloud-init
+          cloudInitNoCloud:
+            secretRef:
+              name: external-vm-cloud-init-userdata
