@@ -6,3 +6,5 @@ commonAnnotations:
 
 resources:
   - vm-rhem.yaml
+  - vm-aap.yaml
+  - vm-keycloak.yaml
