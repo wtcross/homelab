@@ -21,23 +21,23 @@ helmCharts:
 
 # Force using system root certificates
 #   https://github.com/smallstep/helm-charts/blob/master/step-issuer/crds/certmanager.step.sm_stepclusterissuers.yaml#L37
-patches:
-  - target:
-      group: certmanager.step.sm
-      version: v1beta1
-      kind: StepClusterIssuer
-      name: step-issuer
-      namespace: pki
-    patch: |-
-      - op: remove
-        path: "/spec/caBundle"
+# patches:
+#   - target:
+#       group: certmanager.step.sm
+#       version: v1beta1
+#       kind: StepClusterIssuer
+#       name: step-issuer
+#       namespace: pki
+#     patch: |-
+#       - op: remove
+#         path: "/spec/caBundle"
 
-  - target:
-      group: certmanager.step.sm
-      version: v1beta1
-      kind: StepIssuer
-      name: step-issuer
-      namespace: pki
-    patch: |-
-      - op: remove
-        path: "/spec/caBundle"
+#   - target:
+#       group: certmanager.step.sm
+#       version: v1beta1
+#       kind: StepIssuer
+#       name: step-issuer
+#       namespace: pki
+#     patch: |-
+#       - op: remove
+#         path: "/spec/caBundle"
