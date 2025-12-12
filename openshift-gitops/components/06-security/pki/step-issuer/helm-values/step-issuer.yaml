@@ -44,23 +44,34 @@ service:
   scrape: true
   scrapePort: 8080
 
+# Security Context for the pod
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# security context for container
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
 serviceAccount:
   # Specifies whether a service account should be created
-  create: false
+  create: true
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: step-issuer
 
 # mandatory values to generate stepIssuer resource
 # please follow the https://github.com/smallstep/step-issuer#getting-started to setup step-ca and get step-issuer values
 stepIssuer:
-  create: false
+  create: true
   caUrl: https://pki.lab.cross.solutions
   caBundle: patch-me-lab-ca-bundle
   provisioner:
-    name: ocp-trust-manager-lab
+    name: ocp-cert-manager-lab
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
       name: lab-ca-step-issuer-provisioner-password
@@ -69,22 +80,22 @@ stepIssuer:
 # mandatory values to generate stepClusterIssuer resource
 # please follow the https://github.com/smallstep/step-issuer#getting-started to setup step-ca and get step-issuer values
 stepClusterIssuer:
-  create: false
+  create: true
   caUrl: https://pki.lab.cross.solutions
   caBundle: patch-me-lab-ca-bundle
   provisioner:
-    name: ocp-trust-manager-lab
+    name: ocp-cert-manager-lab
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
       name: lab-ca-step-issuer-provisioner-password
       namespace: pki
       key: password
 
-# For the trust-manager approver
+# For the cert-manager approver
 certManager:
   serviceAccount:
-    name: trust-manager
-    namespace: trust-manager
+    name: cert-manager
+    namespace: cert-manager
 
 # Experimental support for the TLS-over-TLS tunnel in the step-ca client.
 # Do not enable this unless you know what to use.
