@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: step-issuer
+    repo: https://smallstep.github.io/helm-charts
+    releaseName: step-issuer
+    version: 0.22.0
+    valuesFile: helm-values/step-issuer.yaml
+    namespace: security
+    includeCRDs: true
+
+# Force using system root certificates
+#   https://github.com/smallstep/helm-charts/blob/master/step-issuer/crds/certmanager.step.sm_stepclusterissuers.yaml#L37
+patches:
+  - target:
+      group: certmanager.step.sm
+      version: v1beta1
+      kind: StepClusterIssuer
+      name:
+      namespace: pki
+    patch: |-
+      - op: remove
+        path: "/spec/caBundle"
+
+
+  - target:
+      group: certmanager.step.sm
+      version: v1beta1
+      kind: StepIssuer
+      name:
+      namespace: pki
+    patch: |-
+      - op: remove
+        path: "/spec/caBundle"
