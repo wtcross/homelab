@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - secret-lab-ca-root.yaml
   - secret-lab-ca-bundle.yaml
-  - cm-lab-ca-bundle.yaml
+  - trust-bundle-lab-ca.yaml

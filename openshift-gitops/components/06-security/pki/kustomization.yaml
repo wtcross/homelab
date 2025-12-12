@@ -5,4 +5,4 @@ resources:
   - cert-manager-operator/operator/overlays/stable-v1.18
   - trust-manager
   - ns-pki.yaml
-  - ca-trust
+  - lab-ca-trust

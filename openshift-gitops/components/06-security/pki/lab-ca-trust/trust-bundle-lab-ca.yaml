@@ -1,0 +1,22 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: lab.cross.solutions
+spec:
+  sources:
+  - useDefaultCAs: true
+
+  - secret:
+      name: lab-ca-bundle
+      key: ca-bundle.crt
+  target:
+    configMap:
+      key: ca-bundle.crt
+      metadata:
+        annotations:
+          argocd.argoproj.io/sync-wave: "1"
+        labels:
+          app.kubernetes.io/component: "trust-bundle"
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: openshift-config
