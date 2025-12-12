@@ -5,7 +5,6 @@ resources:
   - ns-reflector.yaml
   - use-nonroot-v2-scc.yaml
   - allow-reflector-sa-nonroot-v2.yaml
-  - chart
 
 helmCharts:
   - name: reflector
