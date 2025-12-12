@@ -11,6 +11,8 @@ nameOverride: ""
 namespaceOverride: ""
 fullnameOverride: ""
 
+namespace: reflector
+
 cron:
   enabled: false
   schedule: "*/15 * * * *"
