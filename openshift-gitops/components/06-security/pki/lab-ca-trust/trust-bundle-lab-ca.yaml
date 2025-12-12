@@ -1,7 +1,7 @@
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: lab.cross.solutions
+  name: lab-ca-bundle
 spec:
   sources:
   - useDefaultCAs: true
