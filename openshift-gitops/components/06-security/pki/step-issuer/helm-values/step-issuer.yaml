@@ -52,8 +52,8 @@ podSecurityContext: {}
 securityContext:
   runAsUser: 1000
   runAsGroup: 1000
-  # seccompProfile:
-  #   type: RuntimeDefault
+  seccompProfile:
+    type: RuntimeDefault
 
 serviceAccount:
   # Specifies whether a service account should be created
