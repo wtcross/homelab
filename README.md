@@ -10,3 +10,4 @@ TODO:
 - Investigate using [github.com/CardContact/sc-hsm-embedded](https://github.com/CardContact/sc-hsm-embedded/) as an alternative PKCS#11 module to improve performance
 
 https://access.redhat.com/solutions/7053229
+https://seism0saurus.de/posts/private-acme-ca-hsm/
