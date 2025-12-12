@@ -7,8 +7,8 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: reflector
-  namespace: harbor
+  namespace: reflector
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: use-nonroot-scc
+  name: use-nonroot-v2-scc
