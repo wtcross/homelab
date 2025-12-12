@@ -4,4 +4,3 @@ metadata:
   name: reflector
   annotations:
     openshift.io/display-name: "Reflector"
-    argocd.argoproj.io/sync-wave: "0"

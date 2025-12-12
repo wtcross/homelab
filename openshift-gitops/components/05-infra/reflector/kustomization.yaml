@@ -5,12 +5,4 @@ resources:
   - ns-reflector.yaml
   - use-nonroot-v2-scc.yaml
   - allow-reflector-sa-nonroot-v2.yaml
-
-helmCharts:
-  - name: reflector
-    repo: https://emberstack.github.io/helm-charts
-    releaseName: reflector
-    version: 9.1.45
-    valuesFile: helm-values/reflector.yaml
-    namespace: reflector
-    includeCRDs: true
+  - chart
