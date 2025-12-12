@@ -6,3 +6,4 @@ resources:
   - trust-manager
   - ns-pki.yaml
   - lab-ca-trust
+  - step-issuer
