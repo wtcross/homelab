@@ -10,4 +10,5 @@ helmCharts:
     releaseName: reflector
     version: 9.1.45
     valuesFile: helm-values/reflector.yaml
-    includeCRDs: false
+    namespace: reflector
+    includeCRDs: true
