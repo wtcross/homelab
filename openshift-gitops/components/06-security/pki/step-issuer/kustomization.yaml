@@ -4,6 +4,12 @@ kind: Kustomization
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "10"
 
+resources:
+  - sa-step-issuer.yaml
+  - secret-step-issuer-provisioner-password.yaml
+  - step-issuer.yaml
+  - step-cluster-issuer.yaml
+
 helmCharts:
   - name: step-issuer
     repo: https://smallstep.github.io/helm-charts

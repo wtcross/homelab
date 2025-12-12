@@ -1,0 +1,14 @@
+apiVersion: certmanager.step.sm/v1beta1
+kind: StepClusterIssuer
+metadata:
+  name: step-issuer
+  namespace: pki
+spec:
+  url: https://pki.lab.cross.solutions
+  provisioner:
+    name: ocp-cert-manager-lab
+    kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
+    passwordRef:
+      name: lab-ca-step-issuer-provisioner-password
+      namespace: pki
+      key: password
