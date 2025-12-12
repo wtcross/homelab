@@ -1,0 +1,14 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: allow-reflector-sa-nonroot
+  namespace: reflector
+subjects:
+- kind: ServiceAccount
+  name: reflector
+  namespace: harbor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: use-nonroot-scc

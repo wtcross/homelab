@@ -7,9 +7,9 @@ image:
   tag: ""
 
 imagePullSecrets: []
-# nameOverride: ""
-# namespaceOverride: ""
-# fullnameOverride: ""
+nameOverride: ""
+namespaceOverride: ""
+fullnameOverride: ""
 
 cron:
   enabled: false

@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - ns-reflector.yaml
+  - use-nonroot-scc.yaml
+  - allow-reflector-sa-nonroot.yaml
 
 helmCharts:
   - name: reflector
