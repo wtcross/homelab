@@ -1,0 +1,14 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: allow-step-issuer-sa-nonroot-v2
+  namespace: pki
+subjects:
+- kind: ServiceAccount
+  name: step-issuer
+  namespace: pki
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: use-nonroot-v2-scc
