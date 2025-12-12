@@ -4,7 +4,7 @@ metadata:
   name: lab-ca-bundle
 spec:
   sources:
-  - useDefaultCAs: true
+  - useDefaultCAs: false
 
   - secret:
       name: lab-ca-bundle
