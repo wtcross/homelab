@@ -8,10 +8,8 @@ image:
 
 imagePullSecrets: []
 nameOverride: ""
-namespaceOverride: ""
+namespaceOverride: "reflector"
 fullnameOverride: ""
-
-namespace: reflector
 
 cron:
   enabled: false
