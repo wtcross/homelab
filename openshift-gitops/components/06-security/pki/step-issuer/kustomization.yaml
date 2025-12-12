@@ -8,9 +8,9 @@ helmCharts:
   - name: step-issuer
     repo: https://smallstep.github.io/helm-charts
     releaseName: step-issuer
-    version: 0.22.0
+    version: 1.9.11
     valuesFile: helm-values/step-issuer.yaml
-    namespace: security
+    namespace: pki
     includeCRDs: true
 
 # Force using system root certificates
