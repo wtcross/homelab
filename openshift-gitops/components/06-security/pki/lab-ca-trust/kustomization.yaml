@@ -5,3 +5,4 @@ resources:
   - secret-lab-ca-root.yaml
   - secret-lab-ca-bundle.yaml
   - trust-bundle-lab-ca.yaml
+  - cluster-proxy.yaml
