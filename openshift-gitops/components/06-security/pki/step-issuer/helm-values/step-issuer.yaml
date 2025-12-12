@@ -60,7 +60,7 @@ stepIssuer:
   caUrl: https://pki.lab.cross.solutions
   caBundle: patch-me-lab-ca-bundle
   provisioner:
-    name: ocp-cert-manager-lab
+    name: ocp-trust-manager-lab
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
       name: lab-ca-step-issuer-provisioner-password
@@ -73,18 +73,18 @@ stepClusterIssuer:
   caUrl: https://pki.lab.cross.solutions
   caBundle: patch-me-lab-ca-bundle
   provisioner:
-    name: ocp-cert-manager-lab
+    name: ocp-trust-manager-lab
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
       name: lab-ca-step-issuer-provisioner-password
       namespace: pki
       key: password
 
-# For the cert-manager approver
+# For the trust-manager approver
 certManager:
   serviceAccount:
-    name: cert-manager
-    namespace: cert-manager
+    name: trust-manager
+    namespace: trust-manager
 
 # Experimental support for the TLS-over-TLS tunnel in the step-ca client.
 # Do not enable this unless you know what to use.
