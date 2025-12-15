@@ -2,6 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: allow-kyverno-sa-use-nonroot-v2-scc
+  namespace: kyverno
 subjects:
 - kind: ServiceAccount
   name: kyverno-migrate-resources
@@ -9,4 +10,4 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: nonroot-v2-scc
+  name: use-nonroot-v2-scc
