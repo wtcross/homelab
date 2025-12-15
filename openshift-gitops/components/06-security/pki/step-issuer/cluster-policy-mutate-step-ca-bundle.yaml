@@ -26,7 +26,7 @@ spec:
       mutate:
         patchStrategicMerge:
           spec:
-            +(caBundle): "{{ trustBundleCM.data['ca-bundle.crt'] }}"
+            +(caBundle): "{{ trustBundleCM.data.`ca-bundle.crt` }}"
     - name: add-ca-bundle-to-step-cluster-issuer
       context:
         - name: trustBundleCM
@@ -47,4 +47,4 @@ spec:
       mutate:
         patchStrategicMerge:
           spec:
-            +(caBundle): "{{ trustBundleCM.data['ca-bundle.crt'] }}"
+            +(caBundle): "{{ trustBundleCM.data.`ca-bundle.crt` }}"
