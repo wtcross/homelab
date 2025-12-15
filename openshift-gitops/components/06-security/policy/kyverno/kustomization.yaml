@@ -6,8 +6,8 @@ commonAnnotations:
 
 resources:
   - ns-kyverno.yaml
-  - use-scc.yaml
-  - allow-kyverno-sa-use-scc.yaml
+  # - use-scc.yaml
+  # - allow-kyverno-sa-use-scc.yaml
 
 helmCharts:
   - name: kyverno
