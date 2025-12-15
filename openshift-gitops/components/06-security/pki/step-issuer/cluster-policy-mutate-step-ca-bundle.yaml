@@ -12,15 +12,18 @@ spec:
           apiCall:
             apiVersion: v1
             kind: ConfigMap
-            namespace: pki
+            namespace: openshift-config
             name: lab-ca-bundle
       match:
         any:
           - resources:
               kinds:
                 - StepIssuer
+              names:
+                - step-issuer
+              namespaces: pki
       mutate:
-        patchesStrategicMerge:
+        patchStrategicMerge:
           spec:
             +(caBundle): "{{ trustBundleCM.data['ca-bundle.crt'] }}"
     - name: add-ca-bundle-to-step-cluster-issuer
@@ -29,14 +32,17 @@ spec:
           apiCall:
             apiVersion: v1
             kind: ConfigMap
-            namespace: pki
+            namespace: openshift-config
             name: lab-ca-bundle
       match:
         any:
           - resources:
               kinds:
                 - StepClusterIssuer
+              names:
+                - step-issuer
+              namespaces: pki
       mutate:
-        patchesStrategicMerge:
+        patchStrategicMerge:
           spec:
             +(caBundle): "{{ trustBundleCM.data['ca-bundle.crt'] }}"
