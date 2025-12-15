@@ -21,7 +21,8 @@ spec:
                 - StepIssuer
               names:
                 - step-issuer
-              namespaces: pki
+              namespaces:
+                - pki
       mutate:
         patchStrategicMerge:
           spec:
@@ -41,7 +42,8 @@ spec:
                 - StepClusterIssuer
               names:
                 - step-issuer
-              namespaces: pki
+              namespaces:
+                - pki
       mutate:
         patchStrategicMerge:
           spec:
