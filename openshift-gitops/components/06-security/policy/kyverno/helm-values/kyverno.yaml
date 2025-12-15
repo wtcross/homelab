@@ -90,7 +90,7 @@ crds:
 
   reportsServer:
       # -- Kyverno reports-server is used in your cluster
-    enabled: true
+    enabled: false
 
   groups:
 
