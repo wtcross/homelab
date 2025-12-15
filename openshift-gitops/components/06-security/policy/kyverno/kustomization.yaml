@@ -26,43 +26,43 @@ patches:
       name: kyverno
   # The following ClusterRole patches are a workaround for the following issue:
   # https://github.com/kyverno/kyverno/issues/12200
-  - patch: |-
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      metadata:
-        name: kyverno-admission-controller:core
-        labels:
-          rbac.kyverno.io/aggregate-to-admission-controller: "true"
-    target:
-      kind: ClusterRole
-      name: kyverno-admission-controller:core
-  - patch: |-
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      metadata:
-        name: kyverno-background-controller:core
-        labels:
-          rbac.kyverno.io/aggregate-to-background-controller: "true"
-    target:
-      kind: ClusterRole
-      name: kyverno-background-controller:core
-  - patch: |-
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      metadata:
-        name: kyverno-cleanup-controller:core
-        labels:
-          rbac.kyverno.io/aggregate-to-cleanup-controller: "true"
-    target:
-      kind: ClusterRole
-      name: kyverno-cleanup-controller:core
-  - patch: |-
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      metadata:
-        name: kyverno-reports-controller:core
-        labels:
-          rbac.kyverno.io/aggregate-to-reports-controller: "true"
-    target:
-      kind: ClusterRole
-      name: kyverno-reports-controller:core
+  # - patch: |-
+  #     apiVersion: rbac.authorization.k8s.io/v1
+  #     kind: ClusterRole
+  #     metadata:
+  #       name: kyverno-admission-controller:core
+  #       labels:
+  #         rbac.kyverno.io/aggregate-to-admission-controller: "true"
+  #   target:
+  #     kind: ClusterRole
+  #     name: kyverno-admission-controller:core
+  # - patch: |-
+  #     apiVersion: rbac.authorization.k8s.io/v1
+  #     kind: ClusterRole
+  #     metadata:
+  #       name: kyverno-background-controller:core
+  #       labels:
+  #         rbac.kyverno.io/aggregate-to-background-controller: "true"
+  #   target:
+  #     kind: ClusterRole
+  #     name: kyverno-background-controller:core
+  # - patch: |-
+  #     apiVersion: rbac.authorization.k8s.io/v1
+  #     kind: ClusterRole
+  #     metadata:
+  #       name: kyverno-cleanup-controller:core
+  #       labels:
+  #         rbac.kyverno.io/aggregate-to-cleanup-controller: "true"
+  #   target:
+  #     kind: ClusterRole
+  #     name: kyverno-cleanup-controller:core
+  # - patch: |-
+  #     apiVersion: rbac.authorization.k8s.io/v1
+  #     kind: ClusterRole
+  #     metadata:
+  #       name: kyverno-reports-controller:core
+  #       labels:
+  #         rbac.kyverno.io/aggregate-to-reports-controller: "true"
+  #   target:
+  #     kind: ClusterRole
+  #     name: kyverno-reports-controller:core
