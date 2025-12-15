@@ -14,7 +14,7 @@ spec:
       key: ca-bundle.crt
       metadata:
         annotations:
-          argocd.argoproj.io/sync-wave: "1"
+          argocd.argoproj.io/sync-wave: "5"
         labels:
           app.kubernetes.io/component: "trust-bundle"
     namespaceSelector:

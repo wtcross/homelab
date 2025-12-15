@@ -6,7 +6,7 @@ metadata:
 spec:
   # Force using system root certificates by omitting /spec/caBundle
   #   https://github.com/smallstep/helm-charts/blob/master/step-issuer/crds/certmanager.step.sm_stepclusterissuers.yaml#L37
-  caBundle:
+  caBundle: kyverno-replaces-me
   url: https://pki.lab.cross.solutions
   provisioner:
     name: ocp-cert-manager-lab
