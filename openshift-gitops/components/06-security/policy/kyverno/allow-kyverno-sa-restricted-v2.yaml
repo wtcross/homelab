@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: allow-kyverno-admission-controller-sa-nonroot-v2
+  name: allow-kyverno-admission-controller-sa-restricted-v2
   namespace: kyverno
 subjects:
 - kind: ServiceAccount
@@ -11,12 +11,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: use-nonroot-v2-scc
+  name: use-restricted-v2-scc
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: allow-kyverno-background-controller-sa-nonroot-v2
+  name: allow-kyverno-background-controller-sa-restricted-v2
   namespace: kyverno
 subjects:
 - kind: ServiceAccount
@@ -25,12 +25,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: use-nonroot-v2-scc
+  name: use-restricted-v2-scc
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: allow-kyverno-cleanup-controller-sa-nonroot-v2
+  name: allow-kyverno-cleanup-controller-sa-restricted-v2
   namespace: kyverno
 subjects:
 - kind: ServiceAccount
@@ -39,12 +39,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: use-nonroot-v2-scc
+  name: use-restricted-v2-scc
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: allow-kyverno-reports-controller-sa-nonroot-v2
+  name: allow-kyverno-reports-controller-sa-restricted-v2
   namespace: kyverno
 subjects:
 - kind: ServiceAccount
@@ -53,12 +53,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: use-nonroot-v2-scc
+  name: use-restricted-v2-scc
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: allow-kyverno-migrate-resources-sa-nonroot-v2
+  name: allow-kyverno-migrate-resources-sa-restricted-v2
   namespace: kyverno
 subjects:
 - kind: ServiceAccount
@@ -67,4 +67,4 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: use-nonroot-v2-scc
+  name: use-restricted-v2-scc
