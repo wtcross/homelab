@@ -6,7 +6,7 @@ commonAnnotations:
 
 resources:
   - ns-kyverno.yaml
-  - sa-kyverno.yaml
+  # - sa-kyverno.yaml
   - use-nonroot-v2-scc.yaml
   - allow-kyverno-sa-nonroot-v2.yaml
 
