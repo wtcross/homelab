@@ -90,7 +90,7 @@ crds:
 
   reportsServer:
       # -- Kyverno reports-server is used in your cluster
-    enabled: false
+    enabled: false # TODO: fix and enable
 
   groups:
 
@@ -118,13 +118,13 @@ crds:
 
     # -- Install CRDs in group `reports.kyverno.io`
     reports:
-      clusterephemeralreports: true
-      ephemeralreports: true
+      clusterephemeralreports: false  # TODO: fix and enable
+      ephemeralreports: false  # TODO: fix and enable
 
     # -- Install CRDs in group `wgpolicyk8s.io`
     wgpolicyk8s:
-      clusterpolicyreports: true
-      policyreports: true
+      clusterpolicyreports: false  # TODO: fix and enable
+      policyreports: false  # TODO: fix and enable
 
   # -- Additional CRDs annotations
   annotations: {}
@@ -665,19 +665,19 @@ grafana:
 features:
   admissionReports:
     # -- Enables the feature
-    enabled: true
+    enabled: false # TODO: fix and enable
   aggregateReports:
     # -- Enables the feature
-    enabled: true
+    enabled: false # TODO: fix and enable
   policyReports:
     # -- Enables the feature
-    enabled: true
+    enabled: false # TODO: fix and enable
   validatingAdmissionPolicyReports:
     # -- Enables the feature
-    enabled: true
+    enabled: false # TODO: fix and enable
   mutatingAdmissionPolicyReports:
     # -- Enables the feature
-    enabled: false
+    enabled: false # TODO: fix and enable
   reporting:
     # -- Enables the feature
     validate: false # TODO: enable and fix
@@ -1901,7 +1901,7 @@ reportsController:
   featuresOverride: {}
 
   # -- Enable reports controller.
-  enabled: true
+  enabled: false # TODO: fix and enable
 
   rbac:
     # -- Create RBAC resources
