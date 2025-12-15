@@ -5,12 +5,13 @@ commonAnnotations:
   argocd.argoproj.io/sync-wave: "10"
 
 resources:
+  - policy-mutate-step-ca-bundle.yaml
   - sa-step-issuer.yaml
   - use-nonroot-v2-scc.yaml
   - allow-step-issuer-sa-nonroot-v2.yaml
   - secret-step-issuer-provisioner-password.yaml
-  # - step-issuer.yaml
-  # - step-cluster-issuer.yaml
+  - step-issuer.yaml
+  - step-cluster-issuer.yaml
 
 helmCharts:
   - name: step-issuer
@@ -20,26 +21,3 @@ helmCharts:
     valuesFile: helm-values/step-issuer.yaml
     namespace: pki
     includeCRDs: true
-
-# Force using system root certificates
-#   https://github.com/smallstep/helm-charts/blob/master/step-issuer/crds/certmanager.step.sm_stepclusterissuers.yaml#L37
-# patches:
-#   - target:
-#       group: certmanager.step.sm
-#       version: v1beta1
-#       kind: StepClusterIssuer
-#       name: step-issuer
-#       namespace: pki
-#     patch: |-
-#       - op: remove
-#         path: "/spec/caBundle"
-
-#   - target:
-#       group: certmanager.step.sm
-#       version: v1beta1
-#       kind: StepIssuer
-#       name: step-issuer
-#       namespace: pki
-#     patch: |-
-#       - op: remove
-#         path: "/spec/caBundle"
