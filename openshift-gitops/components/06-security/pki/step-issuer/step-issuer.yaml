@@ -12,5 +12,5 @@ spec:
     name: ocp-cert-manager-lab
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
-      name: lab-ca-step-issuer-provisioner-password
+      name: step-issuer-provisioner-password
       key: password

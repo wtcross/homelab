@@ -17,10 +17,6 @@ spec:
           - resources:
               kinds:
                 - StepIssuer
-              names:
-                - step-issuer
-              namespaces:
-                - pki
       mutate:
         patchStrategicMerge:
           spec:
@@ -36,10 +32,6 @@ spec:
           - resources:
               kinds:
                 - StepClusterIssuer
-              names:
-                - step-issuer
-              namespaces:
-                - pki
       mutate:
         patchStrategicMerge:
           spec:
