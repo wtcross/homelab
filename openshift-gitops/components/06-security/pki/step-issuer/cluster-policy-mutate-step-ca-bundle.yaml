@@ -5,6 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "7"
 spec:
+  mutateExistingOnPolicyUpdate: true
   rules:
     - name: add-ca-bundle-to-step-issuer
       context:
@@ -13,10 +14,14 @@ spec:
             name: lab-ca-bundle
             namespace: openshift-config
       match:
-        any:
+        all:
           - resources:
               kinds:
                 - StepIssuer
+              namespaces:
+                - pki
+              names:
+                - step-issuer
       mutate:
         patchStrategicMerge:
           spec:
@@ -28,10 +33,12 @@ spec:
             name: lab-ca-bundle
             namespace: openshift-config
       match:
-        any:
+        all:
           - resources:
               kinds:
                 - StepClusterIssuer
+              names:
+                - step-issuer
       mutate:
         patchStrategicMerge:
           spec:
