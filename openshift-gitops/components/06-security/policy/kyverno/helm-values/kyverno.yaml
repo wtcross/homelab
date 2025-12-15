@@ -680,15 +680,15 @@ features:
     enabled: false
   reporting:
     # -- Enables the feature
-    validate: true
+    validate: false # TODO: enable and fix
     # -- Enables the feature
-    mutate: true
+    mutate: false # TODO: enable and fix
     # -- Enables the feature
-    mutateExisting: true
+    mutateExisting: false # TODO: enable and fix
     # -- Enables the feature
-    imageVerify: true
+    imageVerify: false  # TODO: enable and fix
     # -- Enables the feature
-    generate: true
+    generate: false # TODO: enable and fix
   autoUpdateWebhooks:
     # -- Enables the feature
     enabled: true
