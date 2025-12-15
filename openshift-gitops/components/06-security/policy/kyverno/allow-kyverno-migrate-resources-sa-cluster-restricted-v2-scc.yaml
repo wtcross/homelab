@@ -8,5 +8,5 @@ subjects:
   namespace: kyverno
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: cluster-restricted-v2-scc
