@@ -6,8 +6,8 @@ commonAnnotations:
 
 resources:
   - ns-kyverno.yaml
-  # - use-scc.yaml
-  # - allow-kyverno-sa-use-scc.yaml
+  - cluster-restricted-v2-scc.yaml
+  - allow-kyverno-migrate-resources-sa-cluster-restricted-v2-scc
 
 helmCharts:
   - name: kyverno
