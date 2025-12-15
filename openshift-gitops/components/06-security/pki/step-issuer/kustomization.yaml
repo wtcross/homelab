@@ -9,8 +9,8 @@ resources:
   - use-nonroot-v2-scc.yaml
   - allow-step-issuer-sa-nonroot-v2.yaml
   - secret-step-issuer-provisioner-password.yaml
-  - step-issuer.yaml
-  - step-cluster-issuer.yaml
+  # - step-issuer.yaml
+  # - step-cluster-issuer.yaml
 
 helmCharts:
   - name: step-issuer
