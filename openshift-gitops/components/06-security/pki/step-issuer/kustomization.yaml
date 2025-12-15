@@ -5,6 +5,7 @@ commonAnnotations:
   argocd.argoproj.io/sync-wave: "10"
 
 resources:
+  - sa-step-issuer.yaml
   - use-nonroot-v2-scc.yaml
   - allow-step-issuer-sa-nonroot-v2.yaml
   - secret-step-issuer-provisioner-password.yaml
