@@ -8,12 +8,10 @@ spec:
   rules:
     - name: add-ca-bundle-to-step-issuer
       context:
-        - name: trustBundleCM
-          apiCall:
-            apiVersion: v1
-            kind: ConfigMap
-            namespace: openshift-config
+        - name: labCaBundle
+          configMap:
             name: lab-ca-bundle
+            namespace: openshift-config
       match:
         any:
           - resources:
@@ -26,15 +24,13 @@ spec:
       mutate:
         patchStrategicMerge:
           spec:
-            +(caBundle): '{{ trustBundleCM.data."ca-bundle.crt" }}'
+            +(caBundle): '{{ labCaBundle.data."ca-bundle.crt" }}'
     - name: add-ca-bundle-to-step-cluster-issuer
       context:
-        - name: trustBundleCM
-          apiCall:
-            apiVersion: v1
-            kind: ConfigMap
-            namespace: openshift-config
+        - name: labCaBundle
+          configMap:
             name: lab-ca-bundle
+            namespace: openshift-config
       match:
         any:
           - resources:
@@ -47,4 +43,4 @@ spec:
       mutate:
         patchStrategicMerge:
           spec:
-            +(caBundle): '{{ trustBundleCM.data."ca-bundle.crt" }}'
+            +(caBundle): '{{ labCaBundle.data."ca-bundle.crt" }}'
