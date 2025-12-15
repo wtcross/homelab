@@ -6,6 +6,7 @@ commonAnnotations:
 
 resources:
   - ns-kyverno.yaml
+  - cr-kyverno-reports-controller.yaml
   - use-scc.yaml
   - allow-kyverno-sa-use-scc.yaml
 
