@@ -1,8 +1,7 @@
 apiVersion: kyverno.io/v1
-kind: Policy
+kind: ClusterPolicy
 metadata:
   name: mutate-step-ca-bundle
-  namespace: pki
   annotations:
     argocd.argoproj.io/sync-wave: "7"
 spec:
