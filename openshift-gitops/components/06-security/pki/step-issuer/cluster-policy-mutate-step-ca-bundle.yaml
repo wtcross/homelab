@@ -24,7 +24,7 @@ spec:
       mutate:
         patchStrategicMerge:
           spec:
-            +(caBundle): '{{ labCaBundle.data."ca-bundle.crt" | base64_encode() }}'
+            +(caBundle): "{{ base64_encode('{{ labCaBundle.data.\"ca-bundle.crt\" }}') }}"
     - name: add-ca-bundle-to-step-cluster-issuer
       context:
         - name: labCaBundle
