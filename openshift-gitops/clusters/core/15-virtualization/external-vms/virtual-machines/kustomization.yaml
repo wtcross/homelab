@@ -5,7 +5,7 @@ commonAnnotations:
   argocd.argoproj.io/sync-wave: "10"
 
 resources:
-  - vm-rhem.yaml
-  - vm-aap.yaml
-  - vm-keycloak.yaml
-  - vm-labctrl.yaml
+  # - vm-rhem.yaml
+  # - vm-aap.yaml
+  # - vm-keycloak.yaml
+  # - vm-labctrl.yaml
