@@ -13,5 +13,4 @@ spec:
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
       name: lab-ca-step-issuer-provisioner-password
-      namespace: pki
       key: password

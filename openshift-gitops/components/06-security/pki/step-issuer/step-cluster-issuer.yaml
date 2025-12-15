@@ -2,7 +2,6 @@ apiVersion: certmanager.step.sm/v1beta1
 kind: StepClusterIssuer
 metadata:
   name: step-issuer
-  namespace: pki
 spec:
   # Force using system root certificates by omitting /spec/caBundle
   #   https://github.com/smallstep/helm-charts/blob/master/step-issuer/crds/certmanager.step.sm_stepclusterissuers.yaml#L37
