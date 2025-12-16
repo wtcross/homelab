@@ -50,7 +50,7 @@ spec:
   template:
     spec:
       containers:
-        - image: quay.io/openshift/origin-cli:latest
+        - image: quay.io/openshift/origin-cli:4.20
           env:
             - name: NAMESPACE
               value: openshift-ingress
@@ -72,6 +72,12 @@ spec:
                 echo "Waiting for tls.crt/tls.key to be present in $NAMESPACE/$SECRET..."
                 sleep 5
               done
+
+              CURRENT=$(oc get ingresscontroller.operator default -n openshift-ingress-operator -o jsonpath='{.spec.defaultCertificate.name}{"\n"}' 2>/dev/null || true)
+              if [[ "$CURRENT" == "$SECRET" ]]; then
+                echo "APIServer already references $SECRET; exiting."
+                exit 0
+              fi
 
               oc patch ingresscontroller.operator default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "'"$SECRET"'" }}}'
           name: patch-cluster-ingress-wildcard-cert
