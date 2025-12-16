@@ -6,4 +6,4 @@ metadata:
     argocd.argoproj.io/sync-wave: "7"
 spec:
   trustedCA:
-    name: lab-ca-bundle
+    name: lab-root-ca-bundle
