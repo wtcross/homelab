@@ -19,7 +19,15 @@ spec:
                 - StepIssuer
               namespaces:
                 - pki
+          - resources:
+              kinds:
+                - StepIssuer
+              namespaces:
                 - openshift-ingress
+          - resources:
+              kinds:
+                - StepIssuer
+              namespaces:
                 - openshift-config
       mutate:
         patchStrategicMerge:
