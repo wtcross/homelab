@@ -61,10 +61,10 @@ spec:
             - -c
             - |
               #!/usr/bin/env bash
-              if oc get secret lab-api-certificate -n openshift-config; then
-                oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates": [{"names": ["'$API_HOST_NAME'"], "servingCertificate": {"name": "lab-api-certificate"}}]}}}'
+              if oc get secret lab-cluster-api-certificate -n openshift-config; then
+                oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates": [{"names": ["'$API_HOST_NAME'"], "servingCertificate": {"name": "lab-cluster-api-certificate"}}]}}}'
               else
-                echo "Could not execute sync as secret 'lab-api-certificate' in namespace 'openshift-config' does not exist, check status of CertificationRequest"
+                echo "Could not execute sync as secret 'lab-cluster-api-certificate' in namespace 'openshift-config' does not exist, check status of CertificationRequest"
                 exit 1
               fi
           name: patch-lab-api-cert
