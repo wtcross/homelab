@@ -6,5 +6,4 @@ commonAnnotations:
 
 resources:
   - openshift-wildcard-certificate.yaml
-  - mirrored-secret-openshift-wildcard-certificate.yaml
   - patch-cluster-wildcard-cert-job.yaml
