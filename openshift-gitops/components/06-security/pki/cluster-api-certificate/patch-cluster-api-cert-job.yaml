@@ -1,0 +1,72 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: patch-lab-api-cert
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - config.openshift.io
+    resources:
+      - apiservers
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: patch-lab-api-cert
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: patch-lab-api-cert
+subjects:
+  - kind: ServiceAccount
+    name: patch-lab-api-cert
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: patch-lab-api-cert
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: patch-lab-api-cert
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+        - image: quay.io/openshift/origin-cli:latest
+          env:
+            - name: API_HOST_NAME
+              value: api.core.lab.cross.solutions
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/usr/bin/env bash
+              if oc get secret lab-api-certificate -n openshift-config; then
+                oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates": [{"names": ["'$API_HOST_NAME'"], "servingCertificate": {"name": "lab-api-certificate"}}]}}}'
+              else
+                echo "Could not execute sync as secret 'lab-api-certificate' in namespace 'openshift-config' does not exist, check status of CertificationRequest"
+                exit 1
+              fi
+          name: patch-lab-api-cert
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      serviceAccount: patch-lab-api-cert
+      serviceAccountName: patch-lab-api-cert
