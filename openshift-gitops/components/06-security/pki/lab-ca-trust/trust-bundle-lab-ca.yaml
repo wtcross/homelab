@@ -18,5 +18,9 @@ spec:
         labels:
           app.kubernetes.io/component: "trust-bundle"
     namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: openshift-config
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - openshift-config
+            - pki

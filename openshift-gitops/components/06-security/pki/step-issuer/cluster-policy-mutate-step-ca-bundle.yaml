@@ -11,7 +11,7 @@ spec:
         - name: labCaBundle
           configMap:
             name: lab-ca-bundle
-            namespace: openshift-config
+            namespace: pki
       match:
         any:
           - resources:
@@ -34,7 +34,7 @@ spec:
         - name: labCaBundle
           configMap:
             name: lab-ca-bundle
-            namespace: openshift-config
+            namespace: pki
       match:
         any:
           - resources:
