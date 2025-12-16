@@ -11,8 +11,6 @@ resources:
   - allow-step-issuer-sa-nonroot-v2.yaml
   - secret-step-issuer-provisioner-password.yaml
   - step-issuer-pki.yaml
-  - step-issuer-openshift-ingress.yaml
-  - step-issuer-openshift-config.yaml
   # - step-cluster-issuer.yaml
 
 helmCharts:

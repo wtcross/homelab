@@ -17,6 +17,8 @@ spec:
           - resources:
               kinds:
                 - StepIssuer
+              namespaces:
+                - pki
               selector:
                 matchLabels:
                   inject-lab-ca-bundle: "true"
