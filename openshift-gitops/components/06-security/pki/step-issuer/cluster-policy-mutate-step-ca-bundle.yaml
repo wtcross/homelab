@@ -13,28 +13,14 @@ spec:
             name: lab-ca-bundle
             namespace: openshift-config
       match:
-        all:
+        any:
           - resources:
               kinds:
                 - StepIssuer
               namespaces:
                 - pki
-              names:
-                - step-issuer
-          - resources:
-              kinds:
-                - StepIssuer
-              namespaces:
                 - openshift-ingress
-              names:
-                - step-issuer
-          - resources:
-              kinds:
-                - StepIssuer
-              namespaces:
                 - openshift-config
-              names:
-                - step-issuer
       mutate:
         patchStrategicMerge:
           spec:
@@ -46,12 +32,10 @@ spec:
             name: lab-ca-bundle
             namespace: openshift-config
       match:
-        all:
+        any:
           - resources:
               kinds:
                 - StepClusterIssuer
-              names:
-                - step-issuer
       mutate:
         patchStrategicMerge:
           spec:
