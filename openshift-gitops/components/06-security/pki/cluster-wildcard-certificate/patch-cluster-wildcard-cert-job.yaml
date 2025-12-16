@@ -35,11 +35,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: patch-cluster-wildcard-cert
+  namespace: openshift-ingress
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: patch-cluster-wildcard-cert
+  namespace: openshift-ingress
   annotations:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
