@@ -5,6 +5,7 @@ commonAnnotations:
     argocd.argoproj.io/sync-wave: "3"
 
 resources:
+  - patch-cluster-root-ca.yaml
   - secret-lab-ca-root.yaml
   - secret-lab-ca-bundle.yaml
   - trust-bundle-lab-ca.yaml
