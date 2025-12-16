@@ -1,22 +1,22 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: lab-ingress-wildcard
+  name: cluster-api
   namespace: pki
 spec:
-  secretName: lab-ingress-wildcard-certificate
+  secretName: cluster-api-certificate
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "openshift-ingress"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "openshift-config"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "openshift-ingress"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "openshift-config"
   duration: 1440h
   renewBefore: 72h
   issuerRef:
     group: certmanager.step.sm
     kind: StepIssuer
     name: step-issuer
-  commonName: '*.apps.core.lab.cross.solutions'
+  commonName: 'api.core.lab.cross.solutions'
   dnsNames:
-    - '*.apps.core.lab.cross.solutions'
+    - 'api.core.lab.cross.solutions'

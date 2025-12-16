@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: patch-lab-api-cert
+  name: patch-cluster-api-cert
 rules:
   - apiGroups:
       - ""
@@ -24,26 +24,26 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: patch-lab-api-cert
+  name: patch-cluster-api-cert
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: patch-lab-api-cert
+  name: patch-cluster-api-cert
 subjects:
   - kind: ServiceAccount
-    name: patch-lab-api-cert
+    name: patch-cluster-api-cert
     namespace: openshift-config
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: patch-lab-api-cert
+  name: patch-cluster-api-cert
   namespace: openshift-config
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: patch-lab-api-cert
+  name: patch-cluster-api-cert
   namespace: openshift-config
   annotations:
     argocd.argoproj.io/hook: PostSync
@@ -56,20 +56,32 @@ spec:
           env:
             - name: API_HOST_NAME
               value: api.core.lab.cross.solutions
+            - name: NAMESPACE
+              value: openshift-config
+            - name: SECRET
+              value: cluster-api-certificate
           command:
             - /bin/bash
             - -c
             - |
-              #!/usr/bin/env bash
-              if oc get secret lab-cluster-api-certificate -n openshift-config; then
-                oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates": [{"names": ["'$API_HOST_NAME'"], "servingCertificate": {"name": "lab-cluster-api-certificate"}}]}}}'
-              else
-                echo "Could not execute sync as secret 'lab-cluster-api-certificate' in namespace 'openshift-config' does not exist, check status of CertificationRequest"
-                exit 1
-              fi
-          name: patch-lab-api-cert
+              #!/bin/bash
+
+              until oc -n "$NAMESPACE" get secret "$SECRET" >/dev/null 2>&1; do
+                echo "Waiting for $NAMESPACE/$SECRET to exist..."
+                sleep 5
+              done
+
+              until oc -n "$NAMESPACE" get secret "$SECRET" -o jsonpath='{.data.tls\.crt}' | grep -q . && \
+                    oc -n "$NAMESPACE" get secret "$SECRET" -o jsonpath='{.data.tls\.key}' | grep -q .; do
+                echo "Waiting for tls.crt/tls.key to be present in $NAMESPACE/$SECRET..."
+                sleep 5
+              done
+
+              oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts":{"namedCertificates":[{"names":["'"$API_HOST_NAME"'"],"servingCertificate":{"name":"'"$SECRET"'"}}]}}}'
+
+          name: patch-cluster-api-cert
       dnsPolicy: ClusterFirst
       restartPolicy: Never
       terminationGracePeriodSeconds: 30
-      serviceAccount: patch-lab-api-cert
-      serviceAccountName: patch-lab-api-cert
+      serviceAccount: patch-cluster-api-cert
+      serviceAccountName: patch-cluster-api-cert

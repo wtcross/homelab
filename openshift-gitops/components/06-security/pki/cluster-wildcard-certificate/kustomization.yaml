@@ -5,5 +5,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-wave: "15"
 
 resources:
-  - lab-ingress-wildcard-certificate.yaml
+  - cluster-ingress-wildcard-certificate.yaml
   - patch-cluster-ingress-wildcard-cert-job.yaml

@@ -5,5 +5,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-wave: "20"
 
 resources:
-  - lab-api-certificate.yaml
+  - cluster-api-certificate.yaml
   - patch-cluster-api-cert-job.yaml
