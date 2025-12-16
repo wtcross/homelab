@@ -17,18 +17,12 @@ spec:
           - resources:
               kinds:
                 - StepIssuer
-              namespaces:
-                - pki
-          - resources:
-              kinds:
-                - StepIssuer
-              namespaces:
-                - openshift-ingress
-          - resources:
-              kinds:
-                - StepIssuer
-              namespaces:
-                - openshift-config
+              selector:
+                matchLabels:
+                  inject-lab-ca-bundle: true
+              operations:
+                - CREATE
+                - UPDATE
       mutate:
         patchStrategicMerge:
           spec:
@@ -44,6 +38,12 @@ spec:
           - resources:
               kinds:
                 - StepClusterIssuer
+              selector:
+                matchLabels:
+                  inject-lab-ca-bundle: true
+              operations:
+                - CREATE
+                - UPDATE
       mutate:
         patchStrategicMerge:
           spec:

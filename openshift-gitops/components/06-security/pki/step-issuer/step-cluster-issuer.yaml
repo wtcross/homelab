@@ -2,6 +2,8 @@ apiVersion: certmanager.step.sm/v1beta1
 kind: StepClusterIssuer
 metadata:
   name: step-issuer
+  labels:
+    inject-lab-ca-bundle: true
 spec:
   # caBundle: required field that is added by kyverno
   url: https://pki.lab.cross.solutions
