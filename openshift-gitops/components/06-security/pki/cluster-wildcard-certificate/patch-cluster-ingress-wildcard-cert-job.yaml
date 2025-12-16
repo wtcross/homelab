@@ -74,17 +74,6 @@ spec:
               done
 
               oc patch ingresscontroller.operator default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "'"$SECRET"'" }}}'
-          command:
-            - /bin/bash
-            - -c
-            - |
-              #!/bin/bash
-              if oc get secret  -n openshift-ingress; then
-                oc patch ingresscontroller default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "lab-ingress-wildcard-certificate" }}}'
-              else
-                echo "Could not execute sync as secret 'lab-ingress-wildcard-certificate' in namespace 'openshift-ingress' does not exist, check status of CertificationRequest"
-                exit 1
-              fi
           name: patch-cluster-ingress-wildcard-cert
       dnsPolicy: ClusterFirst
       restartPolicy: Never
