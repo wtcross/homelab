@@ -19,6 +19,8 @@ spec:
                 - StepIssuer
               namespaces:
                 - pki
+                - openshift-ingress
+                - openshift-config
               names:
                 - step-issuer
       mutate:
