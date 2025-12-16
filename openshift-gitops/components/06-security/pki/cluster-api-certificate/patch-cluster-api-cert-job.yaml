@@ -32,19 +32,19 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: patch-lab-api-cert
-    namespace: openshift-ingress
+    namespace: openshift-api
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: patch-lab-api-cert
-  namespace: openshift-ingress
+  namespace: openshift-api
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: patch-lab-api-cert
-  namespace: openshift-ingress
+  namespace: openshift-api
   annotations:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
