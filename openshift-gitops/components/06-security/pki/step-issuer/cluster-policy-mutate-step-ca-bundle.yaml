@@ -10,7 +10,7 @@ spec:
       context:
         - name: labCaBundle
           configMap:
-            name: lab-ca-bundle
+            name: lab-cluster-ca-bundle
             namespace: pki
       match:
         any:
@@ -33,7 +33,7 @@ spec:
       context:
         - name: labCaBundle
           configMap:
-            name: lab-ca-bundle
+            name: lab-cluster-ca-bundle
             namespace: pki
       match:
         any:
