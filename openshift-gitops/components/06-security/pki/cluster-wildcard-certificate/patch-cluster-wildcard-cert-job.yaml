@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: patch-cluster-wildcard-cert
+  name: patch-lab-ingress-wildcard-cert
 rules:
   - apiGroups:
       - operator.openshift.io
@@ -22,26 +22,26 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: patch-cluster-wildcard-cert
+  name: patch-lab-ingress-wildcard-cert
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: patch-cluster-wildcard-cert
+  name: patch-lab-ingress-wildcard-cert
 subjects:
   - kind: ServiceAccount
-    name: patch-cluster-wildcard-cert
+    name: patch-lab-ingress-wildcard-cert
     namespace: openshift-ingress
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: patch-cluster-wildcard-cert
+  name: patch-lab-ingress-wildcard-cert
   namespace: openshift-ingress
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: patch-cluster-wildcard-cert
+  name: patch-lab-ingress-wildcard-cert
   namespace: openshift-ingress
   annotations:
     argocd.argoproj.io/hook: PostSync
@@ -56,15 +56,15 @@ spec:
             - -c
             - |
               #!/usr/bin/env bash
-              if oc get secret openshift-wildcard-certificate -n openshift-ingress; then
-                oc patch ingresscontroller default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "openshift-wildcard-certificate" }}}'
+              if oc get secret lab-ingress-wildcard-certificate -n openshift-ingress; then
+                oc patch ingresscontroller default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "lab-ingress-wildcard-certificate" }}}'
               else
-                echo "Could not execute sync as secret 'openshift-wildcard-certificate' in namespace 'openshift-ingress' does not exist, check status of CertificationRequest"
+                echo "Could not execute sync as secret 'lab-ingress-wildcard-certificate' in namespace 'openshift-ingress' does not exist, check status of CertificationRequest"
                 exit 1
               fi
-          name: patch-cluster-wildcard-cert
+          name: patch-lab-ingress-wildcard-cert
       dnsPolicy: ClusterFirst
       restartPolicy: Never
       terminationGracePeriodSeconds: 30
-      serviceAccount: patch-cluster-wildcard-cert
-      serviceAccountName: patch-cluster-wildcard-cert
+      serviceAccount: patch-lab-ingress-wildcard-cert
+      serviceAccountName: patch-lab-ingress-wildcard-cert
