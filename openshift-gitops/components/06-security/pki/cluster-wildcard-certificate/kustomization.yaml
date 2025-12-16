@@ -6,4 +6,4 @@ commonAnnotations:
 
 resources:
   - lab-ingress-wildcard-certificate.yaml
-  - patch-lab-ingress-wildcard-cert.yaml
+  - patch-cluster-wildcard-cert-job.yaml
