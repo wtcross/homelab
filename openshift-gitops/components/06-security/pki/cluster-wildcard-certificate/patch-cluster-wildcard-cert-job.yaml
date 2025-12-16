@@ -30,6 +30,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: patch-cluster-wildcard-cert
+    namespace: openshift-ingress
 ---
 apiVersion: v1
 kind: ServiceAccount
