@@ -4,7 +4,7 @@ metadata:
   name: step-issuer
   namespace: openshift-ingress
   labels:
-    inject-lab-ca-bundle: true
+    inject-lab-ca-bundle: "true"
 spec:
   # caBundle: required field that is added by kyverno
   url: https://pki.lab.cross.solutions

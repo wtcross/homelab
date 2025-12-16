@@ -3,7 +3,7 @@ kind: StepClusterIssuer
 metadata:
   name: step-issuer
   labels:
-    inject-lab-ca-bundle: true
+    inject-lab-ca-bundle: "true"
 spec:
   # caBundle: required field that is added by kyverno
   url: https://pki.lab.cross.solutions
