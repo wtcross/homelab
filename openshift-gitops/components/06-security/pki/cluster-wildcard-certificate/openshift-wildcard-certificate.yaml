@@ -5,8 +5,8 @@ metadata:
   namespace: openshift-ingress
 spec:
   secretName: openshift-wildcard-certificate
-  duration: 60d
-  renewBefore: 3d
+  duration: 1440h
+  renewBefore: 72h
   issuerRef:
     group: certmanager.step.sm
     kind: StepIssuer
