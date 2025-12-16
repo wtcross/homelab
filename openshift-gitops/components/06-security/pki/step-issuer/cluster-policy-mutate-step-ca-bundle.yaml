@@ -19,7 +19,19 @@ spec:
                 - StepIssuer
               namespaces:
                 - pki
+              names:
+                - step-issuer
+          - resources:
+              kinds:
+                - StepIssuer
+              namespaces:
                 - openshift-ingress
+              names:
+                - step-issuer
+          - resources:
+              kinds:
+                - StepIssuer
+              namespaces:
                 - openshift-config
               names:
                 - step-issuer
