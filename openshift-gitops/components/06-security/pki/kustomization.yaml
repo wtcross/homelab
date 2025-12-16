@@ -10,5 +10,5 @@ resources:
   - ns-pki.yaml
   - lab-ca-trust
   - step-issuer
-  - cluster-wildcard-certificate
-  - cluster-api-certificate
+  # - cluster-wildcard-certificate
+  # - cluster-api-certificate
