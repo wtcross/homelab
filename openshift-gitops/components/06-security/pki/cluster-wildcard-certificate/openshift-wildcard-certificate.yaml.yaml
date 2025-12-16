@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: openshift-wildcard
+  namespace: openshift-ingress
+spec:
+  secretName: openshift-wildcard-certificate
+  duration: 60d
+  renewBefore: 3d
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepIssuer
+    name: step-issuer
+  commonName: '*.apps.core.lab.cross.solutions'
+  dnsNames:
+    - '*.apps.core.lab.cross.solutions'

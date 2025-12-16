@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-step-certificates-certs
+  namespace: pki
+  labels:
+    {{- include "autocert.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.ca.certs | nindent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-step-certificates-config
+  namespace: pki
+  labels:
+    {{- include "autocert.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.ca.config | nindent 2 }}
+{{- end }}

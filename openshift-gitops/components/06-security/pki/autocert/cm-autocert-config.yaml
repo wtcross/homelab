@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-autocert-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "autocert.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    address: :4443
+    service: autocert
+    logFormat: json
+    caUrl: https://pki.lab.cross.solutions
+    certLifetime: 24h
+    clusterDomain: cluster.local
+    restrictCertificatesToNamespace: false
+    rootCAPath: /home/step/certs/root_ca.crt
+    provisionerPasswordPath: /home/step/password/password
+    renewer:
+      name: autocert-renewer
+      image: "cr.step.sm/smallstep/autocert-renewer:0.20.4"
+      imagePullPolicy: IfNotPresent
+      resources:
+        {requests: {cpu: 10m, memory: 20Mi}}
+      volumeMounts:
+      - name: certs
+        mountPath: /var/run/autocert.step.sm
+    bootstrapper:
+      name: autocert-bootstrapper
+      image: "cr.step.sm/smallstep/autocert-bootstrapper:0.20.4"
+      imagePullPolicy: IfNotPresent
+      resources:
+        {requests: {cpu: 10m, memory: 20Mi}}
+      volumeMounts:
+      - name: certs
+        mountPath: /var/run/autocert.step.sm
+    certsVolume:
+      name: certs
+      emptyDir: {}

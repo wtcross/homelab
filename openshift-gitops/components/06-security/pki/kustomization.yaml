@@ -10,3 +10,4 @@ resources:
   - ns-pki.yaml
   - lab-ca-trust
   - step-issuer
+  - cluster-wildcard-certificate

@@ -1,0 +1,14 @@
+apiVersion: certmanager.step.sm/v1beta1
+kind: StepIssuer
+metadata:
+  name: step-issuer
+  namespace: openshift-ingress
+spec:
+  # caBundle: required field that is added by kyverno
+  url: https://pki.lab.cross.solutions
+  provisioner:
+    name: ocp-cert-manager-lab
+    kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
+    passwordRef:
+      name: step-issuer-provisioner-password
+      key: password
