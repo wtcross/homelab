@@ -18,4 +18,5 @@ spec:
     serverCASecret: shared-pg-certificate
     serverTLSSecret: shared-pg-certificate
   enableSuperuserAccess: true
-  superuserSecret: shared-pg-superuser-credentials
+  superuserSecret:
+    name: shared-pg-superuser-credentials
