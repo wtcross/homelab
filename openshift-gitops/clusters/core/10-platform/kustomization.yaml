@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../../components/10-platform/scc
-  - ../../../components/10-platform/cloudnative-pg/operator/overlays/stable-v1
+  - ../../../components/10-platform/cloudnative-pg
   # - keycloak
   # - harbor
