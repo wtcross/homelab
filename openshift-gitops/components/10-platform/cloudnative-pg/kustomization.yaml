@@ -5,9 +5,10 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: ServerSideApply=true
 
 resources:
-  - namespace.yaml
+  - ns-cnpg-system.yaml
   - use-nonroot-v2-scc.yaml
   - allow-cnpg-sa-nonroot-v2.yaml
+
 
 helmCharts:
   - name: cloudnative-pg

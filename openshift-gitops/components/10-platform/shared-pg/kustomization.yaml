@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "5"
+
+resources:
+  - ns-cnpg.yaml
+  - shared-pg-certificate.yaml
+  - shared-pg-superuser-secret.yaml
+  - cluster-shared-pg.yaml

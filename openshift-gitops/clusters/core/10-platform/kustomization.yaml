@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - ../../../components/10-platform/scc
   - ../../../components/10-platform/cloudnative-pg
+  - ../../../components/10-platform/shared-pg
   # - keycloak
   # - harbor

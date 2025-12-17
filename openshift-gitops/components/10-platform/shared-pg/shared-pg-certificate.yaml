@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: shared-pg
+  namespace: cnpg
+spec:
+  secretName: shared-pg-certificate
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""
+  duration: 1440h
+  renewBefore: 72h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: step-issuer
+  usages:
+    - server auth
+  dnsNames:
+    - shared-pg-lb.internal.mydomain.net
+    - shared-pg-rw
+    - shared-pg-rw.default
+    - shared-pg-rw.default.svc
+    - shared-pg-r
+    - shared-pg-r.default
+    - shared-pg-r.default.svc
+    - shared-pg-ro
+    - shared-pg-ro.default
+    - shared-pg-ro.default.svc

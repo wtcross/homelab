@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: shared-pg
+  namespace: cnpg
+spec:
+  description: Shared PostgreSQL cluster
+  instances: 3
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 50Gi
+    storageClass: fast-nfs
+  walStorage:
+    size: 5Gi
+    storageClass: fast-nfs
+  certificates:
+    serverCASecret: shared-pg-certificate
+    serverTLSSecret: shared-pg-certificate
+  enableSuperuserAccess: true
+  superuserSecret: shared-pg-superuser-credentials

@@ -10,7 +10,7 @@ spec:
     service:
       secret: keycloak-admin-creds
   http:
-    tlsSecret: keycloak-tls
+    tlsSecret: keycloak-certificate
   hostname:
     hostname: keycloak.apps.core.lab.cross.solutions
   db:

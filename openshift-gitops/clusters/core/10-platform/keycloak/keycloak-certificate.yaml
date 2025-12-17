@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  secretName: keycloak-certificate
+  duration: 1440h
+  renewBefore: 72h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: step-issuer
+  commonName: 'keycloak.apps.core.lab.cross.solutions'
+  dnsNames:
+    - 'keycloak.apps.core.lab.cross.solutions'
