@@ -5,7 +5,7 @@ resources:
   - namespace.yaml
 
 helmCharts:
-  - name: cnpg
+  - name: cloudnative-pg
     repo: 'https://cloudnative-pg.github.io/charts'
     releaseName: cnpg
     version: 0.27.0
