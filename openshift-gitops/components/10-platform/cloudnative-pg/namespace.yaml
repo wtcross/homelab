@@ -4,3 +4,5 @@ metadata:
   name: cnpg-system
   annotations:
     openshift.io/display-name: "CloudNative PG"
+    openshift.io/sa.scc.uid-range: "1000750000/10000"
+    openshift.io/sa.scc.supplemental-groups: "1000750000/10000"
