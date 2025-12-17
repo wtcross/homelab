@@ -1,0 +1,14 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: allow-cnpg-sa-nonroot-v2
+  namespace: cnpg-system
+subjects:
+- kind: ServiceAccount
+  name: cnpg
+  namespace: cnpg-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: use-nonroot-v2-scc
