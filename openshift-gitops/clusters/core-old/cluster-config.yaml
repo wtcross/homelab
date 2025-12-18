@@ -1,9 +1,0 @@
-# cluster:
-#   name: core
-#   base_domain: lab.cross.solutions
-#   address: https://kubernetes.default.svc
-
-# features:
-#   platform: "true"
-#   virtualization: "true"
-#   management: "false"
