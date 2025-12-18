@@ -10,6 +10,7 @@ resources:
   - ../../../components/05-infra/advanced-cluster-management/operator/overlays/release-2.15
   - ../../../components/05-infra/advanced-cluster-management/instance/base
   - lvmcluster.yaml
+  - lvms-storageclass.yaml
 
 patches:
   - target:
