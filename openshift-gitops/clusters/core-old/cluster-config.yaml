@@ -4,6 +4,6 @@ cluster:
   address: https://kubernetes.default.svc
 
 features:
-  platform: "false"
-  virtualization: "false"
+  platform: "true"
+  virtualization: "true"
   management: "false"

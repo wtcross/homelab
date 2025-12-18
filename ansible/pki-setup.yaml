@@ -1,0 +1,6 @@
+---
+- name: Configure Step CA
+  hosts: pki
+  gather_facts: true
+  roles:
+    - role: step-ca-pkcs11

@@ -1,0 +1,18 @@
+- name: Create the {{ _smallstep_user }} group
+  become: yes
+  ansible.builtin.group:
+    state: present
+    name: "{{ _smallstep_group }}"
+    gid: "{{ _smallstep_gid }}"
+
+- name: Create the {{ _smallstep_user }} user
+  become: yes
+  ansible.builtin.user:
+    state: present
+    system: yes
+    name: "{{ _smallstep_user }}"
+    group: "{{ _smallstep_group }}"
+    create_home: yes
+    home: "{{ _smallstep_user_home }}"
+    shell: /usr/bin/bash
+    uid: "{{ _smallstep_uid }}"

@@ -10,7 +10,7 @@
   become: yes
   ansible.builtin.user:
     state: present
-    system: yes
+    system: no
     name: "{{ op_user }}"
     create_home: yes
     home: "{{ op_user_home }}"

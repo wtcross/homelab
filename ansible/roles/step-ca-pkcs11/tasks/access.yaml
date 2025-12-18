@@ -1,0 +1,68 @@
+- name: Create udev rules to allow the {{ _smallstep_group }} group to interact with the HSM
+  become: yes
+  ansible.builtin.copy:
+    dest: /etc/udev/rules.d/50-hsm.rules
+    owner: root
+    group: root
+    mode: 644
+    content: |
+      # Only handle USB events
+      SUBSYSTEM!="usb", GOTO="nitrokey_hsm_step_end"
+      ACTION!="add", GOTO="nitrokey_hsm_step_end"
+
+      # Nitrokey HSM (20a0:4230)
+      ATTR{idVendor}=="20a0", ATTR{idProduct}=="4230", \
+        ENV{ID_SMARTCARD_READER}="1", \
+        ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", \
+        GROUP="step", MODE="0660"
+
+      LABEL="nitrokey_hsm_step_end"
+      EOF
+  register: create_hsm_udev_rule
+
+- name: Reload udev rules if 99-hsm.rules changed
+  when: create_hsm_udev_rule.changed
+  become: yes
+  ansible.builtin.command:
+    argv:
+      - /sbin/udevadm
+      - control
+      - --reload-rules
+  register: reload_udev_rules
+
+- name: Request events from the kernel if 50-hsm.rules changed and udev rules were reloaded
+  when: create_hsm_udev_rule.changed and reload_udev_rules.rc == 0
+  become: yes
+  command:
+    argv:
+      - /sbin/udevadm
+      - trigger
+      - --attr-match=idVendor=20a0
+      - --attr-match=idProduct=4230
+
+- name: Create a polkit rule that allows the {{ _smallstep_group }} group to interact with the HSM
+  become: yes
+  ansible.builtin.copy:
+    dest: /etc/polkit-1/rules.d/50-step-pcsc.rules
+    owner: root
+    group: root
+    mode: 644
+    content: |
+      polkit.addRule(function(action, subject) {
+          // Allow members of group "{{ _smallstep_group }}" to talk to pcscd and access cards
+          if ((action.id == "org.debian.pcsc-lite.access_pcsc" ||
+               action.id == "org.debian.pcsc-lite.access_card") &&
+              subject.isInGroup("{{ _smallstep_group }}")) {
+              return polkit.Result.YES;
+          }
+      });
+  register: create_hsm_polkit_rule
+
+- name: Restart polkit if 50-step-pcsc.rules changed
+  when: create_hsm_polkit_rule.changed
+  become: yes
+  ansible.builtin.systemd_service:
+    state: restarted
+    enabled: yes
+    scope: system
+    name: polkit

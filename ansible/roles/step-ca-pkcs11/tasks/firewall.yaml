@@ -1,0 +1,6 @@
+- name: Permanently enable https service and enable it immediately
+  ansible.posix.firewalld:
+    service: https
+    state: enabled
+    permanent: true
+    immediate: true

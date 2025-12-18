@@ -1,0 +1,10 @@
+_smallstep_yum_repo_gpg_key_uri: https://packages.smallstep.com/keys/smallstep-0x889B19391F774443.gpg
+_smallstep_yum_repo_base_url: https://packages.smallstep.com/stable/fedora/
+
+_smallstep_uid: 2000
+_smallstep_gid: 2000
+_smallstep_user: step
+_smallstep_group: step
+_smallstep_user_home: /etc/step-ca
+
+_smallset_step_kms_plugin_url: https://github.com/smallstep/step-kms-plugin/releases/download/v0.16.0/step-kms-plugin-0.16.0-1.x86_64.rpm

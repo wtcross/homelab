@@ -9,7 +9,6 @@ resources:
   - use-nonroot-v2-scc.yaml
   - allow-cnpg-sa-nonroot-v2.yaml
 
-
 helmCharts:
   - name: cloudnative-pg
     repo: 'https://cloudnative-pg.github.io/charts'
