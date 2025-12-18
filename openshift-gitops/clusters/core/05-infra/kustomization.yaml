@@ -8,6 +8,7 @@ resources:
   - ../../../components/06-security/pki/cert-manager-operator/operator/overlays/stable-v1.18
   - ../../../components/05-infra/nmstate
   - ../../../components/05-infra/node-feature-discovery
+  - ../../../components/05-infra/lvm-storage/operator/overlays/stable-4.20
 
 patches:
   - target:
