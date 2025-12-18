@@ -10,6 +10,7 @@
       changed_when: "'configured' in install_gitops_operator.stdout or 'created' in install_gitops_operator.stdout"
 
     - name: Wait until the GitOps operator reaches the desired status
+      when: install_gitops_operator.changed
       kubernetes.core.k8s_info:
         api_version: argoproj.io/v1beta1
         namespace: openshift-gitops
