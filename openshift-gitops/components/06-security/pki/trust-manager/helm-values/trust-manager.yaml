@@ -1,10 +1,7 @@
-# +docs:section=Global
 global:
   rbac:
     # Create required ClusterRoles, Roles, ClusterRoleBindings and RoleBindings for trust-manager.
     create: true
-
-# +docs:section=CRDs
 crds:
   # This option decides if the CRDs should be installed
   # as part of the Helm installation.
@@ -16,8 +13,6 @@ crds:
   # WARNING: when the CRDs are removed, all trust-manager custom resources
   # (Certificates, Issuers, ...) will be removed too by the garbage collector.
   keep: true
-
-# +docs:section=Trust Manager
 
 # The number of replicas of trust-manager to run.
 #
@@ -31,13 +26,11 @@ crds:
 #  Use a string if you want to insert a variable for post-processing of the rendered template.
 #   replicaCount: ${REPLICAS_OVERRIDE:=3}
 #
-# +docs:type=number,string,null
 replicaCount: 1
 
 # The number of old ReplicaSets to retain to allow rollback.
 # This is used to control the number of old ReplicaSets that are retained to allow rollback.
 # If set to 0, no old ReplicaSets are retained.
-# +docs:type=number,null
 revisionHistoryLimit: 10
 
 nameOverride: ""
@@ -55,7 +48,6 @@ image:
   # For example:
   #   registry: quay.io
   #   repository: jetstack/trust-manager
-  # +docs:property
   # registry: quay.io
 
   # Target image repository.
@@ -63,13 +55,11 @@ image:
 
   # Override the image tag to deploy by setting this variable.
   # If no value is set, the chart's appVersion is used.
-  # +docs:property
   # tag: vX.Y.Z
 
   # Target image digest. Override any tag, if set.
   # For example:
   #   digest: sha256:0e072dddd1f7f8fc8909a2ca6f65e76c5f0d2fcfb8be47935ae3457e8bbceb20
-  # +docs:property
   # digest: sha256:...
 
   # Kubernetes imagePullPolicy on Deployment.
@@ -95,7 +85,6 @@ defaultPackageImage:
   # For example:
   #   registry: quay.io
   #   repository: jetstack/trust-manager-package-debian
-  # +docs:property
   # registry: quay.io
 
   # The repository for the default package image. This image enables the 'useDefaultCAs' source on Bundles.
@@ -103,20 +92,17 @@ defaultPackageImage:
 
   # Override the image tag of the default package image.
   # Is set at chart build time to the version specified in ./make/00_debian_bookworm_version.mk.
-  # +docs:property
   # tag: vX.Y.Z
 
   # Target image digest. Override any tag, if set.
   # For example:
   #   digest: sha256:0e072dddd1f7f8fc8909a2ca6f65e76c5f0d2fcfb8be47935ae3457e8bbceb20
-  # +docs:property
   # digest: sha256:...
 
   # imagePullPolicy for the default package image.
   pullPolicy: IfNotPresent
 
 # Automounting API credentials for the trust-manager pod.
-# +docs:property
 automountServiceAccountToken: true
 
 serviceAccount:
@@ -125,11 +111,9 @@ serviceAccount:
 
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template.
-  # +docs:property
   # name: ""
 
   # Automount API credentials for a Service Account.
-  # +docs:property
   automountServiceAccountToken: true
 
 
@@ -168,7 +152,6 @@ resources: {}
 priorityClassName: ""
 
 # Configure the nodeSelector; defaults to any Linux node (trust-manager doesn't support Windows nodes)
-# +docs:property
 nodeSelector:
   kubernetes.io/os: linux
 
@@ -246,7 +229,6 @@ app:
     namespace: trust-manager
 
   # List of target namespaces that trust-manager can write to. By default, trust-manager can write targets in any namespace.
-  # +docs:property
   # targetNamespaces: ["ns-1", "ns-2"]
 
   securityContext:
@@ -258,8 +240,6 @@ app:
 
   # Pod annotations to add to trust-manager pods.
   podAnnotations: {}
-
-  # +docs:section=Webhook
 
   webhook:
     # Host that the webhook listens on.
@@ -279,7 +259,6 @@ app:
       ipFamilies: []
 
       # The nodePort set on the Service used by the webhook.
-      # +docs:property
       # nodePort: 8080
 
     tls:
@@ -311,8 +290,6 @@ app:
 
     # This value specifies if the app should be started in hostNetwork mode. It is required for use in some managed Kubernetes clusters (such as AWS EKS) with custom CNI.
     hostNetwork: false
-
-  # +docs:section=Metrics
 
   metrics:
     # The port for exposing Prometheus metrics on 0.0.0.0 on path '/metrics'.
@@ -353,14 +330,12 @@ podDisruptionBudget:
   # This configures the minimum available pods for disruptions. It can either be set to
   # an integer (e.g. 1) or a percentage value (e.g. 25%).
   # It cannot be used if `maxUnavailable` is set.
-  # +docs:type=unknown
   # +docs:property
   # minAvailable: 1
 
   # This configures the maximum unavailable pods for disruptions. It can either be set to
   # an integer (e.g. 1) or a percentage value (e.g. 25%).
   # it cannot be used if `minAvailable` is set.
-  # +docs:type=unknown
   # +docs:property
   # maxUnavailable: 1
 
@@ -391,5 +366,4 @@ extraObjects: []
 # dependency in another chart.
 # This matched the helm best practices:
 # https://helm.sh/docs/chart_best_practices/dependencies/#conditions-and-tags
-# +docs:hidden
 enabled: true

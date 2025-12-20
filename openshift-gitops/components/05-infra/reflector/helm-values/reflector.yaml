@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: docker.io/emberstack/kubernetes-reflector
+  repository: ghcr.io/emberstack/kubernetes-reflector
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -39,6 +39,24 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# additional annotations to set on the pod
+podAnnotations: {}
+# additional labels to set on the pod
+podLabels: {}
+# additional env vars to add to the pod
+extraEnv: []
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
 livenessProbe:
   httpGet:
     path: /health/live
@@ -63,6 +81,7 @@ startupProbe:
   initialDelaySeconds: 5
   periodSeconds: 10
   failureThreshold: 5
+
 
 resources:
   {}
@@ -91,3 +110,9 @@ tolerations: []
 affinity: {}
 
 topologySpreadConstraints: []
+
+priorityClassName: ""
+
+volumes: []
+
+volumeMounts: []
