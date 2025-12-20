@@ -15,6 +15,7 @@ components:
   - ../../components/gitops-admins
   - ../../components/health-check-olm
   - ../../components/health-check-openshift-builds
+  - ../../components/enable-progressive-sync
   - ../../components/kustomize-build-enable-helm
   - ../../components/kustomize-build-acm-2.15-policy-generator
 
