@@ -13,7 +13,11 @@ SLEEP_SECONDS=30
 
 echo "Installing initial secret for ESO"
 kustomize build "${CLUSTER_DIR}/core/bootstrap/external-secrets" | oc apply -f -
-oc create secret generic infra-secrets-reader-credentials --from-file="${WORKSPACE_DIR}/.priv/homelab-442320-c098cf369dbf.json" --namespace external-secrets
+oc create secret generic infra-secrets-reader-credentials \
+  --from-file="${WORKSPACE_DIR}/.priv/homelab-442320-c098cf369dbf.json" \
+  --namespace external-secrets \
+  --dry-run=client -o yaml \
+  | oc replace -f -
 
 echo ""
 echo "Installing OpenShift GitOps Operator."
@@ -23,7 +27,7 @@ echo "Pause ${SLEEP_SECONDS} seconds for the creation of the openshift-gitops-op
 sleep "${SLEEP_SECONDS}"
 
 echo "Waiting for operator to start"
-until oc get deployment gitops-operator-controller-manager -n openshift-operators
+until oc get deployment openshift-gitops-operator-controller-manager -n openshift-gitops-operator
 do
   sleep 10;
 done
@@ -41,7 +45,7 @@ do
 done
 
 echo "Waiting for all pods to be created"
-deployments=(cluster kam openshift-gitops-applicationset-controller openshift-gitops-redis openshift-gitops-repo-server openshift-gitops-server)
+deployments=(cluster openshift-gitops-applicationset-controller openshift-gitops-redis openshift-gitops-repo-server openshift-gitops-server)
 for i in "${deployments[@]}";
 do
   echo "Waiting for deployment $i";
@@ -51,7 +55,10 @@ done
 echo "Deploy OpenShift GitOps instance"
 kustomize build "${CLUSTER_DIR}/core/bootstrap/openshift-gitops-instance" | oc apply -f -
 
-# TODO: wait for successful deployment of the gitops instance
+until oc get argocd openshift-gitops -n openshift-gitops -o jsonpath='{.status.phase}' | grep -q Available
+do
+  sleep 10;
+done
 
-echo "Create the bootstrap Application"
-kustomize build "${CLUSTER_DIR}/core/bootstrap/openshift-gitops-instance" | oc apply -f -
+# echo "Create the bootstrap Application"
+# kustomize build "${CLUSTER_DIR}/core/bootstrap/openshift-gitops-instance" | oc apply -f -

@@ -4,4 +4,5 @@ metadata:
   name: openshift-gitops
 spec:
   applicationSet:
-    extraCommandArgs: "--enable-progressive-syncs"
+    extraCommandArgs:
+      - "--enable-progressive-syncs"

@@ -3,6 +3,7 @@ kind: ArgoCD
 metadata:
   name: openshift-gitops
 spec:
+  resourceHealthChecks: []
   controller:
     resources:
       limits:
