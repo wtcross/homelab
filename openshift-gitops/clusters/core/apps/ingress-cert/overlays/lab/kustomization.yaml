@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      group: cert-manager.io
+      version: v1
+      kind: Certificate
+      name: cluster-ingress-cert
+      namespace: openshift-ingress
+    path: patches/patch-certificate.yaml

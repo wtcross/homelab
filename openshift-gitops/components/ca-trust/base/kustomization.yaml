@@ -12,4 +12,4 @@ configMapGenerator:
 
 resources:
   - proxy.yaml
-  - patch-cluster-root-ca.yaml
+  - post-sync-wait-for-stable-cluster.yaml
