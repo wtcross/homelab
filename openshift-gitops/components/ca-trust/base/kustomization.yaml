@@ -6,6 +6,7 @@ generatorOptions:
 
 configMapGenerator:
   - name: lab-ca-bundle
+    namespace: openshift-config
     files:
       - ca-bundle.crt
 
