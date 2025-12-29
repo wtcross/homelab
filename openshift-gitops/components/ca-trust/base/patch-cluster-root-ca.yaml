@@ -36,14 +36,7 @@ spec:
             - |
               #!/usr/bin/env bash
 
-              until oc -n openshift-config get configmap lab-cluster-ca-bundle >/dev/null 2>&1; do
-                echo "Waiting for openshift-config/lab-cluster-ca-bundle to exist..."
-                sleep 5
-              done
-
-              oc patch proxy/cluster --type=merge --patch='{"spec":{"trustedCA":{"name":"lab-cluster-ca-bundle"}}}'
-
-              oc adm wait-for-stable-cluster --minimum-stable-period=20s
+              oc adm wait-for-stable-cluster --minimum-stable-period=10s
 
           name: patch-cluster-proxy
       dnsPolicy: ClusterFirst

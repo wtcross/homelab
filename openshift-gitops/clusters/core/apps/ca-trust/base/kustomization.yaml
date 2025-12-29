@@ -1,8 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - es-lab-ca-root.yaml
-  - es-lab-ca-bundle.yaml
-  - trust-bundle-lab-ca.yaml
-  - patch-cluster-root-ca.yaml

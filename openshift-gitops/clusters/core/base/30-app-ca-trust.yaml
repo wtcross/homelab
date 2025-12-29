@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/wtcross/homelab.git
     targetRevision: patch-me-source-revision
-    path: openshift-gitops/clusters/core/apps/ca-trust/overlays/lab
+    path: openshift-gitops/components/ca-trust/overlays/lab
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-gitops
