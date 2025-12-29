@@ -4,5 +4,4 @@ metadata:
   name: openshift-external-secrets-operator
   namespace: external-secrets-operator
 spec:
-  targetNamespaces:
-    - external-secrets-operator
+  targetNamespaces: []
