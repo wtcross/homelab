@@ -2,8 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../../../../nmstate/aggregate/overlays/default
-  - ../../../../../node-feature-discovery/aggregate/overlays/default
-  - ../../../../../cert-manager/operator/overlays/stable-v1.18
-  - ../../../../../step-issuer/controller/overlays/version-1.9.11
-  - ../../../../../reflector/controller/overlays/version-9.1.45
+  - ../../../../../components/nmstate/aggregate/overlays/default
+  - ../../../../../components/node-feature-discovery/aggregate/overlays/default
+  - ../../../../../components/cert-manager/operator/overlays/stable-v1.18
+  - ../../../../../components/trust-manager/operator/overlays/version-v0.20.3
+  - ../../../../../components/step-issuer/controller/overlays/version-1.9.11
+  - ../../../../../components/reflector/controller/overlays/version-9.1.45

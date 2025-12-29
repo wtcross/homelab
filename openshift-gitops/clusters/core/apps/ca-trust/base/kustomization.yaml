@@ -2,7 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../../../../trust-manager/operator/overlays/version-v0.20.3
   - secret-lab-ca-root.yaml
   - secret-lab-ca-bundle.yaml
   - trust-bundle-lab-ca.yaml
