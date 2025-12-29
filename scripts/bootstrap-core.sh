@@ -19,7 +19,7 @@ fi
 echo "Installing initial secret for ESO"
 oc get namespace external-secrets &> /dev/null || oc create namespace external-secrets
 oc get secret cluster-secrets-reader-credentials --namespace external-secrets &> /dev/null || oc create secret generic cluster-secrets-reader-credentials \
-  --from-file="${GCP_CREDENTIAL_PATH}" \
+  --from-file=secret-access-credentials="${GCP_CREDENTIAL_PATH}" \
   --namespace external-secrets
 
 echo ""
