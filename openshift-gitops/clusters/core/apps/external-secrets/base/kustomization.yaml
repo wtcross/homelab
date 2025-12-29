@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../../../../components/external-secrets/operator/overlays/stable-v1
+  - ../../../../../components/external-secrets/instance/overlays/default
   - ns-external-secrets.yaml
   - clustersecretstore.yaml
