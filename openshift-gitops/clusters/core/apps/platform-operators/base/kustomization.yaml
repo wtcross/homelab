@@ -5,6 +5,5 @@ resources:
   - ../../../../../nmstate/aggregate/overlays/default
   - ../../../../../node-feature-discovery/aggregate/overlays/default
   - ../../../../../cert-manager/operator/overlays/stable-v1.18
-  - ../../../../../trust-manager/operator/overlays/version-v0.20.3
   - ../../../../../step-issuer/controller/overlays/version-1.9.11
   - ../../../../../reflector/controller/overlays/version-9.1.45
