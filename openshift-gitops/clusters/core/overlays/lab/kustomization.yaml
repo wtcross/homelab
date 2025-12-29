@@ -47,3 +47,10 @@ patches:
       name: acm
       namespace: openshift-gitops
     path: patches/patch-app-acm.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: ingress-cert
+      namespace: openshift-gitops
+    path: patches/patch-app-ingress-cert.yaml

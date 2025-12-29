@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-cert
+  annotations:
+    argocd.argoproj.io/sync-wave: "36"
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/wtcross/homelab.git
+    targetRevision: patch-me-source-revision
+    path: openshift-gitops/clusters/core/apps/ingress-cert/overlays/lab
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
