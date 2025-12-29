@@ -1,17 +1,17 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: lab-ca-bundle
+  name: lab-ca-root
   namespace: trust-manager
 spec:
   data:
     - remoteRef:
-        key: lab-ca-bundle
-      secretKey: ca-bundle.crt
+        key: lab-ca-root
+      secretKey: ca.crt
   refreshInterval: 1h0m0s
   secretStoreRef:
     kind: ClusterSecretStore
-    name: cluster-gcpsm-store
+    name: gcpsm-cluster-secret-store
   target:
-    name: lab-ca-bundle
+    name: lab-ca-root
     creationPolicy: Owner
