@@ -54,3 +54,10 @@ patches:
       name: ingress-cert
       namespace: openshift-gitops
     path: patches/patch-app-ingress-cert.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: api-cert
+      namespace: openshift-gitops
+  path: patches/patch-app-api-cert.yaml

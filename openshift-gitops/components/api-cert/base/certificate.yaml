@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cluster-api-cert
+  namespace: openshift-config
+spec:
+  secretName: cluster-api-certificate
+  duration: 1440h
+  renewBefore: 72h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: patch-me-step-cluster-issuer-name
+  commonName: patch-me-common-name
+  dnsNames: patch-me-dns-names
