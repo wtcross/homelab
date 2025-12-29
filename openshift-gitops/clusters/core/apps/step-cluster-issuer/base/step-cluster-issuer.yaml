@@ -10,5 +10,5 @@ spec:
     kid: "At3bv3OxIXZki-90c1es7kKsk-fHkY4uJoBxSLKSeMY"
     passwordRef:
       name: step-issuer-provisioner-password
-      namespace: pki
+      namespace: step-issuer
       key: password
