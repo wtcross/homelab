@@ -60,4 +60,4 @@ patches:
       kind: Application
       name: api-cert
       namespace: openshift-gitops
-  path: patches/patch-app-api-cert.yaml
+    path: patches/patch-app-api-cert.yaml

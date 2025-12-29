@@ -10,6 +10,6 @@ resources:
   - 30-app-ca-trust.yaml
   - 35-app-step-cluster-issuer.yaml
   - 36-app-ingress-cert.yaml
-  # - 37-app-api-cert.yaml
+  - 37-app-api-cert.yaml
   - 40-app-storage.yaml
   - 50-app-acm.yaml
