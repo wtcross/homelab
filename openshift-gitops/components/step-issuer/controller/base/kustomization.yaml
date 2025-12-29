@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - ns-step-issuer.yaml
+  - use-nonroot-v2-scc.yaml
+  - allow-step-issuer-sa-nonroot-v2.yaml
