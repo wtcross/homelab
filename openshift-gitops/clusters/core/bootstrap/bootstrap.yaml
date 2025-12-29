@@ -1,6 +1,0 @@
-# TODO:
-#   - Need to figure out where to create the bootstrap app
-#     that will create Argo projects and appsets
-#   - For the appsets make sure to use progressive sync and order syncs
-#     by context boundary (foundation, platform operators, security, etc)
-#

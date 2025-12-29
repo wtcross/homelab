@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: openshift-gitops
+
+resources:
+  - 00-proj-platform.yaml
+  - 10-app-external-secrets.yaml
+  - 20-app-platform-operators.yaml
+  - 30-app-ca-trust.yaml
+  - 35-app-step-cluster-issuer.yaml
+  - 40-app-storage.yaml
+

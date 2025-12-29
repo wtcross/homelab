@@ -53,7 +53,7 @@
           apiVersion: v1
           kind: Secret
           metadata:
-            name:  infra-secrets-reader-credentials
+            name:  cluster-secrets-reader-credentials
             namespace: external-secrets
           data:
             secret-access-credentials: "{{ lookup('ansible.builtin.file', gcp_credential_path) | ansible.builtin.b64encode }}"

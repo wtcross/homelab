@@ -1,0 +1,49 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: external-secrets
+      namespace: openshift-gitops
+    path: patch-app-external-secrets.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: platform-operators
+      namespace: openshift-gitops
+    path: patch-app-platform-operators.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: ca-trust
+      namespace: openshift-gitops
+    path: patch-app-ca-trust.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: step-cluster-issuer
+      namespace: openshift-gitops
+    path: patch-app-step-cluster-issuer.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: storage
+      namespace: openshift-gitops
+    path: patch-app-storage.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: acm
+      namespace: openshift-gitops
+    path: patch-app-acm.yaml

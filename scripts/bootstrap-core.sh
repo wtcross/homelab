@@ -6,22 +6,25 @@ LANG=C
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 WORKSPACE_DIR=$( dirname "${SCRIPT_DIR}" )
-CATALOG_DIR="${WORKSPACE_DIR}/openshift-gitops/catalog"
-CLUSTER_DIR="${WORKSPACE_DIR}/openshift-gitops/clusters"
+GITOPS_DIR="${WORKSPACE_DIR}/openshift-gitops"
 
 SLEEP_SECONDS=30
 
+if [[ -z "$GCP_CREDENTIAL_PATH" ]]; then
+    echo "Must provide GCP_CREDENTIAL_PATH in environment" 1>&2
+    exit 1
+fi
+
+
 echo "Installing initial secret for ESO"
-kustomize build "${CLUSTER_DIR}/core/bootstrap/external-secrets" | oc apply -f -
-oc create secret generic infra-secrets-reader-credentials \
-  --from-file="${WORKSPACE_DIR}/.priv/homelab-442320-c098cf369dbf.json" \
-  --namespace external-secrets \
-  --dry-run=client -o yaml \
-  | oc replace -f -
+oc get namespace external-secrets &> /dev/null || oc create namespace external-secrets
+oc get secret cluster-secrets-reader-credentials --namespace external-secrets &> /dev/null || oc create secret generic cluster-secrets-reader-credentials \
+  --from-file="${GCP_CREDENTIAL_PATH}" \
+  --namespace external-secrets
 
 echo ""
 echo "Installing OpenShift GitOps Operator."
-kustomize build "${CLUSTER_DIR}/core/bootstrap/openshift-gitops-operator" | oc apply -f -
+oc apply -k "${GITOPS_DIR}/components/openshift-gitops/operator/overlays/default"
 
 echo "Pause ${SLEEP_SECONDS} seconds for the creation of the openshift-gitops-operator..."
 sleep "${SLEEP_SECONDS}"
@@ -53,12 +56,12 @@ do
 done
 
 echo "Deploy OpenShift GitOps instance"
-kustomize build "${CLUSTER_DIR}/core/bootstrap/openshift-gitops-instance" | oc apply -f -
+oc apply -k "${GITOPS_DIR}/components/openshift-gitops/instance/overlays/acm-2.15-hub"
 
 until oc get argocd openshift-gitops -n openshift-gitops -o jsonpath='{.status.phase}' | grep -q Available
 do
   sleep 10;
 done
 
-# echo "Create the bootstrap Application"
-# kustomize build "${CLUSTER_DIR}/core/bootstrap/openshift-gitops-instance" | oc apply -f -
+echo "Create the bootstrap Application"
+oc apply -k "${GITOPS_DIR}/bootstrap/overlays/lab"
