@@ -40,13 +40,13 @@ patches:
       name: storage
       namespace: openshift-gitops
     path: patches/patch-app-storage.yaml
-  # - target:
-  #     group: argoproj.io
-  #     version: v1alpha1
-  #     kind: Application
-  #     name: acm
-  #     namespace: openshift-gitops
-  #   path: patches/patch-app-acm.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: acm
+      namespace: openshift-gitops
+    path: patches/patch-app-acm.yaml
   - target:
       group: argoproj.io
       version: v1alpha1
