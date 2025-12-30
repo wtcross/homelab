@@ -11,4 +11,5 @@ spec:
           sizePercent: 90
           name: thin-pool-1
           overprovisionRatio: 10
+        forceWipeDevicesAndDestroyAllData: true
         name: vg1
