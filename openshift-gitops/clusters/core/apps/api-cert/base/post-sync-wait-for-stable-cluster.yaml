@@ -1,5 +1,3 @@
-# TODO: this file (both in api and ingress cert components) needs to be moved to the cluster apps dir
-#       since there is cluster-specific info in it. specifically the api hostname
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
