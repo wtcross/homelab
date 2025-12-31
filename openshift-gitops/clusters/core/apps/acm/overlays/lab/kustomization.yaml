@@ -6,3 +6,4 @@ resources:
 
 components:
   - ../../components/agent-service-config
+  - ../../components/metal3-provisioning
