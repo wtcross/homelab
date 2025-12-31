@@ -3,4 +3,4 @@ kind: Kustomization
 
 resources:
   - ../../../../../components/advanced-cluster-management/operator/overlays/release-2.15
-  - ../../../../../components/advanced-cluster-management/instance/base
+  - ../../../../../components/advanced-cluster-management/instance/overlays/default
