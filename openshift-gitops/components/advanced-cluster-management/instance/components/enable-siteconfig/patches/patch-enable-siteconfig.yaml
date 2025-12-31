@@ -6,6 +6,5 @@ metadata:
 spec:
   overrides:
     components:
-      - configOverrides: {}
+      - name: siteconfig
         enabled: true
-        name: siteconfig

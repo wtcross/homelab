@@ -33,7 +33,7 @@ spec:
         enabled: true
         name: multicluster-engine
       - configOverrides: {}
-        enabled: true
+        enabled: false
         name: multicluster-observability
       - configOverrides: {}
         enabled: false

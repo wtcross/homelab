@@ -6,6 +6,5 @@ metadata:
 spec:
   overrides:
     components:
-      - configOverrides: {}
+      - name: multicluster-observability
         enabled: true
-        name: siteconfig

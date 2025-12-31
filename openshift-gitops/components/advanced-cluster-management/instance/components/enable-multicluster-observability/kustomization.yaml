@@ -1,8 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
+openapi:
+  path: mch-schema.json
+
 patches:
   - target:
+      group: operator.open-cluster-management.io
+      version: v1
       kind: MultiClusterHub
       namespace: open-cluster-management
-    path: patch-enable-multicluster-observability.yaml
+      name: multiclusterhub
+    path: patches/patch-enable-multicluster-observability.yaml
