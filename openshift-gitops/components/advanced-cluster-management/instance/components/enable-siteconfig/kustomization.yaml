@@ -3,6 +3,8 @@ kind: Component
 
 patches:
   - target:
+      group: operator.open-cluster-management.io
+      version: v1
       kind: MultiClusterHub
       namespace: open-cluster-management
     path: patch-enable-siteconfig.yaml
