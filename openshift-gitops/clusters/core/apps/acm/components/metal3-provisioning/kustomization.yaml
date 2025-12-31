@@ -3,4 +3,3 @@ kind: Component
 
 resources:
   - provisioning.yaml
-  - rbac.yaml
