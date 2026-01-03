@@ -88,4 +88,4 @@ patches:
       kind: Application
       name: lvm-storage
       namespace: openshift-gitops
-    path: patches/patch-app-storage.yaml
+    path: patches/patch-app-lvm-storage.yaml
