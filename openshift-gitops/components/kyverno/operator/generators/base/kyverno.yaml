@@ -209,18 +209,18 @@ valuesInline:
       nodeAffinity: {}
 
       # -- Security context for the hook containers
-      securityContext:
-        runAsUser: 65534
-        runAsGroup: 65534
-        runAsNonRoot: true
-        privileged: false
-        allowPrivilegeEscalation: false
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
+      securityContext: null
+        # runAsUser: 65534
+        # runAsGroup: 65534
+        # runAsNonRoot: true
+        # privileged: false
+        # allowPrivilegeEscalation: false
+        # readOnlyRootFilesystem: true
+        # capabilities:
+        #   drop:
+        #     - ALL
+        # seccompProfile:
+        #   type: RuntimeDefault
 
       podResources:
         # -- Pod resource limits
@@ -543,18 +543,18 @@ valuesInline:
         memory: 64Mi
 
     # -- Security context for the test containers
-    securityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
-      runAsNonRoot: true
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      seccompProfile:
-        type: RuntimeDefault
+    securityContext: null
+      # runAsUser: 65534
+      # runAsGroup: 65534
+      # runAsNonRoot: true
+      # privileged: false
+      # allowPrivilegeEscalation: false
+      # readOnlyRootFilesystem: true
+      # capabilities:
+      #   drop:
+      #     - ALL
+      # seccompProfile:
+      #   type: RuntimeDefault
 
     # -- Toggle automounting of the ServiceAccount
     automountServiceAccountToken: true
@@ -620,18 +620,18 @@ valuesInline:
     nodeAffinity: {}
 
     # -- Security context for the hook containers
-    securityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
-      runAsNonRoot: true
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      seccompProfile:
-        type: RuntimeDefault
+    securityContext: null
+      # runAsUser: 65534
+      # runAsGroup: 65534
+      # runAsNonRoot: true
+      # privileged: false
+      # allowPrivilegeEscalation: false
+      # readOnlyRootFilesystem: true
+      # capabilities:
+      #   drop:
+      #     - ALL
+      # seccompProfile:
+      #   type: RuntimeDefault
 
     resources:
       # -- Pod resource limits
@@ -1070,16 +1070,16 @@ valuesInline:
           memory: 64Mi
 
       # -- Container security context
-      securityContext:
-        runAsNonRoot: true
-        privileged: false
-        allowPrivilegeEscalation: false
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
+      securityContext: null
+        # runAsNonRoot: true
+        # privileged: false
+        # allowPrivilegeEscalation: false
+        # readOnlyRootFilesystem: true
+        # capabilities:
+        #   drop:
+        #     - ALL
+        # seccompProfile:
+        #   type: RuntimeDefault
 
       # -- Additional container args.
       extraArgs: {}
@@ -1115,16 +1115,16 @@ valuesInline:
           memory: 128Mi
 
       # -- Container security context
-      securityContext:
-        runAsNonRoot: true
-        privileged: false
-        allowPrivilegeEscalation: false
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
+      securityContext: null
+        # runAsNonRoot: true
+        # privileged: false
+        # allowPrivilegeEscalation: false
+        # readOnlyRootFilesystem: true
+        # capabilities:
+        #   drop:
+        #     - ALL
+        # seccompProfile:
+        #   type: RuntimeDefault
 
       # -- Additional container args.
       extraArgs: {}
@@ -1454,16 +1454,16 @@ valuesInline:
     podSecurityContext: {}
 
     # -- Security context for the containers
-    securityContext:
-      runAsNonRoot: true
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      seccompProfile:
-        type: RuntimeDefault
+    securityContext: null
+      # runAsNonRoot: true
+      # privileged: false
+      # allowPrivilegeEscalation: false
+      # readOnlyRootFilesystem: true
+      # capabilities:
+      #   drop:
+      #     - ALL
+      # seccompProfile:
+      #   type: RuntimeDefault
 
     podDisruptionBudget:
       # -- Enable PodDisruptionBudget.
@@ -1787,16 +1787,16 @@ valuesInline:
     podSecurityContext: {}
 
     # -- Security context for the containers
-    securityContext:
-      runAsNonRoot: true
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      seccompProfile:
-        type: RuntimeDefault
+    securityContext: null
+      # runAsNonRoot: true
+      # privileged: false
+      # allowPrivilegeEscalation: false
+      # readOnlyRootFilesystem: true
+      # capabilities:
+      #   drop:
+      #     - ALL
+      # seccompProfile:
+      #   type: RuntimeDefault
 
     podDisruptionBudget:
       # -- Enable PodDisruptionBudget.
@@ -2091,16 +2091,16 @@ valuesInline:
     podSecurityContext: {}
 
     # -- Security context for the containers
-    securityContext:
-      runAsNonRoot: true
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      seccompProfile:
-        type: RuntimeDefault
+    securityContext: null
+      # runAsNonRoot: true
+      # privileged: false
+      # allowPrivilegeEscalation: false
+      # readOnlyRootFilesystem: true
+      # capabilities:
+      #   drop:
+      #     - ALL
+      # seccompProfile:
+      #   type: RuntimeDefault
 
     podDisruptionBudget:
       # -- Enable PodDisruptionBudget.
