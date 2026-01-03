@@ -14,7 +14,7 @@ spec:
       releaseName: step-issuer
       parameters:
         - name: 'securityContext'
-          value: null
+          value: {}
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc
