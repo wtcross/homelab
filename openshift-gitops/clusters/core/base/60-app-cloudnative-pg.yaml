@@ -13,6 +13,9 @@ spec:
     targetRevision: patch-me-source-revision
     helm:
       releaseName: cloudnative-pg
+      parameters:
+        - name: 'crds.migration.securityContext'
+          value: ~
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc
@@ -25,3 +28,8 @@ spec:
       - CreateNamespace=true
       - ServerSideApply=true
       - SkipDryRunOnMissingResource=true
+    managedNamespaceMetadata:
+      annotations:
+        openshift.io/display-name: "CloudNative PG"
+        openshift.io/sa.scc.uid-range: "1000750000/10000"
+        openshift.io/sa.scc.supplemental-groups: "1000750000/10000"

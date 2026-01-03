@@ -42,3 +42,6 @@ spec:
       - CreateNamespace=true
       - ServerSideApply=true
       - SkipDryRunOnMissingResource=true
+    managedNamespaceMetadata:
+      annotations:
+        openshift.io/display-name: "Kyverno Policy Engine"
