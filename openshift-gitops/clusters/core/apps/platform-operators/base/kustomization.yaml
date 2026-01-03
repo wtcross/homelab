@@ -5,6 +5,7 @@ resources:
   - ../../../../../components/nmstate/aggregate/overlays/default
   - ../../../../../components/node-feature-discovery/aggregate/overlays/default
   - ../../../../../components/cert-manager/operator/overlays/stable-v1.18
-  - ../../../../../components/trust-manager/operator/overlays/version-v0.20.3
-  - ../../../../../components/step-issuer/controller/overlays/version-1.9.11
-  - ../../../../../components/reflector/controller/overlays/version-9.1.45
+  - ../../../../../components/trust-manager/operator/overlays/chart-version-v0.20.3
+  - ../../../../../components/step-issuer/controller/overlays/chart-version-1.9.11
+  - ../../../../../components/reflector/controller/overlays/chart-version-9.1.45
+  - ../../../../../components/kyverno/operator/overlays/chart-version-3.6.1

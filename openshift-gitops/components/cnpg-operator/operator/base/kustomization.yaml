@@ -3,6 +3,7 @@ kind: Kustomization
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: ServerSideApply=true
+  argocd.argoproj.io/compare-options: ServerSideDiff=true
 
 resources:
   - ns-cnpg-system.yaml

@@ -1,10 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: trust-manager
-
 resources:
   - ../../base
 
 generators:
-  - ../../generators/overlays/version-v0.20.3
+  - ../../generators/overlays/chart-version-0.27.0

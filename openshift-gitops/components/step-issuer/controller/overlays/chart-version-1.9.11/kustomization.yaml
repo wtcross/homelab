@@ -1,10 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: reflector
+namespace: step-issuer
 
 resources:
   - ../../base
 
 generators:
-  - ../../generators/overlays/version-9.1.45
+  - ../../generators/overlays/chart-version-1.9.11
