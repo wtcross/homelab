@@ -18,6 +18,8 @@ spec:
           value: ~
         - name: 'podSecurityContext'
           value: ~
+        - name: 'kubeRBACproxy.securityContext'
+          value: ~
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc

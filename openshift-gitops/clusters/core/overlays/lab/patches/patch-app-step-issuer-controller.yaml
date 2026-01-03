@@ -18,6 +18,8 @@
         pullPolicy: IfNotPresent
         tag: v0.8.0
 
+      securityContext: ~
+
     # List of secret keys used to pull images from private registries.
     imagePullSecrets: []
     nameOverride: ""
