@@ -56,11 +56,7 @@ valuesInline:
     # fsGroup: 2000
 
   # security context for container
-  securityContext:
-    runAsUser: null  # Let OpenShift pick the uid
-    runAsGroup: null  # Let OpenShift pick the gid
-    seccompProfile:
-      type: RuntimeDefault
+  securityContext: {}
 
   serviceAccount:
     # Specifies whether a service account should be created
