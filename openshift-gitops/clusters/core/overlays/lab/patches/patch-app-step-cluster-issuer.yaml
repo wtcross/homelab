@@ -1,3 +1,6 @@
 - op: replace
   path: /spec/source/targetRevision
   value: main
+- op: replace
+  path: /spec/source/path
+  value: openshift-gitops/clusters/core/apps/step-cluster-issuer/overlays/lab

@@ -16,6 +16,13 @@ patches:
       group: argoproj.io
       version: v1alpha1
       kind: Application
+      name: kyverno
+      namespace: openshift-gitops
+    path: patches/patch-app-kyverno.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
       name: platform-operators
       namespace: openshift-gitops
     path: patches/patch-app-platform-operators.yaml
