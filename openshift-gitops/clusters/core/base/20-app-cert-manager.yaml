@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: node-feature-discovery
+  name: cert-manager
   annotations:
     argocd.argoproj.io/sync-wave: "20"
 spec:
