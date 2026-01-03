@@ -12,4 +12,4 @@ resources:
   - 36-app-ingress-cert.yaml
   - 37-app-api-cert.yaml
   - 40-app-storage.yaml
-  - 50-app-acm.yaml
+  # - 50-app-acm.yaml
