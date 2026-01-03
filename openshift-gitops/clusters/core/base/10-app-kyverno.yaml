@@ -15,21 +15,21 @@ spec:
       releaseName: kyverno
       parameters:
         - name: 'crds.migration.securityContext'
-          value: {}
+          value: ~
         - name: 'test.securityContext'
-          value: {}
+          value: ~
         - name: 'webhooksCleanup.securityContext'
-          value: {}
+          value: ~
         - name: 'admissionController.initContainer.securityContext'
-          value: {}
+          value: ~
         - name: 'admissionController.container.securityContext'
-          value: {}
+          value: ~
         - name: 'backgroundController.securityContext'
-          value: {}
+          value: ~
         - name: 'cleanupController.securityContext'
-          value: {}
+          value: ~
         - name: 'reportsController.securityContext'
-          value: {}
+          value: ~
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc
