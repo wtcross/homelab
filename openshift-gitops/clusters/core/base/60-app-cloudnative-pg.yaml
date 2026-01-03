@@ -4,6 +4,7 @@ metadata:
   name: cloudnative-pg
   annotations:
     argocd.argoproj.io/sync-wave: "50"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   project: platform
   source:
@@ -22,4 +23,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
       - SkipDryRunOnMissingResource=true
