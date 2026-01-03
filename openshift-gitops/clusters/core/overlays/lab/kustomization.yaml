@@ -23,9 +23,30 @@ patches:
       group: argoproj.io
       version: v1alpha1
       kind: Application
-      name: platform-operators
+      name: cert-manager
       namespace: openshift-gitops
-    path: patches/patch-app-platform-operators.yaml
+    path: patches/patch-app-cert-manager.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: nmstate
+      namespace: openshift-gitops
+    path: patches/patch-app-nmstate.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: node-feature-discovery
+      namespace: openshift-gitops
+    path: patches/patch-app-node-feature-discovery.yaml
+  # - target:
+  #     group: argoproj.io
+  #     version: v1alpha1
+  #     kind: Application
+  #     name: step-issuer-controller
+  #     namespace: openshift-gitops
+  #   path: patches/patch-app-step-issuer-controller.yaml
   - target:
       group: argoproj.io
       version: v1alpha1
@@ -44,20 +65,6 @@ patches:
       group: argoproj.io
       version: v1alpha1
       kind: Application
-      name: storage
-      namespace: openshift-gitops
-    path: patches/patch-app-storage.yaml
-  # - target:
-  #     group: argoproj.io
-  #     version: v1alpha1
-  #     kind: Application
-  #     name: acm
-  #     namespace: openshift-gitops
-  #   path: patches/patch-app-acm.yaml
-  - target:
-      group: argoproj.io
-      version: v1alpha1
-      kind: Application
       name: ingress-cert
       namespace: openshift-gitops
     path: patches/patch-app-ingress-cert.yaml
@@ -68,3 +75,10 @@ patches:
       name: api-cert
       namespace: openshift-gitops
     path: patches/patch-app-api-cert.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: storage
+      namespace: openshift-gitops
+    path: patches/patch-app-storage.yaml

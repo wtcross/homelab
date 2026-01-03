@@ -3,4 +3,4 @@
   value: main
 - op: replace
   path: /spec/source/path
-  value: openshift-gitops/clusters/core/apps/acm/overlays/lab
+  value: openshift-gitops/components/cert-manager/operator/overlays/stable-v1.18

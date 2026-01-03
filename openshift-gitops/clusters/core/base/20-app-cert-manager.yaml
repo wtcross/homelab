@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: platform-operators
+  name: node-feature-discovery
   annotations:
     argocd.argoproj.io/sync-wave: "20"
 spec:
@@ -18,5 +18,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
       - SkipDryRunOnMissingResource=true

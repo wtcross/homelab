@@ -3,4 +3,4 @@
   value: main
 - op: replace
   path: /spec/source/path
-  value: openshift-gitops/clusters/core/apps/platform-operators/overlays/lab
+  value: openshift-gitops/components/nmstate/aggregate/overlays/default
