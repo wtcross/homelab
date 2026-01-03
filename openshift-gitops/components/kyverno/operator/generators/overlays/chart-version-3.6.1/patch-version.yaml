@@ -1,3 +1,0 @@
-- op: replace
-  path: /version
-  value: 3.6.1

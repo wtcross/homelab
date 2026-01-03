@@ -1,21 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: storage
+  name: cloudnative-pg
   annotations:
-    argocd.argoproj.io/sync-wave: "40"
+    argocd.argoproj.io/sync-wave: "50"
 spec:
   project: platform
   source:
-    repoURL: https://github.com/wtcross/homelab.git
+    chart: cloudnative-pg
+    repoURL: 'https://cloudnative-pg.github.io/charts'
     targetRevision: patch-me-source-revision
-    path: patch-me-source-path
+    helm:
+      releaseName: cloudnative-pg
+      valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc
-    namespace: openshift-gitops
+    namespace: cnpg-system
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
