@@ -12,9 +12,9 @@ spec:
     targetRevision: patch-me-source-revision
     helm:
       releaseName: step-issuer
-      parameters:
-        - name: 'securityContext'
-          value: {}
+      # parameters:
+      #   - name: securityContext
+      #     value: {}
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc

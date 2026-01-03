@@ -51,7 +51,7 @@
       # fsGroup: 2000
 
     # security context for container
-    securityContext: null
+    securityContext: {}
 
     serviceAccount:
       # Specifies whether a service account should be created
