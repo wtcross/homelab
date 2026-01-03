@@ -10,9 +10,9 @@ resources:
   - 20-app-cert-manager.yaml
   - 20-app-nmstate.yaml
   - 20-app-node-feature-discovery.yaml
-  # - 20-app-step-issuer-controller.yaml
+  - 20-app-step-issuer-controller.yaml
   - 30-app-ca-trust.yaml
-  - 35-app-step-cluster-issuer.yaml
+  - 30-app-step-cluster-issuer.yaml
   - 36-app-ingress-cert.yaml
   - 37-app-api-cert.yaml
   - 40-app-storage.yaml
