@@ -40,13 +40,13 @@ patches:
       name: node-feature-discovery
       namespace: openshift-gitops
     path: patches/patch-app-node-feature-discovery.yaml
-  # - target:
-  #     group: argoproj.io
-  #     version: v1alpha1
-  #     kind: Application
-  #     name: step-issuer-controller
-  #     namespace: openshift-gitops
-  #   path: patches/patch-app-step-issuer-controller.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: step-issuer-controller
+      namespace: openshift-gitops
+    path: patches/patch-app-step-issuer-controller.yaml
   - target:
       group: argoproj.io
       version: v1alpha1
