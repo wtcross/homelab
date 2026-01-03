@@ -8,8 +8,8 @@ spec:
   project: platform
   source:
     chart: step-issuer
-    # repoURL: 'https://smallstep.github.io/helm-charts'
-    repoURL: 'oci://ghcr.io/wtcross'
+    repoURL: ghcr.io/wtcross
+    path: step-issuer
     targetRevision: patch-me-source-revision
     helm:
       releaseName: step-issuer
