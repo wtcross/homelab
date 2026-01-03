@@ -9,6 +9,7 @@ spec:
   description: "Common platform configuration"
   sourceRepos:
     - 'https://github.com/wtcross/homelab.git'
+    - 'https://kyverno.github.io/kyverno/'
   destinations:
     - namespace: '*'
       server: 'https://kubernetes.default.svc'
