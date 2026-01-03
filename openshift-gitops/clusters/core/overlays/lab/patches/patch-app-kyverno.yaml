@@ -204,7 +204,7 @@
         nodeAffinity: {}
 
         # -- Security context for the hook containers
-        securityContext: ~
+        securityContext: {}
           # runAsUser: 65534
           # runAsGroup: 65534
           # runAsNonRoot: true
@@ -538,7 +538,7 @@
           memory: 64Mi
 
       # -- Security context for the test containers
-      securityContext: ~
+      securityContext: {}
         # runAsUser: 65534
         # runAsGroup: 65534
         # runAsNonRoot: true
@@ -615,7 +615,7 @@
       nodeAffinity: {}
 
       # -- Security context for the hook containers
-      securityContext: ~
+      securityContext: {}
         # runAsUser: 65534
         # runAsGroup: 65534
         # runAsNonRoot: true
@@ -1065,7 +1065,7 @@
             memory: 64Mi
 
         # -- Container security context
-        securityContext: ~
+        securityContext: {}
           # runAsNonRoot: true
           # privileged: false
           # allowPrivilegeEscalation: false
@@ -1110,7 +1110,7 @@
             memory: 128Mi
 
         # -- Container security context
-        securityContext: ~
+        securityContext: {}
           # runAsNonRoot: true
           # privileged: false
           # allowPrivilegeEscalation: false
@@ -1449,7 +1449,7 @@
       podSecurityContext: {}
 
       # -- Security context for the containers
-      securityContext: ~
+      securityContext: {}
         # runAsNonRoot: true
         # privileged: false
         # allowPrivilegeEscalation: false
@@ -1782,7 +1782,7 @@
       podSecurityContext: {}
 
       # -- Security context for the containers
-      securityContext: ~
+      securityContext: {}
         # runAsNonRoot: true
         # privileged: false
         # allowPrivilegeEscalation: false
@@ -2086,7 +2086,7 @@
       podSecurityContext: {}
 
       # -- Security context for the containers
-      securityContext: ~
+      securityContext: {}
         # runAsNonRoot: true
         # privileged: false
         # allowPrivilegeEscalation: false
