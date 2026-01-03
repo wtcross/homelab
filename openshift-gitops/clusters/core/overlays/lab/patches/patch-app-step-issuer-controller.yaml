@@ -1,6 +1,6 @@
 - op: replace
   path: /spec/source/targetRevision
-  value: 1.9.11
+  value: 1.9.12
 - op: replace
   path: /spec/source/helm/valuesObject
   value:
@@ -47,11 +47,11 @@
       scrapePort: 8080
 
     # Security Context for the pod
-    podSecurityContext: {}
+    podSecurityContext: ~
       # fsGroup: 2000
 
     # security context for container
-    securityContext: {}
+    securityContext: ~
 
     serviceAccount:
       # Specifies whether a service account should be created

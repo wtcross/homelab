@@ -10,7 +10,8 @@ spec:
   sourceRepos:
     - 'https://github.com/wtcross/homelab.git'
     - 'https://kyverno.github.io/kyverno/'
-    - 'https://smallstep.github.io/helm-charts'
+    # - 'https://smallstep.github.io/helm-charts'
+    - 'oci://ghcr.io/wtcross'
     - 'https://cloudnative-pg.github.io/charts'
   destinations:
     - namespace: '*'

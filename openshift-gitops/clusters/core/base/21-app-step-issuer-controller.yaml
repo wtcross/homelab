@@ -8,10 +8,16 @@ spec:
   project: platform
   source:
     chart: step-issuer
-    repoURL: 'https://smallstep.github.io/helm-charts'
+    # repoURL: 'https://smallstep.github.io/helm-charts'
+    repoURL: 'oci://ghcr.io/wtcross'
     targetRevision: patch-me-source-revision
     helm:
       releaseName: step-issuer
+      parameters:
+        - name: 'securityContext'
+          value: ~
+        - name: 'podSecurityContext'
+          value: ~
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc
