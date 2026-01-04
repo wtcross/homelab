@@ -13,13 +13,13 @@ spec:
       releaseName: seaweedfs-operator
       parameters:
         - name: 'webhook.podSecurityContext'
-          value: null
+          value: ~
         - name: 'webhook.securityContext'
-          value: null
+          value: ~
         - name: 'podSecurityContext'
-          value: null
+          value: ~
         - name: 'securityContext'
-          value: null
+          value: ~
       valuesObject: patch-me-values-object
   destination:
     server: https://kubernetes.default.svc
