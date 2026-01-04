@@ -3,33 +3,19 @@ kind: Application
 metadata:
   name: cloudnative-pg
   annotations:
-    argocd.argoproj.io/sync-wave: "50"
-    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    argocd.argoproj.io/sync-wave: "60"
 spec:
   project: platform
   source:
-    chart: cloudnative-pg
-    repoURL: 'https://cloudnative-pg.github.io/charts'
+    repoURL: https://github.com/wtcross/homelab.git
     targetRevision: patch-me-source-revision
-    helm:
-      releaseName: cloudnative-pg
-      parameters:
-        - name: 'crds.migration.securityContext'
-          value: ~
-      valuesObject: patch-me-values-object
+    path: patch-me-source-path
   destination:
     server: https://kubernetes.default.svc
-    namespace: cnpg-system
+    namespace: openshift-gitops
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
       - SkipDryRunOnMissingResource=true
-    managedNamespaceMetadata:
-      annotations:
-        openshift.io/display-name: "CloudNative PG"
-        openshift.io/sa.scc.uid-range: "1000750000/10000"
-        openshift.io/sa.scc.supplemental-groups: "1000750000/10000"
