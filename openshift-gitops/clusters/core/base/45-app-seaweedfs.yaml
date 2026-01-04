@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: seaweedfs
+  annotations:
+    argocd.argoproj.io/sync-wave: "45"
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/wtcross/homelab.git
+    targetRevision: patch-me-source-revision
+    path: patch-me-source-path
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - SkipDryRunOnMissingResource=true

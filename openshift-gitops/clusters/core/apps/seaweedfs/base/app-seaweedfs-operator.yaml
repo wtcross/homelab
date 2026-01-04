@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: seaweedfs-operator
+  # annotations:
+    # argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  project: platform
+  source:
+    chart: seaweedfs-operator
+    repoURL: 'https://seaweedfs.github.io/seaweedfs-operator/'
+    targetRevision: patch-me-source-revision
+    helm:
+      releaseName: seaweedfs-operator
+      valuesObject: patch-me-values-object
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: seaweedfs-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+    managedNamespaceMetadata:
+      annotations:
+        openshift.io/display-name: "SeaweedFS Operator"
