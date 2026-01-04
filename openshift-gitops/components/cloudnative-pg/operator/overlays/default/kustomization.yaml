@@ -7,5 +7,5 @@ resources:
 patches:
   - target:
       kind: Subscription
-      name: openshift-gitops-operator
+      name: cloudnative-pg
     path: patch-subscription.yaml
