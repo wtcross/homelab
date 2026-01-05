@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+spec:
+  cluster:
+    name: keycloak-pg
+  ensure: present
+  name: keycloak
+  owner: keycloak

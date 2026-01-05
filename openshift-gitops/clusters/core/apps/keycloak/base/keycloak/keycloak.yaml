@@ -1,0 +1,28 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  bootstrapAdmin:
+    user:
+      secret: keycloak-admin-creds
+    service:
+      secret: keycloak-admin-creds
+  http:
+    tlsSecret: keycloak-certificate
+  hostname:
+    hostname: patch-me-keycloak-hostname
+  db:
+    vendor: postgres
+    host: keycloak-pg-rw
+    usernameSecret:
+      name: keycloak-db-creds
+      key: user
+    passwordSecret:
+      name: keycloak-db-creds
+      key: password
+  ingress:
+    enabled: false
+  proxy:
+    headers: xforwarded

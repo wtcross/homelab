@@ -3,3 +3,12 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+patches:
+  - target:
+      group: k8s.keycloak.org
+      version: v2alpha1
+      kind: Keycloak
+      name: keycloak
+      namespace: keycloak
+    path: patches/patch-keycloak-hostname.yaml

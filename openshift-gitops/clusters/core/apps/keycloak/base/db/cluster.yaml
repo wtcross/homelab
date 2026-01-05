@@ -1,0 +1,22 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: keycloak-pg
+  namespace: keycloak
+spec:
+  description: Keycloak PostgreSQL cluster
+  instances: 3
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 50Gi
+    storageClass: lvms-vg1
+  walStorage:
+    size: 5Gi
+    storageClass: lvms-vg1
+  certificates:
+    serverCASecret: keycloak-pg-certificate
+    serverTLSSecret: keycloak-pg-certificate
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: keycloak-pg-superuser-credentials

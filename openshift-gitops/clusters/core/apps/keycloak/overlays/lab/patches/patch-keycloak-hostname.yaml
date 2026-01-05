@@ -1,0 +1,3 @@
+- op: replace
+  path: /spec/hostname
+  value: keycloak.apps.core.lab.cross.solutions
