@@ -24,5 +24,6 @@ spec:
     roles:
       - name: keycloak
         login: true
+        ensure: present
         passwordSecret:
           name: keycloak-db-creds
