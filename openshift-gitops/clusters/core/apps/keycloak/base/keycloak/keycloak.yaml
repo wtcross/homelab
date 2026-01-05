@@ -18,10 +18,10 @@ spec:
     host: keycloak-pg-rw
     database: app
     usernameSecret:
-      name: keycloak-pg-app
+      name: keycloak-db-creds
       key: user
     passwordSecret:
-      name: keycloak-pg-app
+      name: keycloak-db-creds
       key: password
   ingress:
     # enabled: false
