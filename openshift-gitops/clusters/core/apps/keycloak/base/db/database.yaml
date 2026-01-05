@@ -10,3 +10,4 @@ spec:
   ensure: present
   name: keycloak
   owner: keycloak
+  allowConnections: true
