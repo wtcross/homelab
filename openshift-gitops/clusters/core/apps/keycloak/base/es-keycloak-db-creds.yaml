@@ -6,9 +6,6 @@ metadata:
 spec:
   data:
     - remoteRef:
-        key: core-keycloak-db-user
-      secretKey: user
-    - remoteRef:
         key: core-keycloak-db-password
       secretKey: password
   refreshInterval: 1h0m0s
@@ -18,3 +15,8 @@ spec:
   target:
     name: keycloak-db-creds
     creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        user: keycloak
+        password: "{{ .password }}"
