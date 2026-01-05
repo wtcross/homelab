@@ -24,8 +24,5 @@ spec:
       name: keycloak-pg-app
       key: password
   ingress:
-    # enabled: false
     enabled: true
     tlsSecret: keycloak-certificate
-  # proxy:
-  #   headers: xforwarded
