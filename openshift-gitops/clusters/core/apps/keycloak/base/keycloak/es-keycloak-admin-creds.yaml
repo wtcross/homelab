@@ -20,7 +20,7 @@ spec:
   refreshInterval: 1h0m0s
   secretStoreRef:
     kind: ClusterSecretStore
-    name: infra-gcpsm-store
+    name: gcpsm-cluster-secret-store
   target:
     name: keycloak-admin-creds
     creationPolicy: Owner
