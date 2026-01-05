@@ -96,10 +96,10 @@ patches:
       name: seaweedfs
       namespace: openshift-gitops
     path: patches/patch-app-seaweedfs.yaml
-  # - target:
-  #     group: argoproj.io
-  #     version: v1alpha1
-  #     kind: Application
-  #     name: keycloak
-  #     namespace: openshift-gitops
-  #   path: patches/patch-app-keycloak.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: keycloak
+      namespace: openshift-gitops
+    path: patches/patch-app-keycloak.yaml

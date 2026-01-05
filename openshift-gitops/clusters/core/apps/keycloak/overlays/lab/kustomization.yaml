@@ -11,4 +11,11 @@ patches:
       kind: Keycloak
       name: keycloak
       namespace: keycloak
-    path: patches/patch-keycloak-hostname.yaml
+    path: patches/patch-keycloak.yaml
+  - target:
+      group: cert-manager.io
+      version: v1
+      kind: Certificate
+      name: keycloak
+      namespace: keycloak
+    path: patches/patch-keycloak-certificate.yaml

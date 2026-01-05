@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  secretName: keycloak-certificate
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""
+  duration: 1440h
+  renewBefore: 72h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: step-cluster-issuer
+  usages:
+    - server auth
+  commonName: patch-me-keycloak-cert-common-name
+  dnsNames: patch-me-keycloak-cert-dns-names

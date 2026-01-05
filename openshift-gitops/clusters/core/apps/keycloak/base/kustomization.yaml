@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - ../../../../../components/keycloak/operator/overlays/stable-v26.4
+  - db
+  - keycloak

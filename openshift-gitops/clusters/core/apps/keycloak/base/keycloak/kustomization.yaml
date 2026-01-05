@@ -7,4 +7,5 @@ commonAnnotations:
 resources:
   - es-keycloak-admin-creds.yaml
   - es-keycloak-db-creds.yaml
+  - certificate.yaml
   - keycloak.yaml
