@@ -6,5 +6,4 @@ commonAnnotations:
 
 resources:
   - certificate.yaml
-  # - es-superuser-secret.yaml
   - cluster.yaml

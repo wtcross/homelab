@@ -17,9 +17,6 @@ spec:
   certificates:
     serverCASecret: keycloak-pg-certificate
     serverTLSSecret: keycloak-pg-certificate
-  # enableSuperuserAccess: true
-  # superuserSecret:
-  #   name: keycloak-pg-superuser-credentials
   postgresql:
     pg_hba:
       - hostssl app app all scram-sha-256
