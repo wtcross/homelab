@@ -20,3 +20,6 @@ spec:
   enableSuperuserAccess: true
   superuserSecret:
     name: keycloak-pg-superuser-credentials
+  postgresql:
+    pg_hba:
+      - hostssl app app all scram-sha-256
