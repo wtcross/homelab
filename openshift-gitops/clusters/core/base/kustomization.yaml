@@ -18,3 +18,4 @@ resources:
   - 40-app-lvm-storage.yaml
   - 45-app-seaweedfs.yaml
   - 60-app-cloudnative-pg.yaml
+  - 70-keycloak.yaml
