@@ -16,6 +16,7 @@ spec:
   db:
     vendor: postgres
     host: keycloak-pg-rw
+    database: app
     usernameSecret:
       name: keycloak-pg-app
       key: user
