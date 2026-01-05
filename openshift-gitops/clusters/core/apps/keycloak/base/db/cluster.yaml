@@ -20,10 +20,3 @@ spec:
   enableSuperuserAccess: true
   superuserSecret:
     name: keycloak-pg-superuser-credentials
-  managed:
-    roles:
-      - name: keycloak
-        login: true
-        ensure: present
-        passwordSecret:
-          name: keycloak-db-creds

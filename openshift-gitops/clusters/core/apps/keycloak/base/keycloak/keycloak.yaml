@@ -17,10 +17,10 @@ spec:
     vendor: postgres
     host: keycloak-pg-rw
     usernameSecret:
-      name: keycloak-db-creds
+      name: keycloak-pg-app
       key: user
     passwordSecret:
-      name: keycloak-db-creds
+      name: keycloak-pg-app
       key: password
   ingress:
     enabled: false

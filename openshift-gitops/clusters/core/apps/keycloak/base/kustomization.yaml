@@ -3,6 +3,5 @@ kind: Kustomization
 
 resources:
   - ../../../../../components/keycloak/operator/overlays/stable-v26.4
-  - es-keycloak-db-creds.yaml
   - db
   - keycloak
