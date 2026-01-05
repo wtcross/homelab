@@ -19,4 +19,5 @@ spec:
       type: Opaque
       data:
         user: keycloak
+        username: keycloak
         password: "{{ .password }}"
