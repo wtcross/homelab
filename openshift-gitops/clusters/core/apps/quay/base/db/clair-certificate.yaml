@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: clair-pg
+  namespace: clair
+spec:
+  secretName: clair-pg-certificate
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""
+  duration: 1440h
+  renewBefore: 72h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: step-cluster-issuer
+  usages:
+    - server auth
+  dnsNames:
+    - clair-pg-lb.internal.mydomain.net
+    - clair-pg-rw
+    - clair-pg-rw.default
+    - clair-pg-rw.default.svc
+    - clair-pg-r
+    - clair-pg-r.default
+    - clair-pg-r.default.svc
+    - clair-pg-ro
+    - clair-pg-ro.default
+    - clair-pg-ro.default.svc
