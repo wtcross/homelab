@@ -6,6 +6,5 @@ resources:
   - ns-quay.yaml
   - es-quay-db-creds.yaml
   - es-clair-db-creds.yaml
-  - cm-trusted-ca.yaml
   - db
   - seaweed
