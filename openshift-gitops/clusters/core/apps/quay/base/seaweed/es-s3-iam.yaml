@@ -1,0 +1,44 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: seaweed-s3-config
+  namespace: quay
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: seaweed-s3-config
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        s3-config.json: |
+          {
+            "identities": [
+              {
+                "name": "quay",
+                "actions": [
+                  "Read",
+                  "List",
+                  "Write"
+                ],
+                "credentials": [
+                  {
+                    "accessKey": "{{ .s3AccessKey }}",
+                    "secretKey": "{{ .s3SecretKey }}"
+                  }
+                ]
+              }
+            ]
+          }
+  data:
+    - secretKey: s3AccessKey
+      remoteRef:
+        key: core-quay-seaweed-s3-access-key
+    - secretKey: s3SecretKey
+      remoteRef:
+        key: core-quay-seaweed-s3-secret-key

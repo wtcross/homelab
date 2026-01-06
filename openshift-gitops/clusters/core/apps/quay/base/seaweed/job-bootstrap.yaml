@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seaweed-quay-bootstrap
+  namespace: quay
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: weed
+          image: chrislusf/seaweedfs:latest
+          command: ["/bin/sh", "-lc"]
+          env:
+            - name: SEAWEED_MASTER
+              value: "seaweed-quay-master.quay.svc.cluster.local:9333"
+            - name: S3_BUCKET
+              value: quay-datastore
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Waiting for Seaweed master at ${SEAWEED_MASTER}..."
+              for i in $(seq 1 60); do
+                if echo "help" | weed shell -master="${SEAWEED_MASTER}" >/dev/null 2>&1; then
+                  break
+                fi
+                sleep 5
+              done
+
+              echo "Creating bucket (idempotency depends on Seaweed version; reruns are usually OK)..."
+              cat <<EOF | weed shell -master="${SEAWEED_MASTER}"
+              s3.bucket.create -name ${S3_BUCKET}
+              EOF
+
+              echo "Done."
