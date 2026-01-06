@@ -1,0 +1,13 @@
+[project]
+name = "keycloak-ee"
+version = "0.1.0"
+description = "Ansible EE for managing Keycloak"
+readme = "README.md"
+requires-python = ">=3.13.8"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "ansible-builder>=3.1",
+]
+ee = []
