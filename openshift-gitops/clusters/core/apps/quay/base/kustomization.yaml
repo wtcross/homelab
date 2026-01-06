@@ -3,4 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../../../../components/quay/operator/overlays/stable-3.16
-  # - db
+  - es-clair-quay-creds.yaml
+  - es-clair-clair-creds.yaml
+  - db

@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: quay-config
+spec:
+  data:
+    - remoteRef:
+        key: core-quay-db-password
+      secretKey: password
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: quay-config
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        user: quay
+        username: quay
+        password: "{{ .password }}"

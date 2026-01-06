@@ -1,0 +1,31 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: quay-pg
+spec:
+  description: PostgreSQL cluster for Quay and Clair
+  instances: 3
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 50Gi
+    storageClass: lvms-vg1
+  walStorage:
+    size: 5Gi
+    storageClass: lvms-vg1
+  certificates:
+    serverCASecret: quay-pg-certificate
+    serverTLSSecret: quay-pg-certificate
+  postgresql:
+    pg_hba:
+      - hostssl app app all scram-sha-256
+  managed:
+    roles:
+      - name: quay
+        login: true
+        passwordSecret:
+          name: quay-db-creds
+      - name: clair
+        login: true
+        passwordSecret:
+          name: quay-db-creds

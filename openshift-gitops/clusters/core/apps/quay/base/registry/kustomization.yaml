@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "10"
+
+namespace: quay
+
+resources:
+  - es-quay-config.yaml
+  - registry.yaml

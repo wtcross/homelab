@@ -1,0 +1,28 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: quay-pg
+spec:
+  secretName: quay-pg-certificate
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""
+  duration: 1440h
+  renewBefore: 72h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: step-cluster-issuer
+  usages:
+    - server auth
+  dnsNames:
+    - quay-pg-lb.internal.mydomain.net
+    - quay-pg-rw
+    - quay-pg-rw.default
+    - quay-pg-rw.default.svc
+    - quay-pg-r
+    - quay-pg-r.default
+    - quay-pg-r.default.svc
+    - quay-pg-ro
+    - quay-pg-ro.default
+    - quay-pg-ro.default.svc

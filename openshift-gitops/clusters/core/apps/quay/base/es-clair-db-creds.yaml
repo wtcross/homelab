@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: clair-db-creds
+spec:
+  data:
+    - remoteRef:
+        key: core-clair-db-password
+      secretKey: password
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: clair-db-creds
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        user: clair
+        username: clair
+        password: "{{ .password }}"

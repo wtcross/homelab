@@ -7,7 +7,7 @@ commonAnnotations:
 namespace: quay
 
 resources:
-  - certificate.yaml
-  - cluster.yaml
-  - database-clair.yaml
-  - database-quay.yaml
+  - quay-certificate.yaml
+  - quay-cluster.yaml
+  - clair-certificate.yaml
+  - clair-cluster.yaml
