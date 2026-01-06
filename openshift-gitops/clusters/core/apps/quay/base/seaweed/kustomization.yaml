@@ -9,6 +9,6 @@ namespace: quay
 resources:
   - seaweed.yaml
   - service-s3.yaml
-  - es-s3-iam.yaml
+  - es-s3-config.yaml
   - job-bootstrap.yaml
   - pdb.yaml
