@@ -10,5 +10,5 @@ resources:
   - seaweed.yaml
   - service-s3.yaml
   - es-s3-iam.yaml
-  - job-bootstrap-s3-iam.yaml
+  - job-bootstrap.yaml
   - pdb.yaml
