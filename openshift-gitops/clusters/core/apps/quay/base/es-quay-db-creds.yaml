@@ -2,6 +2,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: quay-db-creds
+  namespace: quay
 spec:
   data:
     - remoteRef:
