@@ -4,6 +4,8 @@ kind: Kustomization
 commonAnnotations:
     argocd.argoproj.io/sync-wave: "10"
 
+namespace: keycloak
+
 resources:
   - es-keycloak-admin-creds.yaml
   - certificate.yaml
