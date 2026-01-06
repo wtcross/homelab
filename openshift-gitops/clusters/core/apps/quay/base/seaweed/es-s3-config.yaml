@@ -3,8 +3,6 @@ kind: ExternalSecret
 metadata:
   name: seaweed-s3-config
   namespace: quay
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   refreshInterval: 1h
   secretStoreRef:
