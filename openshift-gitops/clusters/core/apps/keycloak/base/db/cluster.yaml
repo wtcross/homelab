@@ -9,10 +9,10 @@ spec:
   logLevel: info
   primaryUpdateStrategy: unsupervised
   storage:
-    size: 50Gi
+    size: 10Gi
     storageClass: lvms-vg1
   walStorage:
-    size: 5Gi
+    size: 2Gi
     storageClass: lvms-vg1
   certificates:
     serverCASecret: keycloak-pg-certificate
