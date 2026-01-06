@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-pg
-  namespace: keycloak
 spec:
   secretName: keycloak-pg-certificate
   secretTemplate:

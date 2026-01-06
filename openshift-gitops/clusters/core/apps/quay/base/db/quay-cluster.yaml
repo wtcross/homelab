@@ -2,7 +2,6 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: quay-pg
-  namespace: quay
 spec:
   description: Quay PostgreSQL cluster
   instances: 3

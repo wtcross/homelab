@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: clair-pg
-  namespace: clair
 spec:
   secretName: clair-pg-certificate
   secretTemplate:

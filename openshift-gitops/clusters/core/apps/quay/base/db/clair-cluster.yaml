@@ -2,7 +2,6 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: clair-pg
-  namespace: clair
 spec:
   description: Clair PostgreSQL cluster
   instances: 3

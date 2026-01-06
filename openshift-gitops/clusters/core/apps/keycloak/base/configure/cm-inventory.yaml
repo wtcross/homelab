@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rhbk-configure-inventory
+data:
+  inventory.ini: |
+    [local]
+    localhost ansible_connection=local
