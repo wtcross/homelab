@@ -89,13 +89,13 @@ patches:
       name: lvm-storage
       namespace: openshift-gitops
     path: patches/patch-app-lvm-storage.yaml
-  - target:
-      group: argoproj.io
-      version: v1alpha1
-      kind: Application
-      name: seaweedfs
-      namespace: openshift-gitops
-    path: patches/patch-app-seaweedfs.yaml
+  # - target:
+  #     group: argoproj.io
+  #     version: v1alpha1
+  #     kind: Application
+  #     name: seaweedfs
+  #     namespace: openshift-gitops
+  #   path: patches/patch-app-seaweedfs.yaml
   - target:
       group: argoproj.io
       version: v1alpha1
