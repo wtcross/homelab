@@ -12,7 +12,7 @@ resources:
   - admin-ingress-certificate.yaml
   - pvc-worker-data.yaml
   - pvc-worker-logs.yaml
-  # - job-create-bucket.yaml
+  - certs
 
 helmCharts:
   - name: seaweedfs

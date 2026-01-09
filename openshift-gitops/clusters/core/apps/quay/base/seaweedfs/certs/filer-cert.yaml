@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: seaweedfs-filer-cert
+spec:
+  secretName: seaweedfs-filer-cert
+  duration: 2160h
+  renewBefore: 360h
+  issuerRef:
+    group: certmanager.step.sm
+    kind: StepClusterIssuer
+    name: step-cluster-issuer
+  usages:
+    - server auth
+  dnsNames:
+    - '*.seaweedfs-filer'
+    - '*.seaweedfs-filer.quay'
+    - '*.seaweedfs-filer.quay.svc'
+    - '*.seaweedfs-filer.quay.svc.cluster.local'
