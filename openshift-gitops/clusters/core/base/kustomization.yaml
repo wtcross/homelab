@@ -16,7 +16,7 @@ resources:
   - 36-app-ingress-cert.yaml
   - 37-app-api-cert.yaml
   - 40-app-lvm-storage.yaml
-  - 45-app-seaweedfs.yaml
+  # - 45-app-seaweedfs.yaml
   - 60-app-cloudnative-pg.yaml
   - 70-keycloak.yaml
   - 80-app-quay.yaml

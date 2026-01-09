@@ -1,0 +1,20 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: seaweed-admin-creds
+  namespace: quay
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: seaweed-admin-creds
+    creationPolicy: Owner
+  data:
+    - secretKey: adminUser
+      remoteRef:
+        key: core-quay-seaweed-admin-user
+    - secretKey: adminPassword
+      remoteRef:
+        key: core-quay-seaweed-admin-password
