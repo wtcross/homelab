@@ -26,7 +26,7 @@ spec:
     template:
       type: Opaque
       data:
-        extra_ca_cert_lab_ca: |
+        extra_ca_cert_lab.crt: |
           -----BEGIN CERTIFICATE-----
           MIICyzCCAlGgAwIBAgIUM701Oc8uB35avhhliU9rgzrXwogwCgYIKoZIzj0EAwQw
           gZIxCzAJBgNVBAYTAlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGluYTEYMBYGA1UE
@@ -66,6 +66,8 @@ spec:
           DB_URI: "postgresql://quay:{{ .quayDBPassword }}@quay-pg-rw.quay.svc.cluster.local:5432/quay"
           DB_CONNECTION_ARGS:
             sslmode: verify-full
+            sslrootcert: conf/stack/extra_ca_certs/lab.crt
+
           DISTRIBUTED_STORAGE_CONFIG:
             default:
               - S3Storage
@@ -80,16 +82,16 @@ spec:
               - default
         clair-config.yaml: |
           indexer:
-              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full"
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=conf/stack/extra_ca_certs/lab.crt"
               layer_scan_concurrency: 6
               migrations: true
               scanlock_retry: 11
           log_level: debug
           matcher:
-              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full"
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=conf/stack/extra_ca_certs/lab.crt"
               migrations: true
           metrics:
               name: prometheus
           notifier:
-              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full"
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=conf/stack/extra_ca_certs/lab.crt"
               migrations: true
