@@ -17,3 +17,7 @@ spec:
     - '*.seaweedfs-master.quay'
     - '*.seaweedfs-master.quay.svc'
     - '*.seaweedfs-master.quay.svc.cluster.local'
+    - '*.seaweedfs-filer'
+    - '*.seaweedfs-filer.quay'
+    - '*.seaweedfs-filer.quay.svc'
+    - '*.seaweedfs-filer.quay.svc.cluster.local'
