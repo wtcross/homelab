@@ -73,7 +73,6 @@ spec:
               - S3Storage
               - host: seaweedfs-s3.quay.svc.cluster.local
                 port: 8333
-                secure: false
                 s3_access_key: "{{ .s3AccessKey }}"
                 s3_secret_key: "{{ .s3SecretKey }}"
                 s3_bucket: quay-datastore
