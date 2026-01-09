@@ -65,8 +65,8 @@ spec:
         config.yaml: |
           DB_URI: "postgresql://quay:{{ .quayDBPassword }}@quay-pg-rw.quay.svc.cluster.local:5432/quay"
           DB_CONNECTION_ARGS:
-            sslmode: prefer
-            #sslrootcert: conf/stack/extra_ca_certs/lab.crt
+            sslmode: verify-full
+            sslrootcert: /run/certs/lab.crt
 
           DISTRIBUTED_STORAGE_CONFIG:
             default:
@@ -82,16 +82,16 @@ spec:
               - default
         clair-config.yaml: |
           indexer:
-              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=prefer"
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=/run/certs/lab.crt"
               layer_scan_concurrency: 6
               migrations: true
               scanlock_retry: 11
           log_level: debug
           matcher:
-              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=prefer"
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=/run/certs/lab.crt"
               migrations: true
           metrics:
               name: prometheus
           notifier:
-              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=prefer"
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=/run/certs/lab.crt"
               migrations: true
