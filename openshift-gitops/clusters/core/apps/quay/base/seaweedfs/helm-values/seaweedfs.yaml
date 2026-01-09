@@ -1215,7 +1215,7 @@ worker:
   enabled: true
   imageOverride: null
   restartPolicy: null
-  replicas: 3
+  replicas: 1
   loggingOverrideLevel: null
   metricsPort: 9327
 
