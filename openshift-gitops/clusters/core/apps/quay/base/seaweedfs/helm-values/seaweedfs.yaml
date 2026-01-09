@@ -571,7 +571,7 @@ volumes: {}
 
 filer:
   enabled: true
-  imageOverride: null
+  imageOverride: chrislusf/seaweedfs:dev
   restartPolicy: null
   replicas: 2
   port: 8888
