@@ -1212,7 +1212,7 @@ admin:
     annotations: {}
 
 worker:
-  enabled: false
+  enabled: true
   imageOverride: null
   restartPolicy: null
   replicas: 3
