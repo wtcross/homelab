@@ -12,6 +12,7 @@ resources:
   - admin-ingress-certificate.yaml
   - pvc-worker-data.yaml
   - pvc-worker-logs.yaml
+  - secret-lab-ca.yaml
   - certs
 
 helmCharts:
