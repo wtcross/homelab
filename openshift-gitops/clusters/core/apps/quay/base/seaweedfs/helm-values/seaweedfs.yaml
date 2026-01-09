@@ -75,7 +75,7 @@ master:
   defaultReplication: "000"
 
   # Disable http request, only gRpc operations are allowed
-  disableHttp: true
+  disableHttp: false
 
   # Resume previous state on start master server
   resumeState: false
@@ -595,7 +595,7 @@ filer:
   # split files larger than the limit, default 32
   maxMB: null
   # encrypt data on volume servers
-  encryptVolumeData: false
+  encryptVolumeData: true
 
   # Whether proxy or redirect to volume server during file GET request
   redirectOnRead: false
@@ -604,7 +604,7 @@ filer:
   dirListLimit: 100000
 
   # Disable http request, only gRpc operations are allowed
-  disableHttp: true
+  disableHttp: false
 
   # Custom command line arguments to add to the filer command
   # Example to fix IPv6 metrics connectivity issues:
@@ -1333,7 +1333,7 @@ allInOne:
   dataCenter: ""  # Current volume server's data center name
   rack: ""  # Current volume server's rack name
   whiteList: ""  # Comma separated IP addresses having write permission
-  disableHttp: true  # Disable HTTP requests, only gRPC operations are allowed
+  disableHttp: false  # Disable HTTP requests, only gRPC operations are allowed
   metricsPort: 9324  # Prometheus metrics listen port
   metricsIp: ""  # Metrics listen IP. If empty, defaults to bindAddress
   loggingOverrideLevel: null  # Override logging level
