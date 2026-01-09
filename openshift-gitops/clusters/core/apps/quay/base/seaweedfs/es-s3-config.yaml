@@ -14,7 +14,7 @@ spec:
     template:
       type: Opaque
       data:
-        s3-config.json: |
+        seaweedfs_s3_config: |
           {
             "identities": [
               {
