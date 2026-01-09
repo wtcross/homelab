@@ -65,8 +65,8 @@ spec:
         config.yaml: |
           DB_URI: "postgresql://quay:{{ .quayDBPassword }}@quay-pg-rw.quay.svc.cluster.local:5432/quay"
           DB_CONNECTION_ARGS:
-            sslmode: verify-full
-            sslrootcert: /run/certs/lab.crt
+            sslmode: prefer
+            #sslrootcert: /run/certs/lab.crt
 
           DISTRIBUTED_STORAGE_CONFIG:
             default:
