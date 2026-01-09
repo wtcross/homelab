@@ -70,13 +70,12 @@ spec:
           DISTRIBUTED_STORAGE_CONFIG:
             default:
               - S3Storage
-              - host: seaweedfs-filer.quay.svc.cluster.local
-                port: 8443
+              - endpoint_url: http://seaweedfs-filer.quay.svc.cluster.local:8333
+                signature_version: s3v4
+                storage_path: /registry
                 s3_access_key: "{{ .s3AccessKey }}"
                 s3_secret_key: "{{ .s3SecretKey }}"
                 s3_bucket: quay-datastore
-                storage_path: /registry
-                ssl_ca_path: /conf/stack/extra_ca_certs/lab.crt
           DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
           DISTRIBUTED_STORAGE_PREFERENCE:
               - default
