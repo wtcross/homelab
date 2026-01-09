@@ -1,7 +1,7 @@
 kind: QuayRegistry
 apiVersion: quay.redhat.com/v1
 metadata:
-  name: example-registry
+  name: registry
   namespace: quay
 spec:
   configBundleSecret: quay-config
