@@ -15,24 +15,7 @@ spec:
       type: Opaque
       data:
         seaweedfs_s3_config: |
-          {
-            "identities": [
-              {
-                "name": "quay",
-                "actions": [
-                  "Read",
-                  "List",
-                  "Write"
-                ],
-                "credentials": [
-                  {
-                    "accessKey": "{{ .s3AccessKey }}",
-                    "secretKey": "{{ .s3SecretKey }}"
-                  }
-                ]
-              }
-            ]
-          }
+          {"identities":[{"name":"quay","actions":["Read","List","Write"],"credentials":[{"accessKey":"{{ .s3AccessKey }}","secretKey":"{{ .s3SecretKey }}"}]}]}
   data:
     - secretKey: s3AccessKey
       remoteRef:
