@@ -71,10 +71,11 @@ spec:
           DISTRIBUTED_STORAGE_CONFIG:
             default:
               - S3Storage
-              - host: seaweed-quay-s3.quay.svc.cluster.local
+              - host: seaweedfs-s3.quay.svc.cluster.local
+                port: 8333
+                secure: false
                 s3_access_key: "{{ .s3AccessKey }}"
                 s3_secret_key: "{{ .s3SecretKey }}"
-                s3_endpoint_url: http://seaweed-quay-s3.quay.svc.cluster.local:8333
                 s3_bucket: quay-datastore
                 storage_path: /registry
           DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
