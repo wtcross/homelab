@@ -10,3 +10,6 @@ spec:
   ensure: present
   name: quay
   owner: quay
+  extensions:
+    - name: pg_trgm
+      schema: public
