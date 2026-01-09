@@ -66,7 +66,7 @@ spec:
           DB_URI: "postgresql://quay:{{ .quayDBPassword }}@quay-pg-rw.quay.svc.cluster.local:5432/quay"
           DB_CONNECTION_ARGS:
             sslmode: prefer
-            sslrootcert: /run/certs/lab.crt
+            sslrootcert: /conf/stack/extra_ca_certs/lab.crt
           DISTRIBUTED_STORAGE_CONFIG:
             default:
               - S3Storage
@@ -76,6 +76,7 @@ spec:
                 s3_secret_key: "{{ .s3SecretKey }}"
                 s3_bucket: quay-datastore
                 storage_path: /registry
+                ssl_ca_path: /conf/stack/extra_ca_certs/lab.crt
           DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
           DISTRIBUTED_STORAGE_PREFERENCE:
               - default
