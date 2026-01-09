@@ -4,6 +4,8 @@ kind: Kustomization
 commonAnnotations:
     argocd.argoproj.io/sync-wave: "7"
 
+namespace: quay
+
 resources:
   - es-s3-config.yaml
   - es-seaweed-admin-creds.yaml

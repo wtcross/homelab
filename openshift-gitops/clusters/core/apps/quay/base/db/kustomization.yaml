@@ -4,6 +4,8 @@ kind: Kustomization
 commonAnnotations:
     argocd.argoproj.io/sync-wave: "5"
 
+namespace: quay
+
 resources:
   - certificate.yaml
   - cluster.yaml
