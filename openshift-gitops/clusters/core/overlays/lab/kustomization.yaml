@@ -89,13 +89,6 @@ patches:
       name: lvm-storage
       namespace: openshift-gitops
     path: patches/patch-app-lvm-storage.yaml
-  # - target:
-  #     group: argoproj.io
-  #     version: v1alpha1
-  #     kind: Application
-  #     name: seaweedfs
-  #     namespace: openshift-gitops
-  #   path: patches/patch-app-seaweedfs.yaml
   - target:
       group: argoproj.io
       version: v1alpha1
@@ -103,10 +96,10 @@ patches:
       name: keycloak
       namespace: openshift-gitops
     path: patches/patch-app-keycloak.yaml
-  - target:
-      group: argoproj.io
-      version: v1alpha1
-      kind: Application
-      name: quay
-      namespace: openshift-gitops
-    path: patches/patch-app-quay.yaml
+  # - target:
+  #     group: argoproj.io
+  #     version: v1alpha1
+  #     kind: Application
+  #     name: quay
+  #     namespace: openshift-gitops
+  #   path: patches/patch-app-quay.yaml
