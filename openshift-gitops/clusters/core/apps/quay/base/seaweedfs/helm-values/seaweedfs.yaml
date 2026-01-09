@@ -120,7 +120,7 @@ master:
   data:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "30Gi"
+    size: "15Gi"
 
   # You may use ANY storage-class, example with local-path-provisioner
   # Annotations are optional.
@@ -137,7 +137,7 @@ master:
   logs:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "30Gi"
+    size: "5Gi"
 
   ## @param master.sidecars Add additional sidecar containers to the master pod(s)
   ## e.g:
@@ -350,7 +350,7 @@ volume:
     - name: data1
       type: persistentVolumeClaim
       storageClass: lvms-vg1
-      size: "100Gi"
+      size: "125Gi"
       maxVolumes: 0
 
       # - name: data2
@@ -656,7 +656,7 @@ filer:
   data:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "30Gi"
+    size: "10Gi"
 
   # You may use ANY storage-class, example with local-path-provisioner
   # Annotations are optional.
@@ -673,7 +673,7 @@ filer:
   logs:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "30Gi"
+    size: "5Gi"
 
   ## @param filer.sidecars Add additional sidecar containers to the filer pod(s)
   ## e.g:
@@ -970,7 +970,7 @@ s3:
   logs:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "30Gi"
+    size: "5Gi"
 
   extraEnvironmentVars:
 
@@ -1066,7 +1066,7 @@ sftp:
   logs:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "30Gi"
+    size: "5Gi"
 
   extraEnvironmentVars: {}
 
@@ -1119,7 +1119,7 @@ admin:
   data:
     type: persistentVolumeClaim
     storageClass: lvms-vg1
-    size: "10Gi"
+    size: "5Gi"
     annotations: {}
 
   logs:
