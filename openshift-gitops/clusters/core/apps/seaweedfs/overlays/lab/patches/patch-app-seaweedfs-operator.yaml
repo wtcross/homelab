@@ -32,7 +32,7 @@
         # -- The name of the service account to use.
         # If not set and create is true, a name is generated using the fullname template
         # If set to "default", no ServiceAccount will be created and the default one will be used
-        name: default
+        name: ""
         # -- Automount service account token for the server service account
         automount: true
 
