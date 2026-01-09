@@ -350,7 +350,7 @@ volume:
     - name: data1
       type: persistentVolumeClaim
       storageClass: lvms-vg1
-      size: "150Gi"
+      size: "100Gi"
       maxVolumes: 0
 
       # - name: data2
