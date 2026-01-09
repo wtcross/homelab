@@ -7,3 +7,4 @@ resources:
   - master-cert.yaml
   - volume-cert.yaml
   - worker-cert.yaml
+  - client-cert.yaml
