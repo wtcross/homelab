@@ -8,3 +8,4 @@ resources:
   - es-clair-db-creds.yaml
   - db
   - seaweedfs
+  - registry
