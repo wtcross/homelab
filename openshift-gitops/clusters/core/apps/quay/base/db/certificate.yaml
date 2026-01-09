@@ -16,13 +16,17 @@ spec:
   usages:
     - server auth
   dnsNames:
-    - quay-pg-lb.internal.mydomain.net
     - quay-pg-rw
-    - quay-pg-rw.default
-    - quay-pg-rw.default.svc
+    - quay-pg-rw.quay
+    - quay-pg-rw.quay.svc
+    - quay-pg-rw.quay.svc.cluster.local
+
     - quay-pg-r
-    - quay-pg-r.default
-    - quay-pg-r.default.svc
+    - quay-pg-r.quay
+    - quay-pg-r.quay.svc
+    - quay-pg-r.quay.svc.cluster.local
+
     - quay-pg-ro
-    - quay-pg-ro.default
-    - quay-pg-ro.default.svc
+    - quay-pg-ro.quay
+    - quay-pg-ro.quay.svc
+    - quay-pg-ro.quay.svc.cluster.local
