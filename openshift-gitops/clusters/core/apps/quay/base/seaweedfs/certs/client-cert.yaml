@@ -19,5 +19,5 @@ spec:
     - '*.seaweedfs-master.quay.svc.cluster.local'
     - '*.seaweedfs-filer'
     - '*.seaweedfs-filer.quay'
-    - '*.seaweedfs-filer.quay.svc'
-    - '*.seaweedfs-filer.quay.svc.cluster.local'
+    - '*.seaweedfs-filer.quay.svc' #TODO: Figure out how what dnsNames the seaweed certs actually need....
+    - 'seaweedfs-filer.quay.svc.cluster.local'
