@@ -4,8 +4,8 @@ kind: Kustomization
 commonAnnotations:
     argocd.argoproj.io/sync-wave: "10"
 
-namespace: quay
-
 resources:
   - es-quay-config.yaml
   - registry.yaml
+  - es-quay-realm-placeholders.yaml
+  - keycloak-realm-import-quay.yaml
