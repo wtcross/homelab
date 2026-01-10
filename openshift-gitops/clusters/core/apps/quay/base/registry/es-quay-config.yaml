@@ -107,7 +107,7 @@ spec:
             #  user_endpoint:
             #    some: "param"
             OIDC_ISSUER: https://keycloak.apps.core.lab.cross.solutions/realms/quay
-            OIDC_SERVER: https://keycloak.apps.core.lab.cross.solutions
+            OIDC_SERVER: https://keycloak.apps.core.lab.cross.solutions/
             #PREFERRED_USERNAME_CLAIM_NAME: <preferred_username_claim>
             #SERVICE_ICON: <service_icon_url>
             SERVICE_NAME: Cross Solutions
