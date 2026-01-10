@@ -89,35 +89,35 @@ spec:
           DISTRIBUTED_STORAGE_PREFERENCE:
               - default
 
-          AUTHENTICATION_TYPE: Database
-          # AUTHENTICATION_TYPE: OIDC
+          # AUTHENTICATION_TYPE: Database
+          AUTHENTICATION_TYPE: OIDC
 
-          # KEYCLOAK_LOGIN_CONFIG:
-          #   CLIENT_ID: "{{ .QUAY_REALM_CLIENT_ID }}"
-          #   CLIENT_SECRET: "{{ .QUAY_REALM_CLIENT_SECRET }}"
-          #   #LOGIN_BINDING_FIELD: <login_binding_field>
-          #   LOGIN_SCOPES:
-          #     - openid
-          #     - email
-          #     - profile
-          #   #OIDC_ENDPOINT_CUSTOM_PARAMS:
-          #   #  authorization_endpoint:
-          #   #    some: "param"
-          #   #  token_endpoint:
-          #   #    some: "param"
-          #   #  user_endpoint:
-          #   #    some: "param"
-          #   OIDC_ISSUER: https://keycloak.apps.core.lab.cross.solutions/realms/quay/
-          #   OIDC_SERVER: https://keycloak.apps.core.lab.cross.solutions/
-          #   #PREFERRED_USERNAME_CLAIM_NAME: <preferred_username_claim>
-          #   #SERVICE_ICON: <service_icon_url>
-          #   SERVICE_NAME: Keycloak
-          #   #VERIFIED_EMAIL_CLAIM_NAME: <verified_email_claim>
-          #   #PREFERRED_GROUP_CLAIM_NAME: <preferred_group_claim>
-          #   #OIDC_DISABLE_USER_ENDPOINT: true
-          #   USE_PKCE: True
-          #   PKCE_METHOD: "S256"
-          #   PUBLIC_CLIENT: True
+          KEYCLOAK_LOGIN_CONFIG:
+            CLIENT_ID: "{{ .QUAY_REALM_CLIENT_ID }}"
+            CLIENT_SECRET: "{{ .QUAY_REALM_CLIENT_SECRET }}"
+            #LOGIN_BINDING_FIELD: <login_binding_field>
+            LOGIN_SCOPES:
+              - openid
+              - email
+              - profile
+            #OIDC_ENDPOINT_CUSTOM_PARAMS:
+            #  authorization_endpoint:
+            #    some: "param"
+            #  token_endpoint:
+            #    some: "param"
+            #  user_endpoint:
+            #    some: "param"
+            OIDC_ISSUER: https://keycloak.apps.core.lab.cross.solutions/realms/quay/
+            OIDC_SERVER: https://keycloak.apps.core.lab.cross.solutions/realms/quay/
+            #PREFERRED_USERNAME_CLAIM_NAME: <preferred_username_claim>
+            #SERVICE_ICON: <service_icon_url>
+            SERVICE_NAME: Keycloak
+            #VERIFIED_EMAIL_CLAIM_NAME: <verified_email_claim>
+            #PREFERRED_GROUP_CLAIM_NAME: <preferred_group_claim>
+            #OIDC_DISABLE_USER_ENDPOINT: true
+            USE_PKCE: True
+            PKCE_METHOD: "S256"
+            PUBLIC_CLIENT: True
 
         clair-config.yaml: |
           indexer:
