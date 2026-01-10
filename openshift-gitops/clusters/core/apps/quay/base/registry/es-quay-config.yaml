@@ -89,6 +89,7 @@ spec:
           DISTRIBUTED_STORAGE_PREFERENCE:
               - default
 
+          AUTHENTICATION_TYPE: Database
           # AUTHENTICATION_TYPE: OIDC
 
           # KEYCLOAK_LOGIN_CONFIG:
