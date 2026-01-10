@@ -110,7 +110,7 @@ spec:
             OIDC_SERVER: https://keycloak.apps.core.lab.cross.solutions/
             #PREFERRED_USERNAME_CLAIM_NAME: <preferred_username_claim>
             #SERVICE_ICON: <service_icon_url>
-            SERVICE_NAME: Cross Solutions
+            SERVICE_NAME: Keycloak
             #VERIFIED_EMAIL_CLAIM_NAME: <verified_email_claim>
             #PREFERRED_GROUP_CLAIM_NAME: <preferred_group_claim>
             #OIDC_DISABLE_USER_ENDPOINT: true
