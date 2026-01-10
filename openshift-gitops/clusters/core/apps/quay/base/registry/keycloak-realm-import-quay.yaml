@@ -6,14 +6,22 @@ metadata:
 spec:
   keycloakCRName: keycloak
   placeholders:
-    QUAY_CLIENT_ID:
+    QUAY_REALM_CLIENT_ID:
       secret:
         name: quay-realm-placeholders
-        key: QUAY_CROSS_SOLUTIONS_CLIENT_ID
-    QUAY_CLIENT_SECRET:
+        key: QUAY_REALM_CLIENT_ID
+    QUAY_REALM_CLIENT_SECRET:
       secret:
         name: quay-realm-placeholders
-        key: QUAY_CROSS_SOLUTIONS_CLIENT_SECRET
+        key: QUAY_REALM_CLIENT_SECRET
+    QUAY_REALM_IDP_CLIENT_ID:
+      secret:
+        name: quay-realm-placeholders
+        key: QUAY_REALM_IDP_CLIENT_ID
+    QUAY_REALM_IDP_CLIENT_SECRET:
+      secret:
+        name: quay-realm-placeholders
+        key: QUAY_REALM_IDP_CLIENT_SECRET
   realm:
     # # id: quay
     realm: quay
