@@ -119,7 +119,7 @@ spec:
             #OIDC_DISABLE_USER_ENDPOINT: true
             USE_PKCE: True
             PKCE_METHOD: "S256"
-            PUBLIC_CLIENT: True
+            PUBLIC_CLIENT: False
 
         clair-config.yaml: |
           indexer:
