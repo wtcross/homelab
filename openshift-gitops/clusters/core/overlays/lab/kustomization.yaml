@@ -103,3 +103,10 @@ patches:
       name: quay
       namespace: openshift-gitops
     path: patches/patch-app-quay.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: openshift-console
+      namespace: openshift-gitops
+    path: patches/patch-app-openshift-console.yaml

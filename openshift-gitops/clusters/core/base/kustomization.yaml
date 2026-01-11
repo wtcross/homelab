@@ -19,3 +19,4 @@ resources:
   - 60-app-cloudnative-pg.yaml
   - 70-keycloak.yaml
   - 80-app-quay.yaml
+  - 100-app-openshift-console.yaml

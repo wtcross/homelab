@@ -9,4 +9,4 @@ resources:
   - registry.yaml
   - es-quay-realm-placeholders.yaml
   - keycloak-realm-import-quay.yaml
-  - consolelink.yaml
+  - cl-quay.yaml
