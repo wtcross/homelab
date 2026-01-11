@@ -10,3 +10,4 @@ resources:
   - es-keycloak-admin-creds.yaml
   - certificate.yaml
   - keycloak.yaml
+  - consolelink.yaml
