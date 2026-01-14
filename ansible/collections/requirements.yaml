@@ -3,9 +3,9 @@ collections:
   - ansible.utils
   - ansible.posix
   - community.general
+  - community.libvirt
   - containers.podman
   - kubernetes.core
   - ansible.platform
   - ansible.controller
   - ansible.hub
-  - dubzland.minio

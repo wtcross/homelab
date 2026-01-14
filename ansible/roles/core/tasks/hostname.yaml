@@ -1,0 +1,21 @@
+- name: Get current hostnamectl configuration
+  become: no
+  ansible.builtin.command:
+    cmd: hostnamectl status --json short
+  changed_when: false
+  register: hostnamectl_status_cmd
+
+- ansible.builtin.set_fact:
+    hostnamectl_status: "{{ hostnamectl_status_cmd.stdout | from_json }}"
+
+- name: Set static hostname
+  become: yes
+  ansible.builtin.command:
+    cmd: hostnamectl hostname '{{ ansible_host }}' --static
+  when: ansible_host != hostnamectl_status['StaticHostname']
+
+- name: Set pretty hostname
+  become: yes
+  ansible.builtin.command:
+    cmd: hostnamectl hostname '{{ inventory_hostname }}' --pretty
+  when: inventory_hostname != hostnamectl_status['PrettyHostname']

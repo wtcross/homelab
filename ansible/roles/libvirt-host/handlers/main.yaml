@@ -1,0 +1,19 @@
+- name: Reboot the system
+  become: yes
+  ansible.builtin.reboot:
+    msg: Rebooting the system
+
+- name: Restart NetworkManager
+  become: yes
+  ansible.builtin.service:
+    name: NetworkManager
+    state: restarted
+
+- name: Restart virtqemud and virtnetworkd
+  become: yes
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - virtqemud
+    - virtnetworkd

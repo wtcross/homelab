@@ -6,13 +6,14 @@
     update_cache: yes
     pkg: "*"
 
-- name: Install podman OS packages
+- name: Install core OS packages
   become: yes
   ansible.builtin.dnf:
     state: latest
     use_backend: dnf4
-    update_cache: yes
-    pkg: "{{ _podman_host_os_packages }}"
+    update_cache: no
+    pkg: "{{ item }}"
+  loop: "{{ _core_host_packages }}"
 
 - name: Check if reboot is required
   ansible.builtin.command: needs-restarting -r

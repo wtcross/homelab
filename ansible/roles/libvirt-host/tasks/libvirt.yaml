@@ -1,0 +1,58 @@
+- name: Install libvirt-host OS packages
+  become: yes
+  ansible.builtin.dnf:
+    state: latest
+    use_backend: dnf4
+    update_cache: yes
+    pkg: "{{ _libvirt_host_os_packages }}"
+  register: dnf_update_result
+  notify: Restart virtqemud and virtnetworkd
+
+- name: Check if reboot is required
+  ansible.builtin.command: needs-restarting -r
+  register: needs_restarting_result
+  failed_when: false
+  changed_when: needs_restarting_result.rc == 1
+  notify: Reboot the system
+
+- name: Enable and start virtualization services
+  become: yes
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    name: "{{ item }}"
+  loop: "{{ _libvirt_services }}"
+
+- name: Ensure the default libvirt network is inactive and disabled
+  become: yes
+  community.libvirt.virt_net:
+    name: default
+    state: inactive
+    autostart: no
+
+- name: Define Libvirt Networks
+  become: yes
+  community.libvirt.virt_net:
+    name: "{{ item.network }}"
+    command: define
+    xml: |
+      <network>
+        <name>{{ item.network }}</name>
+        <forward mode='bridge'/>
+        <bridge name='{{ item.bridge }}'/>
+      </network>
+  loop: "{{ [_native] + _vlans }}"
+
+- name: Ensure libvirt networks are active
+  become: yes
+  community.libvirt.virt_net:
+    name: "{{ item.network }}"
+    state: active
+  loop: "{{ [_native] + _vlans }}"
+
+- name: Ensure libvirt networks autostart
+  become: yes
+  community.libvirt.virt_net:
+    name: "{{ item.network }}"
+    autostart: true
+  loop: "{{ [_native] + _vlans }}"
