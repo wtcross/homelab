@@ -1,8 +1,10 @@
 FROM registry.access.redhat.com/ubi10/ubi AS builder
 
-RUN dnf -y install --nodocs \
-    git make gcc pkgconf golang \
-    pcsc-lite-devel
+RUN dnf install -y \
+    --nodocs \
+    --enablerepo=codeready-builder-for-rhel-10-x86_64-rpms \
+    git make gcc pkgconf golang pcsc-lite-devel \
+    && dnf clean all
 
 ARG TAG
 RUN git clone --branch "${TAG}" --single-branch --depth 1 https://github.com/smallstep/step-kms-plugin.git /opt/app-root/src/step-kms-plugin
