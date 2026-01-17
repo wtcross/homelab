@@ -8,7 +8,7 @@ readonly IMAGE_TAG="ghcr.io/wtcross/step-ca:${GIT_TAG}"
 podman build \
     --build-arg TAG="${GIT_TAG}" \
     --tag "${IMAGE_TAG}" \
-    -f ubi10.Containerfile \
+    -f ubi10.hsm.Containerfile \
     .
 
 podman push "${IMAGE_TAG}"
