@@ -13,6 +13,11 @@ WORKDIR /opt/app-root/src/step-kms-plugin
 RUN make V=1 build
 
 RUN mkdir -p /mnt/rootfs
+RUN mkdir -p /mnt/rootfs/usr/lib64 /mnt/rootfs/usr/bin /mnt/rootfs/usr/sbin /mnt/rootfs/usr/lib \
+    && ln -s usr/lib64 /mnt/rootfs/lib64 \
+    && ln -s usr/bin   /mnt/rootfs/bin \
+    && ln -s usr/sbin  /mnt/rootfs/sbin \
+    && ln -s usr/lib   /mnt/rootfs/lib
 
 RUN dnf install -y \
     --nodocs \
@@ -23,6 +28,7 @@ RUN dnf install -y \
     opensc pcsc-lite-devel gnutls-utils pcsc-lite-libs p11-kit \
     bash grep coreutils-single shadow-utils \
     && dnf clean all --installroot /mnt/rootfs
+RUN rm -rf /mnt/rootfs/var/cache/*
 
 RUN useradd --root /mnt/rootfs -m -d /home/step -s /bin/bash -u 1000 step \
     && mkdir -p /mnt/rootfs/run/pcscd \
