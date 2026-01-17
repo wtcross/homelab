@@ -48,10 +48,8 @@ ENV PWDPATH="/home/step/secrets/password"
 
 VOLUME ["/home/step"]
 STOPSIGNAL SIGTERM
-HEALTHCHECK CMD step ca health 2>/dev/null | grep "^ok" >/dev/null
 
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/usr/local/bin/step-ca", "--password-file", "/home/step/secrets/password", "/home/step/config/ca.json"]
