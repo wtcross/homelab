@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi10/go-toolset AS builder
+FROM registry.access.redhat.com/ubi10/ubi AS builder
 
 RUN dnf install -y \
     --nodocs \
