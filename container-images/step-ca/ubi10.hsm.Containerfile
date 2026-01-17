@@ -38,7 +38,7 @@ FROM ghcr.io/wtcross/step-kms-plugin:v0.16.0 AS kms
 FROM ghcr.io/wtcross/step-cli:v0.29.0
 
 COPY --from=builder /mnt/rootfs /
-COPY --from=builder /opt/app-root/src/certificates/bin/step-ca /usr/local/bin/step-ca
+COPY --from=builder /opt/app-root/src/certificates/bin/step-ca /usr/bin/step-ca
 COPY --from=kms /usr/bin/step-kms-plugin /usr/bin/step-kms-plugin
 
 USER step
