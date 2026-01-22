@@ -1,0 +1,13 @@
+# Only handle USB events
+SUBSYSTEM!="usb", GOTO="nitrokey_hsm_step_end"
+ACTION!="add", GOTO="nitrokey_hsm_step_end"
+
+# Nitrokey HSM (20a0:4230)
+ATTR{idVendor}=="20a0", ATTR{idProduct}=="4230", \
+  ENV{ID_SERIAL_SHORT}="{{ step_hsm_serial }}"
+  ENV{ID_SMARTCARD_READER}="1", \
+  ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", \
+  GROUP="{{ step_group }}", MODE="0660"
+
+LABEL="nitrokey_hsm_step_end"
+EOF

@@ -1,10 +1,20 @@
-_smallstep_yum_repo_gpg_key_uri: https://packages.smallstep.com/keys/smallstep-0x889B19391F774443.gpg
-_smallstep_yum_repo_base_url: https://packages.smallstep.com/stable/fedora/
+---
+step_ca_image_uri: ghcr.io/wtcross/step-ca:latest
 
-_smallstep_uid: 2000
-_smallstep_gid: 2000
-_smallstep_user: step
-_smallstep_group: step
-_smallstep_user_home: /etc/step-ca
+step_uid: 1001
+step_gid: 1001
+step_user: step
+step_group: step
+step_user_home: /home/{{ step_user }}
 
-_smallset_step_kms_plugin_url: https://github.com/smallstep/step-kms-plugin/releases/download/v0.16.0/step-kms-plugin-0.16.0-1.x86_64.rpm
+_step_os_packages:
+  - acl
+  - firewalld
+  - python3-firewall
+  - pcsc-lite
+  - opensc
+  - p11-kit
+  - p11-kit-server
+  - gnutls-utils
+
+_step_data_mount_target: /home/step/.step

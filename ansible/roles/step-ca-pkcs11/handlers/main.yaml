@@ -1,0 +1,4 @@
+- name: Reboot the system
+  become: yes
+  ansible.builtin.reboot:
+    msg: Rebooting the system

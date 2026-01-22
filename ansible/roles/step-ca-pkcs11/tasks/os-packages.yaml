@@ -1,43 +1,22 @@
-- name: Add the smallstep yum repo
-  become: yes
-  ansible.builtin.yum_repository:
-    state: present
-    name: Smallstep
-    description: Smallstep PKI infrastructure
-    enabled: yes
-    gpgkey: "{{ _smallstep_yum_repo_gpg_key_uri }}"
-    baseurl: "{{ _smallstep_yum_repo_base_url }}"
-    repo_gpgcheck: no
-    gpgcheck: yes
-
-- name: Install required base OS packages
+- name: Update OS packages
   become: yes
   ansible.builtin.dnf:
-    state: present
+    state: latest
+    use_backend: dnf4
     update_cache: yes
-    use_backend: dnf4
-    pkg: "{{ item }}"
-  loop:
-    - opensc
-    - pcsc-lite
-    - pcsc-lite-ccid
-    - pcsc-lite-libs
-    - pkcs11-provider
-    - gnutls-utils
+    pkg: "*"
 
-- name: Install step-ca and step-cli
+- name: Install step-ca OS packages
   become: yes
   ansible.builtin.dnf:
-    state: present
+    state: latest
     use_backend: dnf4
-    pkg: "{{ item }}"
-  loop:
-    - step-ca
-    - step-cli
+    update_cache: no
+    pkg: "{{ _step_os_packages }}"
 
-- name: Install step-kms-plugin
-  become: yes
-  ansible.builtin.dnf:
-    state: present
-    use_backend: dnf4
-    pkg: "{{ _smallset_step_kms_plugin_url }}"
+- name: Check if reboot is required
+  ansible.builtin.command: needs-restarting -r
+  register: needs_restarting_result
+  failed_when: false
+  changed_when: needs_restarting_result.rc == 1
+  notify: Reboot the system

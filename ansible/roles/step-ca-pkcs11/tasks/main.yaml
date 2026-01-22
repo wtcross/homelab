@@ -1,5 +1,6 @@
-- ansible.builtin.include_tasks: os-packages.yaml
+- ansible.builtin.include_tasks: preflight-checks.yaml
 - ansible.builtin.include_tasks: user.yaml
-- ansible.builtin.include_tasks: access.yaml
-- ansible.builtin.include_tasks: services.yaml
+- ansible.builtin.include_tasks: os-packages.yaml
+- ansible.builtin.include_tasks: hsm.yaml
+- ansible.builtin.include_tasks: quadlet.yaml
 - ansible.builtin.include_tasks: firewall.yaml

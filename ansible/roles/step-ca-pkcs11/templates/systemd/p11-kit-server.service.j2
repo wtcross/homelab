@@ -1,0 +1,13 @@
+[Unit]
+Description=p11-kit PKCS#11 Server (User Session)
+Requires=p11-kit-server.socket
+After=p11-kit-server.socket
+
+[Service]
+Environment=XDG_RUNTIME_DIR=/run/user/%U
+ExecStartPre=/usr/bin/chcon -R -t container_file_t %t/p11-kit
+ExecStart=/usr/bin/p11-kit server --foreground --sh --provider=/usr/lib64/pkcs11/opensc-pkcs11.so "{{ step_hsm_pkcs11_uri | replace('%', '%%') }}"
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

@@ -1,18 +1,48 @@
-- name: Create the {{ _smallstep_user }} group
+- name: Create the {{ step_user }} group
   become: yes
   ansible.builtin.group:
     state: present
-    name: "{{ _smallstep_group }}"
-    gid: "{{ _smallstep_gid }}"
+    name: "{{ step_group }}"
+    gid: "{{ step_gid }}"
 
-- name: Create the {{ _smallstep_user }} user
+- name: Create the {{ step_user }} user
   become: yes
   ansible.builtin.user:
     state: present
-    system: yes
-    name: "{{ _smallstep_user }}"
-    group: "{{ _smallstep_group }}"
+    system: no
+    name: "{{ step_user }}"
     create_home: yes
-    home: "{{ _smallstep_user_home }}"
-    shell: /usr/bin/bash
-    uid: "{{ _smallstep_uid }}"
+    home: "{{ step_user_home }}"
+    shell: /sbin/nologin
+    uid: "{{ step_uid }}"
+    group: "{{ step_group }}"
+
+- name: Enable lingering for {{ step_user }} user
+  become: yes
+  ansible.builtin.command:
+    argv:
+      - /bin/loginctl
+      - enable-linger
+      - "{{ step_user }}"
+    creates: /var/lib/systemd/linger/{{ step_user }}
+  register: enable_linger
+  changed_when: enable_linger.start is not none and enable_linger.rc == 0
+
+- name: Restart the systemd-logind service so lingering for {{ step_user }} takes effect
+  become: yes
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: systemd-logind
+  when: enable_linger is changed
+
+- name: Ensure user scoped systemd config directories exist {{ step_user }} user
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /home/{{ step_user }}/{{ item }}
+    owner: "{{ step_user }}"
+    group: "{{ step_group }}"
+    mode: "0750"
+  loop:
+    - .config/containers/systemd
+    - .config/systemd/user

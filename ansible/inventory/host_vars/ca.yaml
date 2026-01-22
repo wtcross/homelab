@@ -1,0 +1,10 @@
+---
+ansible_host: "{{ inventory_hostname }}.lab.cross.solutions"
+ansible_user: pkimgmt
+ansible_python_interpreter: /usr/bin/python3.12
+
+step_dns_name: ca.lab.cross.solutions
+step_https_port: 8443
+step_name: Cross Solutions Lab CA
+step_hsm_pkcs11_uri: pkcs11:model=PKCS%2315%20emulated;manufacturer=www.CardContact.de;serial=DENK0400118;token=IntermediateCA
+step_hsm_serial: DENK04001180000

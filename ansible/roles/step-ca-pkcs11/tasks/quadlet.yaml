@@ -1,0 +1,80 @@
+- block:
+    - name: Check if the podman secret for the HSM PIN exists
+      become: yes
+      become_user: "{{ step_user }}"
+      command:
+        cmd: podman secret exists hsm-pin
+      register: check_podman_secret_hsm_pin
+      ignore_errors: true
+      changed_when: false
+
+    - name: Prompt for the HSM PIN if it is not set yet
+      when: check_podman_secret_hsm_pin.rc == 1
+      become: no
+      delegate_to: localhost
+      ansible.builtin.pause:
+        prompt: "Enter the HSM PIN for {{ step_name }}"
+        echo: no
+      register: hsm_pin_prompt
+
+    - name: Create a podman secret for the HSM PIN
+      when: check_podman_secret_hsm_pin.rc == 1
+      become: yes
+      become_user: "{{ step_user }}"
+      containers.podman.podman_secret:
+        state: present
+        name: hsm-pin
+        data: "{{ hsm_pin_prompt.user_input }}"
+        skip_existing: yes
+
+    - set_fact:
+        hsm_pin_prompt: null
+
+- name: Ensure step-ca quadlet units are in place
+  become: yes
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /home/{{ step_user }}/.config/containers/systemd/{{ item }}
+    owner: "{{ step_user }}"
+    group: "{{ step_group }}"
+    mode: "0644"
+  loop:
+    - step-ca.network
+    - step-ca-data.volume
+    - step-ca.container
+  register: create_step_quadlet_units
+
+- name: Reload the user-level systemd daemon if any quadlet units changed
+  when: create_step_quadlet_units.changed
+  become: yes
+  become_user: "{{ step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    daemon_reload: yes
+    scope: user
+
+- name: Restart the step-ca service if any units changed
+  when: create_step_quadlet_units.changed
+  become: yes
+  become_user: "{{ step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: restarted
+    scope: user
+    name: step-ca.service
+
+- name: Ensure the step-ca service is enabled and started
+  become: yes
+  become_user: "{{ step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    scope: user
+    name: step-ca.service

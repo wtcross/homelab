@@ -12,7 +12,6 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 
 FROM registry.access.redhat.com/ubi10/ubi-micro
 
-COPY --from=builder /opt/app-root/src/step-cli/bin/step /usr/bin/step
+COPY --from=builder /opt/app-root/src/step-cli/bin/step /usr/local/bin/step
 
-LABEL io.k8s.display-name="Step CLI" \
-      io.k8s.description="CLI tool for building, operating, and automating Public Key Infrastructure (PKI) systems and workflows. It's also a client for the step-ca online Certificate Authority (CA) server."
+USER 1001

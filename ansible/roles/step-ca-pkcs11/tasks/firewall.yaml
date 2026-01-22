@@ -1,6 +1,14 @@
-- name: Permanently enable https service and enable it immediately
+- name: Ensure firewalld is enabled
+  become: yes
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    name: firewalld
+
+- name: Ensure traffic to the step-ca.socket ({{ step_https_port }}/tcp) is allowed
+  become: yes
   ansible.posix.firewalld:
-    service: https
-    state: enabled
-    permanent: true
+    port: "{{ step_https_port }}/tcp"
     immediate: true
+    permanent: true
+    state: enabled

@@ -1,7 +1,0 @@
-- name: Ensure pcscd is running and enabled
-  become: yes
-  ansible.builtin.systemd_service:
-    state: started
-    enabled: yes
-    scope: system
-    name: pcscd

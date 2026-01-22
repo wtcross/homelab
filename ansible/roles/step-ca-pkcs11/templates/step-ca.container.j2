@@ -1,0 +1,30 @@
+[Unit]
+Description=Step Certificates
+Requires=p11-kit-server.service
+After=p11-kit-server.service
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=step-ca
+Label=app=step-ca
+Image={{ step_ca_image_uri }}
+Pull=always
+UserNS=keep-id:uid={{ step_uid }},gid={{ step_gid }}
+Network=step-ca.network
+PublishPort="{{ step_https_port }}:9000"
+SecurityLabelDisable=true
+Volume=step-ca-data:{{ _step_data_mount_target }}
+Volume=%t/p11-kit/pkcs11-socket:/run/pkcs11-socket
+Secret=hsm-pin,type=mount,target=/home/{{ step_user }}/hsm-pin
+NoNewPrivileges=true
+Notify=true
+Environment=STEPPATH={{ _step_data_mount_target }}
+Environment=STEPCA_INIT_ADDRESS=:9000
+Environment="STEPCA_INIT_NAME={{ step_name }}"
+Environment=STEPCA_INIT_DNS_NAMES={{ step_dns_name }}
+Environment=P11_KIT_SERVER_ADDRESS=unix:path=/run/pkcs11-socket
