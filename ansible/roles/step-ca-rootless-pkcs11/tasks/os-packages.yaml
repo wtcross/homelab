@@ -12,7 +12,7 @@
     state: latest
     use_backend: dnf4
     update_cache: no
-    pkg: "{{ _step_os_packages }}"
+    pkg: "{{ __step_os_packages }}"
 
 - name: Check if reboot is required
   ansible.builtin.command: needs-restarting -r

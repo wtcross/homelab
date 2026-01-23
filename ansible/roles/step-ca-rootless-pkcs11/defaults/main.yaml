@@ -1,0 +1,24 @@
+---
+step_ca_image_uri: ghcr.io/wtcross/step-ca:latest
+
+_step_uid: "{{ step_uid | default('1001') }}"
+_step_gid: "{{ step_gid | default('1001') }}"
+_step_user: "{{ step_user | default('step') }}"
+_step_group: "{{ step_group | default('step') }}"
+
+_step_https_port: "{{ step_https_port | default('9000') }}"
+
+__step_user_home: /home/{{ _step_user }}
+
+__step_os_packages:
+  - acl
+  - firewalld
+  - python3-firewall
+  - pcsc-lite
+  - opensc
+  - p11-kit
+  - p11-kit-server
+  - gnutls-utils
+  - udica
+
+__step_data_mount_target: /home/step/.step

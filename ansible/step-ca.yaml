@@ -3,4 +3,4 @@
   hosts: ca
   gather_facts: true
   roles:
-    - role: step-ca-pkcs11
+    - role: step-ca-rootless-pkcs11

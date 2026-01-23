@@ -5,7 +5,7 @@ After=p11-kit-server.socket
 
 [Service]
 Environment=XDG_RUNTIME_DIR=/run/user/%U
-ExecStartPre=/usr/bin/chcon -R -t container_file_t %t/p11-kit
+ExecStartPre=/usr/bin/chcon -R -t container_file_t -l s0:c100,c200 %t/p11-kit
 ExecStart=/usr/bin/p11-kit server --foreground --sh --provider=/usr/lib64/pkcs11/opensc-pkcs11.so "{{ step_hsm_pkcs11_uri | replace('%', '%%') }}"
 Restart=on-failure
 

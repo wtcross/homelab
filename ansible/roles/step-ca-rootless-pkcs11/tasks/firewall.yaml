@@ -5,10 +5,10 @@
     enabled: yes
     name: firewalld
 
-- name: Ensure traffic to the step-ca.socket ({{ step_https_port }}/tcp) is allowed
+- name: Ensure traffic to the step-ca.socket ({{ _step_https_port }}/tcp) is allowed
   become: yes
   ansible.posix.firewalld:
-    port: "{{ step_https_port }}/tcp"
+    port: "{{ _step_https_port }}/tcp"
     immediate: true
     permanent: true
     state: enabled
