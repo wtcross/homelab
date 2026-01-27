@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/ubi10/go-toolset AS builder
 
-ARG TAG
-RUN git clone --branch "${TAG}" --single-branch --depth 1 https://github.com/smallstep/cli.git /opt/app-root/src/step-cli
+ARG STEP_CLI_GIT_TAG
+RUN git clone --branch "${STEP_CLI_GIT_TAG}" --single-branch --depth 1 https://github.com/smallstep/cli.git /opt/app-root/src/step-cli
 WORKDIR /opt/app-root/src/step-cli
 RUN go mod download
 

@@ -23,3 +23,5 @@ ansible/collections/ansible_collections/
 galaxy-roles/*/
 
 ansible/.tmp/
+
+.claude/

@@ -1,104 +1,118 @@
 #!/bin/bash
 set -eo pipefail
 
-export STEPPATH=$(step path)
+# Entrypoint script for step-ca with PKCS#11 support
+# Uses step ca init to bootstrap admin, then configures PKCS#11 key
 
-# List of env vars required for step ca init
-declare -ra REQUIRED_INIT_VARS=(STEPCA_INIT_NAME STEPCA_INIT_DNS_NAMES)
+STEPPATH="${STEPPATH:-/home/step/.step}"
+CONFIG_FILE="${STEPPATH}/config/ca.json"
 
-# Ensure all env vars required to run step ca init are set.
-function init_if_possible () {
-    local missing_vars=0
-    for var in "${REQUIRED_INIT_VARS[@]}"; do
-        if [ -z "${!var}" ]; then
-            missing_vars=1
-        fi
-    done
-    if [ ${missing_vars} = 1 ]; then
-        >&2 echo "there is no ca.json config file; please run step ca init, or provide config parameters via STEPCA_INIT_ vars"
-    else
-        step_ca_init "${@}"
-    fi
+# Required environment variables
+: "${STEP_CA_NAME:?STEP_CA_NAME is required}"
+: "${STEP_CA_DNS_NAMES:?STEP_CA_DNS_NAMES is required}"
+: "${STEP_PKCS11_PRIVATE_KEY_URI:?STEP_PKCS11_PRIVATE_KEY_URI is required}"
+: "${STEP_ADMIN_PASSWORD_FILE:?STEP_ADMIN_PASSWORD_FILE is required}"
+
+# Validate admin password file exists
+if [ ! -f "${STEP_ADMIN_PASSWORD_FILE}" ]; then
+    echo "Error: Admin password file not found at ${STEP_ADMIN_PASSWORD_FILE}" >&2
+    exit 1
+fi
+
+# Optional environment variables with defaults
+STEP_CA_ADDRESS="${STEP_CA_ADDRESS:-:9000}"
+STEP_INTERMEDIATE_CERT_FILE="${STEP_INTERMEDIATE_CERT_FILE:-/run/secrets/intermediate.crt}"
+STEP_ROOT_CERT_FILE="${STEP_ROOT_CERT_FILE:-/run/secrets/root.crt}"
+STEP_ADMIN_SUBJECT="${STEP_ADMIN_SUBJECT:-step}"
+STEP_ADMIN_PROVISIONER_NAME="${STEP_ADMIN_PROVISIONER_NAME:-admin}"
+
+# Validate certificate files exist
+if [ ! -f "${STEP_INTERMEDIATE_CERT_FILE}" ]; then
+    echo "Error: Intermediate certificate not found at ${STEP_INTERMEDIATE_CERT_FILE}" >&2
+    exit 1
+fi
+
+if [ ! -f "${STEP_ROOT_CERT_FILE}" ]; then
+    echo "Error: Root certificate not found at ${STEP_ROOT_CERT_FILE}" >&2
+    exit 1
+fi
+
+# Initialize CA if config doesn't exist
+if [ ! -f "${CONFIG_FILE}" ]; then
+    echo "Initializing CA configuration..."
+
+    # Create temporary directory for step ca init
+    TEMP_STEPPATH=$(mktemp -d)
+    export STEPPATH="${TEMP_STEPPATH}"
+
+    # Run step ca init to create provisioner and super admin
+    step ca init \
+        --name="${STEP_CA_NAME}" \
+        --dns="${STEP_CA_DNS_NAMES}" \
+        --address="${STEP_CA_ADDRESS}" \
+        --provisioner="${STEP_ADMIN_PROVISIONER_NAME}" \
+        --password-file="${STEP_ADMIN_PASSWORD_FILE}" \
+        --provisioner-password-file="${STEP_ADMIN_PASSWORD_FILE}" \
+        --remote-management \
+        --admin-subject="${STEP_ADMIN_SUBJECT}" \
+        --deployment-type=standalone
+
+    # Reset STEPPATH to actual location
+    STEPPATH="${STEPPATH:-/home/step/.step}"
+    export STEPPATH
+
+    # Extract provisioners from generated config
+    PROVISIONERS=$(jq '.authority.provisioners' "${TEMP_STEPPATH}/config/ca.json")
+
+    # Parse DNS names into JSON array
+    IFS=',' read -ra DNS_ARRAY <<< "${STEP_CA_DNS_NAMES}"
+    DNS_JSON=$(printf '%s\n' "${DNS_ARRAY[@]}" | jq -R . | jq -s .)
+
+    # Create PKCS#11 ca.json using provisioners from init
+    mkdir -p "${STEPPATH}/config"
+    cat > "${CONFIG_FILE}" <<EOF
+{
+    "root": "${STEP_ROOT_CERT_FILE}",
+    "crt": "${STEP_INTERMEDIATE_CERT_FILE}",
+    "key": "${STEP_PKCS11_PRIVATE_KEY_URI}",
+    "kms": {
+        "type": "pkcs11",
+        "uri": "pkcs11:module-path=/usr/lib64/p11-kit-proxy.so"
+    },
+    "address": "${STEP_CA_ADDRESS}",
+    "dnsNames": ${DNS_JSON},
+    "logger": {
+        "format": "text"
+    },
+    "db": {
+        "type": "badgerv2",
+        "dataSource": "${STEPPATH}/db"
+    },
+    "authority": {
+        "enableAdmin": true,
+        "provisioners": ${PROVISIONERS}
+    },
+    "tls": {
+        "cipherSuites": [
+            "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
+        ],
+        "minVersion": 1.2,
+        "maxVersion": 1.3,
+        "renegotiation": false
+    }
 }
+EOF
 
-function generate_password () {
-    set +o pipefail
-    < /dev/urandom tr -dc A-Za-z0-9 | head -c40
-    echo
-    set -o pipefail
-}
+    # Copy database containing super admin
+    cp -r "${TEMP_STEPPATH}/db" "${STEPPATH}/"
 
-# Initialize a CA if not already initialized
-function step_ca_init () {
-    STEPCA_INIT_PROVISIONER_NAME="${STEPCA_INIT_PROVISIONER_NAME:-admin}"
-    STEPCA_INIT_ADMIN_SUBJECT="${STEPCA_INIT_ADMIN_SUBJECT:-step}"
-    STEPCA_INIT_ADDRESS="${STEPCA_INIT_ADDRESS:-:9000}"
-    STEPCA_INIT_ROOT_FILE="${STEPCA_INIT_ROOT_FILE:-"/run/secrets/root_ca.crt"}"
-    STEPCA_INIT_KEY_FILE="${STEPCA_INIT_KEY_FILE:-"/run/secrets/root_ca_key"}"
-    STEPCA_INIT_KEY_PASSWORD_FILE="${STEPCA_INIT_KEY_PASSWORD_FILE:-"/run/secrets/root_ca_key_password"}"
+    # Clean up temporary directory
+    rm -rf "${TEMP_STEPPATH}"
 
-    local -a setup_args=(
-        --name "${STEPCA_INIT_NAME}"
-        --dns "${STEPCA_INIT_DNS_NAMES}"
-        --provisioner "${STEPCA_INIT_PROVISIONER_NAME}"
-        --password-file "${STEPPATH}/password"
-        --provisioner-password-file "${STEPPATH}/provisioner_password"
-        --address "${STEPCA_INIT_ADDRESS}"
-    )
-    if [ -n "${STEPCA_INIT_PASSWORD_FILE}" ]; then
-        cat < "${STEPCA_INIT_PASSWORD_FILE}" > "${STEPPATH}/password"
-        cat < "${STEPCA_INIT_PASSWORD_FILE}" > "${STEPPATH}/provisioner_password"
-    elif [ -n "${STEPCA_INIT_PASSWORD}" ]; then
-        echo "${STEPCA_INIT_PASSWORD}" > "${STEPPATH}/password"
-        echo "${STEPCA_INIT_PASSWORD}" > "${STEPPATH}/provisioner_password"
-    else
-        echo "${STEPPATH}/password"
-        generate_password > "${STEPPATH}/password"
-        generate_password > "${STEPPATH}/provisioner_password"
-    fi
-    if [ -f "${STEPCA_INIT_ROOT_FILE}" ]; then
-        setup_args=("${setup_args[@]}" --root "${STEPCA_INIT_ROOT_FILE}")
-    fi
-    if [ -f "${STEPCA_INIT_KEY_FILE}" ]; then
-        setup_args=("${setup_args[@]}" --key "${STEPCA_INIT_KEY_FILE}")
-    fi
-    if [ -f "${STEPCA_INIT_KEY_PASSWORD_FILE}" ]; then
-        setup_args=("${setup_args[@]}" --key-password-file "${STEPCA_INIT_KEY_PASSWORD_FILE}")
-    fi
-    if [ -n "${STEPCA_INIT_DEPLOYMENT_TYPE}" ]; then
-        setup_args=("${setup_args[@]}" --deployment-type "${STEPCA_INIT_DEPLOYMENT_TYPE}")
-    fi
-    if [ -n "${STEPCA_INIT_WITH_CA_URL}" ]; then
-        setup_args=("${setup_args[@]}" --with-ca-url "${STEPCA_INIT_WITH_CA_URL}")
-    fi
-    if [ "${STEPCA_INIT_SSH}" == "true" ]; then
-        setup_args=("${setup_args[@]}" --ssh)
-    fi
-    if [ "${STEPCA_INIT_ACME}" == "true" ]; then
-        setup_args=("${setup_args[@]}" --acme)
-    fi
-    if [ "${STEPCA_INIT_REMOTE_MANAGEMENT}" == "true" ]; then
-        setup_args=("${setup_args[@]}" --remote-management
-                       --admin-subject "${STEPCA_INIT_ADMIN_SUBJECT}"
-        )
-    fi
-    step ca init "${setup_args[@]}"
-    echo ""
-    if [ "${STEPCA_INIT_REMOTE_MANAGEMENT}" == "true" ]; then
-        echo "Your CA administrative username is: ${STEPCA_INIT_ADMIN_SUBJECT}"
-    fi
-    echo "Your CA administrative password is: $(< $STEPPATH/provisioner_password )"
-    echo "This will only be displayed once."
-    shred -u $STEPPATH/provisioner_password
-    mv $STEPPATH/password $PWDPATH
-}
-
-# if [ -f /usr/sbin/pcscd ]; then
-#     /usr/sbin/pcscd
-# fi
-
-if [ ! -f "${STEPPATH}/config/ca.json" ]; then
-    init_if_possible
+    echo "CA configuration initialized successfully"
+    echo "Admin subject: ${STEP_ADMIN_SUBJECT}"
+    echo "Admin provisioner: ${STEP_ADMIN_PROVISIONER_NAME}"
 fi
 
 exec "${@}"
