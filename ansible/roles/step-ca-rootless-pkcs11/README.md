@@ -143,7 +143,7 @@ This role enables the `step-ca` container to use a hardware security module (HSM
 │                                          ▼                      │
 │                          ┌─────────────────────────────────┐   │
 │                          │  Unix Socket                     │   │
-│                          │  ~/run/p11-kit/pkcs11-socket     │   │
+│                          │  /run/user/{uid}/p11-kit/pkcs11  │   │
 │                          └───────────────┬─────────────────┘   │
 │                                          │ bind mount           │
 │  ┌───────────────────────────────────────┼─────────────────┐   │
