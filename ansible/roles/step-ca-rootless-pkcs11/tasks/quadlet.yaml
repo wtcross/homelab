@@ -1,7 +1,8 @@
+---
 - name: Create a selinux policy specific to step-ca for accessing the p11-kit server socket
   block:
     - name: Create a directory for storing SELinux CIL files
-      become: yes
+      become: true
       ansible.builtin.file:
         state: directory
         path: /var/lib/udica/policy/
@@ -10,7 +11,7 @@
         mode: "0755"
 
     - name: Copy SELinux CIL file for custom step-ca policy
-      become: yes
+      become: true
       ansible.builtin.copy:
         src: step_ca_policy.cil
         dest: /var/lib/udica/policy/step_ca_policy.cil
@@ -19,8 +20,8 @@
         mode: "0755"
 
     - name: Ensure custom step-ca SELinux policy is installed
-      become: yes
-      command:
+      become: true
+      ansible.builtin.command:
         cmd: >
           /sbin/semodule
           -i step_ca_policy.cil
@@ -32,64 +33,130 @@
 - name: Create a podman secret for the HSM PIN
   block:
     - name: Check if the podman secret for the HSM PIN exists
-      become: yes
+      become: true
       become_user: "{{ _step_user }}"
-      command:
-        cmd: podman secret exists hsm-pin
+      ansible.builtin.command:
+        cmd: "podman secret exists hsm-pin-{{ _step_instance }}"
       register: check_podman_secret_hsm_pin
       ignore_errors: true
       changed_when: false
 
     - name: Prompt for the HSM PIN if it is not set yet
       when: check_podman_secret_hsm_pin.rc == 1
-      become: no
+      become: false
       delegate_to: localhost
       ansible.builtin.pause:
         prompt: "Enter the HSM PIN for {{ step_name }}"
-        echo: no
+        echo: false
       register: hsm_pin_prompt
 
     - name: Create a podman secret for the HSM PIN
       when: check_podman_secret_hsm_pin.rc == 1
-      become: yes
+      become: true
       become_user: "{{ _step_user }}"
       containers.podman.podman_secret:
         state: present
-        name: hsm-pin
+        name: "hsm-pin-{{ _step_instance }}"
         data: "{{ hsm_pin_prompt.user_input }}"
-        skip_existing: yes
+        skip_existing: true
 
-    - set_fact:
+    - name: Clear HSM PIN from memory
+      ansible.builtin.set_fact:
         hsm_pin_prompt: null
 
-- name: Ensure step-ca quadlet units are in place
-  become: yes
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: /home/{{ _step_user }}/.config/containers/systemd/{{ item }}
+# Static quadlet base files
+# These files have no templating and can eventually be moved to a separate repo
+# or distributed via a package. For now, the role copies them.
+
+- name: Ensure quadlet directories exist
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0755"
+  loop:
+    - "{{ __step_user_home }}/.config/containers/systemd"
+    - "{{ __step_user_home }}/.config/systemd/user"
+
+- name: Copy static quadlet base files
+  become: true
+  ansible.builtin.copy:
+    src: "systemd/quadlet/{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: "{{ _step_user }}"
     group: "{{ _step_group }}"
     mode: "0644"
   loop:
-    - step-ca.network
-    - step-ca-data.volume
-    - step-ca.container
-  register: create_step_quadlet_units
+    - src: step-ca@.container
+      dest: "{{ __step_user_home }}/.config/containers/systemd/step-ca@.container"
+    - src: step-ca@.volume
+      dest: "{{ __step_user_home }}/.config/containers/systemd/step-ca@.volume"
+    - src: step-ca.network
+      dest: "{{ __step_user_home }}/.config/containers/systemd/step-ca.network"
+    - src: step-ca@.target
+      dest: "{{ __step_user_home }}/.config/systemd/user/step-ca@.target"
+  register: copy_static_quadlet_files
 
-- name: Reload the user-level systemd daemon if any quadlet units changed
-  when: create_step_quadlet_units.changed
-  become: yes
+# Instance-specific configuration via drop-ins and environment files
+
+- name: Ensure step-ca environment directory exists
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "{{ __step_user_home }}/.config/step-ca"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0750"
+
+- name: Ensure step-ca instance environment file exists
+  become: true
+  ansible.builtin.copy:
+    dest: "{{ __step_user_home }}/.config/step-ca/{{ _step_instance }}.env"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0640"
+    content: |
+      STEPCA_INIT_NAME={{ step_name }}
+      STEPCA_INIT_DNS_NAMES={{ step_dns_name }}
+  register: create_step_env
+
+- name: Ensure step-ca container drop-in directory exists
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "{{ __step_user_home }}/.config/containers/systemd/step-ca@{{ _step_instance }}.container.d"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0755"
+
+- name: Ensure step-ca port configuration drop-in exists
+  become: true
+  ansible.builtin.copy:
+    dest: "{{ __step_user_home }}/.config/containers/systemd/step-ca@{{ _step_instance }}.container.d/10-ports.conf"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0644"
+    content: |
+      [Container]
+      PublishPort={{ _step_https_port }}:9000
+  register: create_step_port_dropin
+
+- name: Reload the user-level systemd daemon if configuration changed
+  when: copy_static_quadlet_files.changed or create_step_env.changed or create_step_port_dropin.changed
+  become: true
   become_user: "{{ _step_user }}"
   environment:
     XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
   ansible.builtin.systemd_service:
-    daemon_reload: yes
+    daemon_reload: true
     scope: user
 
-- name: Restart the step-ca service if any units changed
-  when: create_step_quadlet_units.changed
-  become: yes
+- name: Restart the step-ca instance if configuration changed
+  when: copy_static_quadlet_files.changed or create_step_env.changed or create_step_port_dropin.changed
+  become: true
   become_user: "{{ _step_user }}"
   environment:
     XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
@@ -97,16 +164,16 @@
   ansible.builtin.systemd_service:
     state: restarted
     scope: user
-    name: step-ca.service
+    name: "step-ca@{{ _step_instance }}.target"
 
-- name: Ensure the step-ca service is enabled and started
-  become: yes
+- name: Ensure the step-ca instance is enabled and started
+  become: true
   become_user: "{{ _step_user }}"
   environment:
     XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
   ansible.builtin.systemd_service:
     state: started
-    enabled: yes
+    enabled: true
     scope: user
-    name: step-ca.service
+    name: "step-ca@{{ _step_instance }}.target"

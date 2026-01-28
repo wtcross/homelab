@@ -1,0 +1,123 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: quay-config
+  namespace: quay
+spec:
+  data:
+    - remoteRef:
+        key: polaris-quay-db-password
+      secretKey: quayDBPassword
+    - remoteRef:
+        key: polaris-clair-db-password
+      secretKey: clairDBPassword
+    - secretKey: s3AccessKey
+      remoteRef:
+        key: polaris-quay-seaweed-s3-access-key
+    - secretKey: s3SecretKey
+      remoteRef:
+        key: polaris-quay-seaweed-s3-secret-key
+    - remoteRef:
+        key: polaris-keycloak-realm-quay-client-id
+      secretKey: QUAY_REALM_CLIENT_ID
+    - remoteRef:
+        key: polaris-keycloak-realm-quay-client-secret
+      secretKey: QUAY_REALM_CLIENT_SECRET
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: quay-config
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        extra_ca_cert_lab.crt: |
+          -----BEGIN CERTIFICATE-----
+          MIICyzCCAlGgAwIBAgIUM701Oc8uB35avhhliU9rgzrXwogwCgYIKoZIzj0EAwQw
+          gZIxCzAJBgNVBAYTAlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGluYTEYMBYGA1UE
+          CgwPQ3Jvc3MgU29sdXRpb25zMS4wLAYDVQQLDCVDcm9zcyBTb2x1dGlvbnMgQ2Vy
+          dGlmaWNhdGUgQXV0aG9yaXR5MSAwHgYDVQQDDBdDcm9zcyBTb2x1dGlvbnMgUm9v
+          dCBDQTAeFw0yNTEyMDgxMTI0MjBaFw0zNTEyMDYxMTI0MjBaMIGSMQswCQYDVQQG
+          EwJVUzEXMBUGA1UECAwOTm9ydGggQ2Fyb2xpbmExGDAWBgNVBAoMD0Nyb3NzIFNv
+          bHV0aW9uczEuMCwGA1UECwwlQ3Jvc3MgU29sdXRpb25zIENlcnRpZmljYXRlIEF1
+          dGhvcml0eTEgMB4GA1UEAwwXQ3Jvc3MgU29sdXRpb25zIFJvb3QgQ0EwdjAQBgcq
+          hkjOPQIBBgUrgQQAIgNiAAQvXittluoOkXni2wtRn6SuZokbEOq37iKYfi6IDqIg
+          ubXtCzEz+HP3iB7cwJC8kCP5R4k1EEGjrWqE9aGUb0ne2ZDxxrmQ1BIHly4R7DRI
+          B0YjSsGP5denuRSzSnGPxhijZjBkMB0GA1UdDgQWBBRHsedFvBF1un0LhTJqfJaU
+          41axgDAfBgNVHSMEGDAWgBRHsedFvBF1un0LhTJqfJaU41axgDASBgNVHRMBAf8E
+          CDAGAQH/AgEBMA4GA1UdDwEB/wQEAwIBhjAKBggqhkjOPQQDBANoADBlAjEA7YrA
+          ZRETyf06DLv7lmx7b1dSxUGnTaLRXDLipIVH3nAvIlBPKSHtvOBK1LNxhExdAjBj
+          yLwaBS7uq0lshwJAGzMlmsQbKe8IveTJwlIHdmykz8x/2M6SU0MDygXeqXG8fsI=
+          -----END CERTIFICATE-----
+          -----BEGIN CERTIFICATE-----
+          MIIC1DCCAlmgAwIBAgIUZ8HS7WgjRcHKbk1ZcEjdH0Pmr6YwCgYIKoZIzj0EAwQw
+          gZIxCzAJBgNVBAYTAlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGluYTEYMBYGA1UE
+          CgwPQ3Jvc3MgU29sdXRpb25zMS4wLAYDVQQLDCVDcm9zcyBTb2x1dGlvbnMgQ2Vy
+          dGlmaWNhdGUgQXV0aG9yaXR5MSAwHgYDVQQDDBdDcm9zcyBTb2x1dGlvbnMgUm9v
+          dCBDQTAeFw0yNTEyMDgyMTIxMDJaFw0zMDEyMDcyMTIxMDJaMIGaMQswCQYDVQQG
+          EwJVUzEXMBUGA1UECAwOTm9ydGggQ2Fyb2xpbmExGDAWBgNVBAoMD0Nyb3NzIFNv
+          bHV0aW9uczEuMCwGA1UECwwlQ3Jvc3MgU29sdXRpb25zIENlcnRpZmljYXRlIEF1
+          dGhvcml0eTEoMCYGA1UEAwwfQ3Jvc3MgU29sdXRpb25zIEludGVybWVkaWF0ZSBD
+          QTB2MBAGByqGSM49AgEGBSuBBAAiA2IABCWzuQ/1ivs6Q3+tUfrDLH3pW2QFJoqO
+          yRjydPDTpqzIsWM6qBgnptzP0HbVYSW/IMIus/O6MEwQ34GwQMRnoF7xpze4n9L1
+          Jt/VK8uFLMmG/xBdYS1eUHulJY7suBibsaNmMGQwHQYDVR0OBBYEFEFhYucVGsy7
+          FGpk44pug+GrlIF0MB8GA1UdIwQYMBaAFEex50W8EXW6fQuFMmp8lpTjVrGAMBIG
+          A1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0PAQH/BAQDAgGGMAoGCCqGSM49BAMEA2kA
+          MGYCMQCIKYA//2V7/0drFs7TZqjAyBuEg1/qpi2s76JNqaw3ga3Y2Xj/U/Q8z8VJ
+          IF9JfCgCMQDD1zSdki4u/AfPn4xLbMoY5Zo2/3SgoSxgK61mttH/vwgcdYnZiCTH
+          ezyOaUusEwI=
+          -----END CERTIFICATE-----
+        config.yaml: |
+          DB_URI: "postgresql://quay:{{ .quayDBPassword }}@quay-pg-rw.quay.svc.cluster.local:5432/quay"
+          DB_CONNECTION_ARGS:
+            sslmode: prefer
+            sslrootcert: /conf/stack/extra_ca_certs/lab.crt
+
+          LOGS_MODEL: database
+
+          DISTRIBUTED_STORAGE_CONFIG:
+            default:
+              - S3Storage
+              - host: seaweedfs-filer.quay.svc.cluster.local
+                port: 8443
+                signature_version: s3v4
+                storage_path: /registry
+                s3_access_key: "{{ .s3AccessKey }}"
+                s3_secret_key: "{{ .s3SecretKey }}"
+                s3_bucket: quay-datastore
+          DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
+          DISTRIBUTED_STORAGE_PREFERENCE:
+              - default
+
+          AUTHENTICATION_TYPE: OIDC
+
+          KEYCLOAK_LOGIN_CONFIG:
+            CLIENT_ID: "{{ .QUAY_REALM_CLIENT_ID }}"
+            CLIENT_SECRET: "{{ .QUAY_REALM_CLIENT_SECRET }}"
+            LOGIN_SCOPES:
+              - openid
+              - email
+              - profile
+            OIDC_SERVER: https://keycloak.apps.polaris.lab.cross.solutions/realms/quay/
+            SERVICE_NAME: Keycloak
+            USE_PKCE: True
+            PKCE_METHOD: "S256"
+            PUBLIC_CLIENT: False
+
+        clair-config.yaml: |
+          indexer:
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=/run/certs/lab.crt"
+              layer_scan_concurrency: 6
+              migrations: true
+              scanlock_retry: 11
+          log_level: debug
+          matcher:
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=/run/certs/lab.crt"
+              migrations: true
+          metrics:
+              name: prometheus
+          notifier:
+              connstring: "host=quay-pg-rw.quay.svc.cluster.local port=5432 dbname=clair user=clair password={{ .clairDBPassword }} sslmode=verify-full sslrootcert=/run/certs/lab.crt"
+              migrations: true

@@ -1,0 +1,26 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: quay-realm-placeholders
+  namespace: keycloak
+spec:
+  data:
+    - remoteRef:
+        key: polaris-keycloak-realm-quay-client-id
+      secretKey: QUAY_REALM_CLIENT_ID
+    - remoteRef:
+        key: polaris-keycloak-realm-quay-client-secret
+      secretKey: QUAY_REALM_CLIENT_SECRET
+    - remoteRef:
+        key: polaris-keycloak-realm-quay-idp-cross-solutions-client-id
+      secretKey: QUAY_REALM_IDP_CLIENT_ID
+    - remoteRef:
+        key: polaris-keycloak-realm-quay-idp-cross-solutions-client-secret
+      secretKey: QUAY_REALM_IDP_CLIENT_SECRET
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: quay-realm-placeholders
+    creationPolicy: Owner
