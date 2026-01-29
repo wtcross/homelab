@@ -37,16 +37,7 @@
     owner: root
     group: root
     mode: "0644"
-  register: create_hsm_polkit_rule
-
-- name: Restart polkit if 50-step-pcsc.rules changed
-  when: create_hsm_polkit_rule.changed
-  become: true
-  ansible.builtin.systemd_service:
-    state: restarted
-    enabled: true
-    scope: system
-    name: polkit
+  notify: Restart polkit
 
 - name: Ensure pcscd is started and enabled
   become: true
@@ -79,7 +70,7 @@
         - p11-kit-server.target
         - p11-kit-server.socket
         - p11-kit-server.service
-      register: copy_p11_server_systemd_units
+      notify: Reload the user-level systemd daemon
 
     - name: Ensure p11-kit-server environment directory exists
       become: true
@@ -99,30 +90,7 @@
         mode: "0640"
         content: |
           STEP_HSM_PKCS11_URI={{ step_hsm_pkcs11_uri }}
-      register: create_p11_env
-
-    - name: Reload the user-level systemd daemon if needed
-      when: copy_p11_server_systemd_units.changed or create_p11_env.changed
-      become: true
-      become_user: "{{ _step_user }}"
-      environment:
-        XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
-        DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
-      ansible.builtin.systemd_service:
-        daemon_reload: true
-        scope: user
-
-    - name: Restart the p11-kit-server target if its configuration changed
-      when: copy_p11_server_systemd_units.changed or create_p11_env.changed
-      become: true
-      become_user: "{{ _step_user }}"
-      environment:
-        XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
-        DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
-      ansible.builtin.systemd_service:
-        state: restarted
-        scope: user
-        name: p11-kit-server.target
+      notify: Restart the p11-kit-server target
 
     - name: Ensure the p11-kit-server target is enabled and started
       become: true

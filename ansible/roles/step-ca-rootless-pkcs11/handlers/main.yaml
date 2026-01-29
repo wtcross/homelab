@@ -2,3 +2,43 @@
   become: yes
   ansible.builtin.reboot:
     msg: Rebooting the system
+
+- name: Restart polkit
+  become: true
+  ansible.builtin.systemd_service:
+    state: restarted
+    enabled: true
+    scope: system
+    name: polkit
+
+- name: Reload the user-level systemd daemon
+  become: true
+  become_user: "{{ _step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    scope: user
+
+- name: Restart the p11-kit-server target
+  become: true
+  become_user: "{{ _step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: restarted
+    scope: user
+    name: p11-kit-server.target
+
+- name: Restart the step-ca instance
+  become: true
+  become_user: "{{ _step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: restarted
+    scope: user
+    name: "step-ca@{{ _step_instance }}.target"
