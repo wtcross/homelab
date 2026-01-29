@@ -1,0 +1,14 @@
+---
+- name: Restart polkit
+  become: true
+  ansible.builtin.systemd_service:
+    state: restarted
+    enabled: true
+    scope: system
+    name: polkit
+
+- name: Restart the systemd-logind service
+  become: true
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: systemd-logind

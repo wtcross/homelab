@@ -1,0 +1,13 @@
+---
+_step_uid: "{{ step_uid | default('1001') }}"
+_step_gid: "{{ step_gid | default('1001') }}"
+_step_user: "{{ step_user | default('step') }}"
+_step_group: "{{ step_group | default('step') }}"
+
+_step_https_port: "{{ step_https_port | default('9000') }}"
+
+# Instance name - derived from step_name if not explicitly set
+# Sanitized to be safe for systemd unit names (lowercase, alphanumeric + hyphens)
+_step_instance: "{{ step_instance | default(step_name | lower | regex_replace('[^a-z0-9]+', '-') | regex_replace('^-|-$', '')) }}"
+
+__step_user_home: /home/{{ _step_user }}

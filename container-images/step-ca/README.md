@@ -2,6 +2,16 @@
 
 Minimal container image for running step-ca as an intermediate CA with PKCS#11 support for HSM-based private key operations.
 
+## Disclaimer
+
+This image is **not distributed or signed by Smallstep**. The official `step-ca` container image is built without CGO, which means it lacks PKCS#11 support. Smallstep previously provided a CGO-enabled image but has since discontinued it. This image is compiled with `CGO_ENABLED=1` to enable HSM integration.
+
+For more information on PKCS#11 requirements, see the [Smallstep documentation on cryptographic protection](https://smallstep.com/docs/step-ca/cryptographic-protection/#pkcs-11).
+
+The build process uses [cosign](https://github.com/sigstore/cosign) to verify the integrity of the step-ca and step-cli source code tarballs before compiling the binaries included in this image.
+
+If you prefer not to trust a third-party container image, you can use the Containerfile in this directory to build your own.
+
 ## Build
 
 ```bash

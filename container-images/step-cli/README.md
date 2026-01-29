@@ -2,6 +2,12 @@
 
 Minimal container image containing step-cli for CA administration tasks. Includes helper scripts for common provisioner and policy management operations.
 
+## Disclaimer
+
+This image is **not distributed or signed by Smallstep**. However, the build process uses [cosign](https://github.com/sigstore/cosign) to verify the integrity of the source code tarball before compiling the binary included in this image.
+
+If you prefer not to trust a third-party container image, you can use the Containerfile in this directory to build your own.
+
 ## Build
 
 ```bash

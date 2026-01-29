@@ -1,0 +1,28 @@
+---
+- name: Create a directory for storing SELinux CIL files
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: /var/lib/udica/policy/
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy SELinux CIL file for custom step-ca policy
+  become: true
+  ansible.builtin.copy:
+    src: step_ca_policy.cil
+    dest: /var/lib/udica/policy/step_ca_policy.cil
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ensure custom step-ca SELinux policy is installed
+  become: true
+  ansible.builtin.command:
+    cmd: >
+      /sbin/semodule
+      -i step_ca_policy.cil
+      /usr/share/udica/templates/base_container.cil
+      /usr/share/udica/templates/net_container.cil
+    chdir: /var/lib/udica/policy

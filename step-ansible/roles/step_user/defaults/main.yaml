@@ -1,0 +1,7 @@
+---
+_step_uid: "{{ step_uid | default('1001') }}"
+_step_gid: "{{ step_gid | default('1001') }}"
+_step_user: "{{ step_user | default('step') }}"
+_step_group: "{{ step_group | default('step') }}"
+
+__step_user_home: /home/{{ _step_user }}

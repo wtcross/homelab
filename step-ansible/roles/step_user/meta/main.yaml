@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: step_user
+  author: wtcross
+  description: Creates dedicated user and configures HSM access for step-ca
+  license: MIT-0
+  min_ansible_version: "2.15"
+  platforms:
+    - name: EL
+      versions:
+        - "10"
+
+  galaxy_tags:
+    - pki
+    - step
+    - certificate
+    - ca
+    - hsm
+    - pkcs11
+    - user
+
+dependencies: []

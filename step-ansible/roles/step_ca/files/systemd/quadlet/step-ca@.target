@@ -1,0 +1,12 @@
+[Unit]
+Description=Step CA Services - %i
+
+Wants=p11-kit-server.target
+Wants=step-ca-network.service
+Wants=step-ca@%i.service
+
+After=p11-kit-server.target
+After=step-ca-network.service
+
+[Install]
+WantedBy=default.target

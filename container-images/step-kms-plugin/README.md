@@ -2,6 +2,16 @@
 
 Minimal container image containing step-kms-plugin and step-cli for HSM key and certificate operations. Used for offline root CA operations and intermediate CA setup.
 
+## Disclaimer
+
+This image is **not distributed or signed by Smallstep**. The `step-kms-plugin` binary requires CGO for PKCS#11 support, and Smallstep does not provide an official container image for it.
+
+For more information on PKCS#11 requirements, see the [Smallstep documentation on cryptographic protection](https://smallstep.com/docs/step-ca/cryptographic-protection/#pkcs-11).
+
+The build process uses [cosign](https://github.com/sigstore/cosign) to verify the integrity of the step-cli source code tarball before compiling. Note that step-kms-plugin itself is built from a git clone because Smallstep does not provide signed source tarballs for it.
+
+If you prefer not to trust a third-party container image, you can use the Containerfile in this directory to build your own.
+
 ## Build
 
 ```bash

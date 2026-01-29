@@ -1,0 +1,14 @@
+---
+step_host_os_packages:
+  - acl
+  - firewalld
+  - python3-firewall
+  - pcsc-lite
+  - opensc
+  - p11-kit
+  - p11-kit-server
+  - gnutls-utils
+  - udica
+
+step_host_update_packages: true
+step_host_reboot_if_required: true

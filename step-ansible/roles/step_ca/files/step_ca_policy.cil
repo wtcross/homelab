@@ -1,0 +1,12 @@
+(block step_ca_policy
+    (blockinherit container)
+    (blockinherit restricted_net_container)
+    (allow process http_port_t ( tcp_socket (  name_bind )))
+    (allow process container_file_t ( dir ( add_name create getattr ioctl lock open read remove_name rmdir search setattr write )))
+    (allow process container_file_t ( file ( append create getattr ioctl lock map open read rename setattr unlink write )))
+    (allow process container_file_t ( fifo_file ( getattr read write append ioctl lock open )))
+    (allow process container_file_t ( sock_file ( append getattr open read write )))
+
+    (typeattributeset cil_gen_require ( unconfined_t http_port_t container_file_t ))
+    (allow process unconfined_t (unix_stream_socket (connectto)))
+)

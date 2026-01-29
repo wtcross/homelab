@@ -1,0 +1,55 @@
+---
+- name: Ensure the systemd user directory exists
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "{{ __step_user_home }}/.config/systemd/user"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0755"
+
+- name: Copy static p11-kit-server systemd units
+  become: true
+  ansible.builtin.copy:
+    src: "systemd/p11-kit-server/{{ item }}"
+    dest: "{{ __step_user_home }}/.config/systemd/user/{{ item }}"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0644"
+  loop:
+    - p11-kit-server.target
+    - p11-kit-server.socket
+    - p11-kit-server.service
+  notify: Reload the user-level systemd daemon
+
+- name: Ensure p11-kit-server environment directory exists
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "{{ __step_user_home }}/.config/p11-kit-server"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0750"
+
+- name: Ensure p11-kit-server HSM environment file exists
+  become: true
+  ansible.builtin.copy:
+    dest: "{{ __step_user_home }}/.config/p11-kit-server/hsm.env"
+    owner: "{{ _step_user }}"
+    group: "{{ _step_group }}"
+    mode: "0640"
+    content: |
+      STEP_HSM_PKCS11_URI={{ step_hsm_pkcs11_uri }}
+  notify: Restart the p11-kit-server target
+
+- name: Ensure the p11-kit-server target is enabled and started
+  become: true
+  become_user: "{{ _step_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ _step_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ _step_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: true
+    scope: user
+    name: p11-kit-server.target
