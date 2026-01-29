@@ -1,4 +1,0 @@
----
-- ansible.builtin.include_tasks: preflight-checks.yaml
-- ansible.builtin.include_tasks: user.yaml
-- ansible.builtin.include_tasks: hsm.yaml

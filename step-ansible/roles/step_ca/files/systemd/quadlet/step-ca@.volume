@@ -1,8 +1,0 @@
-[Unit]
-Description=Step CA persistent data - %i
-PartOf=step-ca@%i.target
-
-[Volume]
-Label=app=step-ca
-Label=instance=%i
-VolumeName=step-ca-%i-data

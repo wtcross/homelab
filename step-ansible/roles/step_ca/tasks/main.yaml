@@ -1,7 +1,0 @@
----
-- ansible.builtin.include_tasks: preflight-checks.yaml
-- ansible.builtin.include_tasks: p11-kit-server.yaml
-- ansible.builtin.include_tasks: selinux.yaml
-- ansible.builtin.include_tasks: podman-secret.yaml
-- ansible.builtin.include_tasks: quadlet.yaml
-- ansible.builtin.include_tasks: firewall.yaml
