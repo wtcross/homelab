@@ -3,10 +3,13 @@ ansible_host: "{{ inventory_hostname }}.lab.cross.solutions"
 ansible_user: pkimgmt
 ansible_python_interpreter: /usr/bin/python3.12
 
-step_dns_name: ca.lab.cross.solutions
-step_https_port: 8443
-step_name: Cross Solutions Lab CA
-step_hsm_pkcs11_uri: "pkcs11:model=PKCS%2315%20emulated;manufacturer=www.CardContact.de;serial=DENK0400118;token=IntermediateCA"
+step_ca_https_port: 8443
 step_hsm_serial: "DENK04001180000"
 step_hsm_vendor_id: "20a0"
 step_hsm_product_id: "4230"
+
+step_ca_name: Cross Solutions Lab CA
+step_ca_dns_names: pki.lab.cross.solutions
+step_ca_host_private_key_pkcs11_uri: "pkcs11:manufacturer=www.CardContact.de;serial=DENK0400118;token=IntermediateCA;id=%01?module-path=/usr/lib64/pkcs11/opensc-pkcs11.so"
+step_ca_root_cert_local_path: "{{ playbook_dir }}/../pki/root.crt"
+step_ca_intermediate_cert_local_path: "{{ playbook_dir }}/../pki/intermediate.crt"

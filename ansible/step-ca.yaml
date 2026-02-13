@@ -1,6 +1,18 @@
 ---
+- name: Configure Step CA host
+  hosts: ca
+  gather_facts: true
+  roles:
+    - role: wtcross.step.step_host
+
+- name: Configure Step CA user
+  hosts: ca
+  gather_facts: true
+  roles:
+    - role: wtcross.step.step_user
+
 - name: Configure Step CA
   hosts: ca
   gather_facts: true
   roles:
-    - role: step-ca-rootless-pkcs11
+    - role: wtcross.step.step_ca
