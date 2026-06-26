@@ -1,0 +1,2 @@
+- ansible.builtin.include_tasks: hostname.yaml
+- ansible.builtin.include_tasks: os-packages.yaml

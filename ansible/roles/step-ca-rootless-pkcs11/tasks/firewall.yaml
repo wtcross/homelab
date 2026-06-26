@@ -1,0 +1,14 @@
+- name: Ensure firewalld is enabled
+  become: yes
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    name: firewalld
+
+- name: Ensure traffic to the step-ca.socket ({{ _step_https_port }}/tcp) is allowed
+  become: yes
+  ansible.posix.firewalld:
+    port: "{{ _step_https_port }}/tcp"
+    immediate: true
+    permanent: true
+    state: enabled

@@ -1,0 +1,72 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: patch-api-cert
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: patch-api-cert
+    namespace: openshift-config
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: patch-api-cert
+  namespace: openshift-config
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: patch-api-cert
+  namespace: openshift-config
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+        - image: quay.io/openshift/origin-cli:4.20
+          env:
+            - name: API_HOST_NAME
+              value: api.polaris.lab.cross.solutions
+            - name: NAMESPACE
+              value: openshift-config
+            - name: SECRET
+              value: cluster-api-certificate
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+
+              until oc -n "$NAMESPACE" get secret "$SECRET" >/dev/null 2>&1; do
+                echo "Waiting for $NAMESPACE/$SECRET to exist..."
+                sleep 5
+              done
+
+              until oc -n "$NAMESPACE" get secret "$SECRET" -o jsonpath='{.data.tls\.crt}' | grep -q . && \
+                    oc -n "$NAMESPACE" get secret "$SECRET" -o jsonpath='{.data.tls\.key}' | grep -q .; do
+                echo "Waiting for tls.crt/tls.key to be present in $NAMESPACE/$SECRET..."
+                sleep 5
+              done
+
+              CURRENT=$(oc get apiserver cluster -o jsonpath='{.spec.servingCerts.namedCertificates[0].servingCertificate.name}{"\n"}' 2>/dev/null || true)
+              if [[ "$CURRENT" == "$SECRET" ]]; then
+                echo "APIServer already references $SECRET; exiting."
+                exit 0
+              fi
+
+              oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts":{"namedCertificates":[{"names":["'"$API_HOST_NAME"'"],"servingCertificate":{"name":"'"$SECRET"'"}}]}}}'
+
+              oc adm wait-for-stable-cluster --minimum-stable-period=10s
+
+          name: patch-api-cert
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      serviceAccount: patch-api-cert
+      serviceAccountName: patch-api-cert

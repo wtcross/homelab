@@ -1,0 +1,73 @@
+---
+- name: Ensure required OS packages are installed
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ base_os_packages }}"
+    state: latest
+
+- name: Create a nmconnection config file for the ethernet interface
+  become: true
+  community.general.nmcli:
+    type: ethernet
+    conn_name: eno1
+    ifname: "{{ ansible_facts['default_ipv4']['interface'] }}"
+    autoconnect: true
+    method4: manual
+    method6: disabled
+    ip4: "{{ ansible_host }}"
+    gw4: "{{ ip4_gateway }}"
+    gw4_ignore_auto: true
+    dns4: "{{ dns4_servers}}"
+    dns4_ignore_auto: true
+    state: present
+  register: create_ethernet_connection
+
+- name: Find all other nmconnection config files
+  become: true
+  ansible.builtin.find:
+    paths: /etc/NetworkManager/system-connections
+    patterns: "*.nmconnection"
+    excludes: eno1.nmconnection
+  register: find_ethernet_configs
+
+- name: Delete all other nmconnection config files
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ find_ethernet_configs.files }}"
+
+- name: Ensure wake-on-lan is enabled
+  become: true
+  community.general.ini_file:
+    path: /etc/NetworkManager/system-connections/eno1.nmconnection
+    section: ethernet
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: 0600
+    owner: root
+    group: root
+    create: false
+  loop:
+    - option: mac-address
+      value: "{{ ansible_facts['default_ipv4']['macaddress'] }}"
+    - option: wake-on-lan
+      value: 64
+    - option: auto-negotiate
+      value: true
+  register: enable_wol
+
+- name: Create the disable-wireless.conf modprobe.d file
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/disable-wireless.conf
+    content: blacklist iwlwifi
+    owner: root
+    group: root
+    mode: 0644
+  register: modprobe_templating
+
+- name: Reboot node if needed
+  become: true
+  ansible.builtin.reboot:
+  when: create_ethernet_connection is changed or enable_wol is changed or modprobe_templating is changed

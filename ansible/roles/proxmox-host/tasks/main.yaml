@@ -1,0 +1,35 @@
+- name: Configure static IP if needed for first time
+
+- name: Create the disable-wireless.conf modprobe.d file
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/disable-wireless.conf
+    content: blacklist iwlwifi
+    owner: root
+    group: root
+    mode: 0644
+  register: modprobe_templating
+
+- name: Install required packages for thunderbolt devices
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - bolt
+    - polkitd
+
+- name: Enable and start bolt service
+  service:
+    state: started
+    enabled: yes
+    name: bolt
+
+- name: Identify UUID of QNAP USB4 NIC
+
+- name: Enroll QNAP USB4 NIC with boltctl
+  # boltctl enroll <uuid>
+
+# https://pve.proxmox.com/pve-docs/pve-admin-guide.html#_using_the_pve_network_interface_pinning_tool
+- name: Ensure that management interface is statically named (nic0)
+
+- name: Ensure that QNAP interface is statically named (nic1)

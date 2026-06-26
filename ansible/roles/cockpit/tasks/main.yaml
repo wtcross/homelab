@@ -1,0 +1,40 @@
+---
+- name: Install cockpit packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ cockpit_packages }}"
+    state: latest
+
+- name: Enable cockpit service
+  become: true
+  ansible.builtin.service:
+    name: cockpit
+    enabled: true
+    state: started
+
+- name: Open the firewall for cockpit
+  become: true
+  ansible.posix.firewalld:
+    service: cockpit
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Configure PAM to require TOTP for Cockpit
+  when: require_totp_for_cockpit
+  become: true
+  block:
+    - name: Add the Google Authenticator PAM module to the Cockpit PAM configuration
+      ansible.builtin.lineinfile:
+        path: /etc/pam.d/cockpit
+        line: "auth required pam_google_authenticator.so nullok"
+        state: present
+        create: false
+        insertafter: EOF
+      register: cockpit_pam_config
+
+    - name: Restart the Cockpit service
+      when: cockpit_pam_config is changed
+      ansible.builtin.service:
+        name: cockpit
+        state: restarted

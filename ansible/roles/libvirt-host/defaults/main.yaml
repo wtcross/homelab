@@ -1,0 +1,31 @@
+_libvirt_host_os_packages:
+  - python3-libvirt
+  - python3-lxml
+  - qemu-kvm
+  - libvirt
+  - virt-install
+  - cockpit
+  - cockpit-machines
+
+_speed_mgmt: 1000
+_speed_vm: 2500
+
+_native:
+  bridge: br-10-native
+  network: lab
+
+_vlans:
+  - id: 11
+    bridge: br-11-storage
+    network: storage
+  - id: 12
+    bridge: br-12-labvms
+    network: lab-vms
+
+_libvirt_services:
+  - virtqemud.socket
+  - virtnetworkd.socket
+  - virtnodedevd.socket
+  - virtstoraged.socket
+  - virtsecretd.socket
+  - cockpit.socket

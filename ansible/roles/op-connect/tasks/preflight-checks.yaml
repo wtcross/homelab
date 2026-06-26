@@ -1,0 +1,45 @@
+---
+- name: Verify that all required variables are set
+  when: lookup('vars', item) is undefined
+  become: no
+  delegate_to: localhost
+  ansible.builtin.fail:
+    msg: >
+      Missing required variable: {{ item }}
+  loop:
+    - op_quadlet_files
+    - op_tls_key_name
+    - op_tls_fullchain_name
+
+- name: Verify that op_quadlet_files has correct schema
+  become: no
+  delegate_to: localhost
+  ansible.utils.validate:
+    data: "{{ op_quadlet_files }}"
+    criteria: |
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "content": { "type": "string" }
+          },
+          "required": ["name", "content"]
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    engine: ansible.utils.jsonschema
+  vars:
+    ansible_jsonschema_draft: draft7
+  register: op_files_validation
+
+- ansible.builtin.fail:
+    msg: |
+      The op_quadlet_files variable does not have the correct schema. The following errors were found:
+      {%- for error in op_files_validation.errors %}
+      {{ error }}
+      {% endfor %}
+  when: "'errors' in op_files_validation"

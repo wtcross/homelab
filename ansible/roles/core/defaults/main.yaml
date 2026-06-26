@@ -1,0 +1,2 @@
+_core_host_packages:
+  - dnf-utils

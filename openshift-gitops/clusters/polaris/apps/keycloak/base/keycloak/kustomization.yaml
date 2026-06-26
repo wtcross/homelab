@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "10"
+
+namespace: keycloak
+
+resources:
+  - es-keycloak-admin-creds.yaml
+  - certificate.yaml
+  - keycloak.yaml
+  - cl-keycloak.yaml

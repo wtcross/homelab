@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "10"
+
+resources:
+  - es-quay-config.yaml
+  - registry.yaml
+  - es-quay-realm-placeholders.yaml
+  - keycloak-realm-import-quay.yaml
+  - cl-quay.yaml

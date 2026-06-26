@@ -1,0 +1,22 @@
+---
+- name: Patch all core nodes
+  hosts: portal
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Ensure all OS packages are up to date
+      become: true
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Check if reboot is required
+      ansible.builtin.shell:
+        cmd: "needs-restarting -r -s"
+      register: needs_restarting
+      failed_when: false
+      changed_when: false
+
+    - name: Reboot if needed
+      ansible.builtin.reboot:
+      when: needs_restarting.rc != 1

@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: technitium
+  labels:
+    app: technitium
+{#  annotations:#}
+{#    io.podman.annotations.volume.technitium-data: "label=Z"#}
+spec:
+  containers:
+    - name: technitium
+      image: docker.io/technitium/dns-server:latest
+      volumeMounts:
+        - name: technitium-data
+          mountPath: /etc/dns
+      ports:
+        - containerPort: 53443
+          hostPort: 53443
+          protocol: TCP
+        - containerPort: 53
+          hostPort: 5053
+          protocol: UDP
+        - containerPort: 53
+          hostPort: 5053
+          protocol: TCP
+        - containerPort: 443
+          hostPort: 5443
+          protocol: TCP
+      env:
+        - name: DNS_SERVER_DOMAIN
+          value: portal.lab.cross.solutions
+        - name: DNS_SERVER_OPTIONAL_PROTOCOL_DNS_OVER_HTTP
+          value: "true"
+        - name: DNS_SERVER_FORWARDER_PROTOCOL
+          value: Https
+        - name: DNS_SERVER_FORWARDERS
+          value: https://cloudflare-dns.com/dns-query (1.1.1.1),https://cloudflare-dns.com/dns-query (1.0.0.1)
+        - name: DNS_SERVER_WEB_SERVICE_USE_SELF_SIGNED_CERT
+          value: "true"
+        - name: DNS_SERVER_WEB_SERVICE_HTTPS_PORT
+          value: "53443"
+        - name: DNS_SERVER_WEB_SERVICE_ENABLE_HTTPS
+          value: "true"
+#        - name: DNS_SERVER_RECURSION_NETWORK_ACL
+#          value: 192.168.10.0/24,192.168.20.0/27
+        # https://github.com/TechnitiumSoftware/DnsServer/blob/master/docker-compose.yml#L21
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        allowPrivilegeEscalation: false
+  securityContext:
+    seLinuxOptions:
+      type: container_t
+
+  volumes:
+    - name: technitium-data
+      hostPath:
+        path: /home/{{ _tdns_user }}/.local/share/technitium
+        type: Directory

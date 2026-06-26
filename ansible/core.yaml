@@ -1,0 +1,7 @@
+- name: Configure service hosts
+  hosts: core
+  gather_facts: true
+  roles:
+    - role: core
+    - role: podman-host
+    - role: libvirt-host

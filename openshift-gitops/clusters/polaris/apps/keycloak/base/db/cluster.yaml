@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: keycloak-pg
+spec:
+  description: Keycloak PostgreSQL cluster
+  instances: 3
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: lvms-vg1
+  walStorage:
+    size: 2Gi
+    storageClass: lvms-vg1
+  certificates:
+    serverCASecret: keycloak-pg-certificate
+    serverTLSSecret: keycloak-pg-certificate
+  postgresql:
+    pg_hba:
+      - hostssl app app all scram-sha-256

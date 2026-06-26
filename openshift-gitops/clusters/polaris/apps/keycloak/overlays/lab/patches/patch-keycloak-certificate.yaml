@@ -1,0 +1,7 @@
+- op: replace
+  path: /spec/commonName
+  value: keycloak.apps.polaris.lab.cross.solutions
+- op: replace
+  path: /spec/dnsNames
+  value:
+    - keycloak.apps.polaris.lab.cross.solutions

@@ -1,0 +1,6 @@
+---
+_podman_host_os_packages:
+  - dnf-utils
+  - podman
+  - cockpit
+  - cockpit-podman

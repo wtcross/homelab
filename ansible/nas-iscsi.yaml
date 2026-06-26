@@ -1,0 +1,16 @@
+# TODO: Use Ansible to bootstrap NAS from scratch
+#       Note: Pull any secrets from 1password using the lookup plugin
+#         - Configure storage network
+#         - Create a user and configure appropriately
+#         - Create dataset needed for each share (make this a list so it's easy to loop over)
+#         - Configure NFS
+#         - Configure iSCSI
+#             - Configure for CHAP_MUTUAL auth (remember to use secrets set in 1pass)
+#             - Create placeholder target to keep initiator from getting deleted (make this an optional task that defaults to not happening)
+---
+- hosts: nas.lab.cross.solutions
+  connection: local
+  gather_facts: no
+  tasks:
+    -
+#

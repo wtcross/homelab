@@ -1,0 +1,156 @@
+---
+- name: Gather facts needed to configure AAP
+  hosts: aap
+  tasks:
+    - name: Get the AAP admin password
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Secret
+        name: aap-admin-password
+        namespace: "{{ aap_k8s_namespace }}"
+      register: admin_password_secret
+
+    - set_fact:
+        aap_admin_username: admin
+        aap_admin_password: "{{ admin_password_secret.resources[0].data['password'] | ansible.builtin.b64decode }}"
+      no_log: true
+
+    - name: Get the service token used for the AAP OpenShift Virt inventory source
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Secret
+        name: aap-openshift-virt-reader-token
+        namespace: "{{ aap_k8s_namespace }}"
+      register: virt_reader_token_secret
+
+    - set_fact:
+        aap_virt_reader_api_endpoint: https://kubernetes.default.svc
+        aap_virt_reader_sa_token: "{{ virt_reader_token_secret.resources[0].data['token'] | ansible.builtin.b64decode }}"
+        aap_virt_reader_sa_ca_data: "{{ virt_reader_token_secret.resources[0].data['service-ca.crt'] | ansible.builtin.b64decode }}"
+      no_log: true
+
+- name: Configure AAP
+  hosts: aap
+  tasks:
+    - name: Find available subscriptions
+      ansible.controller.subscriptions:
+        filters:
+          subscription_name: Red Hat Ansible Automation Platform, Premium (100 Managed Nodes)
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        username: "{{ aap_rh_username }}"
+        password: "{{ aap_rh_password }}"
+        validate_certs: false
+      register: aap_subscriptions
+
+    - set_fact:
+        aap_subscription_id: aap_subscriptions[0].id
+
+    - name: Ensure the AAP instance is subscribed
+      ansible.controller.license:
+        state: present
+        subscription_id: "{{ aap_subscription_id }}"
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        validate_certs: false
+
+    - name: Configure AAP gateway
+      ansible.platform.settings:
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        validate_certs: false
+        settings: "{{ aap_settings }}"
+
+    - name: Ensure role definitions are created
+      ansible.platform.role_definition:
+        state: present
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        content_type: "{{ item.content_type }}"
+        permissions: "{{ item.permissions }}"
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        validate_certs: false
+      loop: "{{ aap_role_definitions }}"
+      register: role_definition_creation
+
+    - set_fact:
+        aap_role_definitions: "{{ role_definition_creation | community.general.json_query('results[].{id: id, role_definition: item.name}') }}"
+
+- name: Add AAP credentials to each tenant
+  hosts: aap_tenants
+  tasks:
+    - set_fact:
+        aap_hostname: "{{ hostvars[aap_inventory_name]['aap_hostname'] }}"
+        aap_admin_username: "{{ hostvars[aap_inventory_name]['aap_admin_username'] }}"
+        aap_admin_password: "{{ hostvars[aap_inventory_name]['aap_admin_password'] }}"
+        aap_role_definitions: "{{ hostvars[aap_inventory_name]['aap_role_definitions'] }}"
+
+- name: Configure Access Management for all tenants
+  hosts: aap_tenants
+  tasks:
+    - name: Create lab.cross.solutions organization
+      ansible.platform.organization:
+        state: present
+        name: "{{ aap_tenant_organization_name }}"
+        description: "{{ aap_tenant_organization_description }}"
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        validate_certs: false
+      register: aap_tenant_organization_creation
+
+    - set_fact:
+        aap_tenant_organization_id: "{{ aap_tenant_organization_creation.id }}"
+
+    - name: Create the teams
+      ansible.platform.team:
+        state: present
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        organization: "{{ aap_tenant_organization_name }}"
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        validate_certs: false
+      loop: "{{ aap_tenant_teams }}"
+      register: aap_tenant_team_creation
+
+    - name: Set up team roles
+      ansible.builtin.uri:
+        body:
+          object_id: "{{ aap_tenant_organization_id }}"
+          team: "{{ (aap_tenant_team_creation.results | list | selectattr('item.name', '==', item.name) | first)['id'] }}"
+          role_definition: "{{ (aap_role_definitions | list | selectattr('role_definition', '==', item.role_definition) | first)['id'] }}"
+        body_format: json
+        method: POST
+        status_code: 201
+        url: https://{{ aap_hostname }}/api/gateway/v1/role_team_assignments/
+        url_username: "{{ aap_admin_username }}"
+        url_password: "{{ aap_admin_password }}"
+        force_basic_auth: true
+        validate_certs: false
+      loop: "{{ aap_tenant_teams }}"
+
+- name: Configure Automation Content
+  hosts: aap_tenants
+  tasks:
+    - name: Ensure all remotes are configured correctly
+      ansible.hub.collection_remote:
+        state: present
+        name: "{{ item.name }}"
+        tls_validation: "{{ item.tls_validation | default(omit) | bool }}"
+        signed_only: "{{ item.signed_only | default(omit) | bool }}"
+        sync_dependencies: "{{ item.sync_dependencies | default(omit)}}"
+        url: "{{ item.url }}"
+        auth_url: "{{ item.auth_url | default(omit) }}"
+        token: "{{ item.token | default(omit) }}"
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_admin_username }}"
+        aap_password: "{{ aap_admin_password }}"
+        validate_certs: false
+      loop: "{{ aap_tenant_collection_remotes }}"

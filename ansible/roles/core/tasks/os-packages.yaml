@@ -1,0 +1,23 @@
+- name: Update OS packages
+  become: yes
+  ansible.builtin.dnf:
+    state: latest
+    use_backend: dnf4
+    update_cache: yes
+    pkg: "*"
+
+- name: Install core OS packages
+  become: yes
+  ansible.builtin.dnf:
+    state: latest
+    use_backend: dnf4
+    update_cache: no
+    pkg: "{{ item }}"
+  loop: "{{ _core_host_packages }}"
+
+- name: Check if reboot is required
+  ansible.builtin.command: needs-restarting -r
+  register: needs_restarting_result
+  failed_when: false
+  changed_when: needs_restarting_result.rc == 1
+  notify: Reboot the system

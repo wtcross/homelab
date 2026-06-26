@@ -1,0 +1,103 @@
+---
+- ansible.builtin.include_tasks: preflight-checks.yaml
+
+- become: yes
+  ansible.builtin.dnf:
+    name: acl
+    state: present
+
+- ansible.builtin.include_tasks: user.yaml
+
+- name: Create a podman secret for 1password-credentials.json
+  become: yes
+  become_user: "{{ op_user }}"
+  containers.podman.podman_secret:
+    state: present
+    name: op-credentials
+    data: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../.priv/1password-credentials.json') }}"
+
+- name: Create a podman secret for TLS key
+  become: yes
+  become_user: "{{ op_user }}"
+  containers.podman.podman_secret:
+    state: present
+    name: op-connect-tls-key
+    data: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../.priv/' ~ op_tls_key_name) }}"
+
+- name: Create a podman secret for TLS cert
+  become: yes
+  become_user: "{{ op_user }}"
+  containers.podman.podman_secret:
+    state: present
+    name: op-connect-tls-fullchain
+    data: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../.priv/' ~ op_tls_fullchain_name) }}"
+
+- name: Create the systemd quadlet unit directory for the {{ op_user }} user
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /home/{{ op_user }}/.config/containers/systemd
+    owner: "{{ op_user }}"
+    group: "{{ op_group }}"
+    mode: "0750"
+
+- name: Ensure op-connect quadlet files are in place
+  become: yes
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: /home/{{ op_user }}/.config/containers/systemd/{{ item.name }}
+    owner: "{{ op_user }}"
+    group: "{{ op_group }}"
+    mode: "0644"
+  loop: "{{ op_quadlet_files }}"
+  register: copy_op_quadlet_files
+
+# - name: Trigger {{ op_user }} user session to ensure systemd --user instance starts
+#   become: yes
+#   ansible.builtin.command:
+#     cmd: systemd-run --uid={{ op_uid }} --gid={{ op_gid }} --pty /bin/true
+#   register: user_session
+#   changed_when: false
+
+- name: Reload the user-level systemd daemon if any quadlet units changed
+  when: copy_op_quadlet_files.changed
+  become: yes
+  become_user: "{{ op_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ op_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ op_uid }}/bus"
+  # ansible.builtin.command:
+  #   cmd: systemctl --user daemon-reload
+  ansible.builtin.systemd_service:
+    daemon_reload: yes
+    scope: user
+
+- name: Restart the op-connect services if any units changed
+  when: copy_op_quadlet_files.changed
+  become: yes
+  become_user: "{{ op_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ op_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ op_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: restarted
+    scope: user
+    name: "{{ item }}"
+  loop:
+    - op-connect-api
+    - op-connect-sync
+
+- name: Ensure the op-connect services are enabled and started
+  become: yes
+  become_user: "{{ op_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ op_uid }}
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ op_uid }}/bus"
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: yes
+    scope: user
+    name: "{{ item }}"
+  loop:
+    - op-connect-api
+    - op-connect-sync

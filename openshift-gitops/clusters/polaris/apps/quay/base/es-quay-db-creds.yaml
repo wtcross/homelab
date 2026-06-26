@@ -1,0 +1,23 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: quay-db-creds
+  namespace: quay
+spec:
+  data:
+    - remoteRef:
+        key: polaris-quay-db-password
+      secretKey: password
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: quay-db-creds
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        user: quay
+        username: quay
+        password: "{{ .password }}"

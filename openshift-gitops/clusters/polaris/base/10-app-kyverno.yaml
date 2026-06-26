@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  project: platform
+  source:
+    chart: kyverno
+    repoURL: 'https://kyverno.github.io/kyverno/'
+    targetRevision: patch-me-source-revision
+    helm:
+      releaseName: kyverno
+      parameters:
+        - name: 'crds.migration.securityContext'
+          value: ~
+        - name: 'test.securityContext'
+          value: ~
+        - name: 'webhooksCleanup.securityContext'
+          value: ~
+        - name: 'admissionController.initContainer.securityContext'
+          value: ~
+        - name: 'admissionController.container.securityContext'
+          value: ~
+        - name: 'backgroundController.securityContext'
+          value: ~
+        - name: 'cleanupController.securityContext'
+          value: ~
+        - name: 'reportsController.securityContext'
+          value: ~
+      valuesObject: patch-me-values-object
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+    managedNamespaceMetadata:
+      annotations:
+        openshift.io/display-name: "Kyverno Policy Engine"

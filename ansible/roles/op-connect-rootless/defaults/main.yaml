@@ -1,0 +1,91 @@
+---
+_op_subuid_bitshift: 16
+_op_subgid_bitshift: "{{ _op_subuid_bitshift }}"
+
+op_connect_sync_image_uri: ghcr.io/1password/connect-sync:latest
+op_connect_api_image_uri: ghcr.io/1password/connect-api:latest
+
+op_uid: 2000
+op_gid: 2000
+op_user: op
+op_group: op
+op_user_home: /home/{{ op_user }}
+
+op_tls_key_name: op.lab.key.pem
+op_tls_fullchain_name: op.lab.fullchain.pem
+
+_op_data_mount_target: /home/opuser/.op/data
+_op_credentials_mount_target: /home/opuser/.op/1password-credentials.json
+_op_tls_key_mount_target: /home/opuser/.op/{{ op_tls_key_name }}
+_op_tls_fullchain_mount_target: /home/opuser/.op/{{ op_tls_fullchain_name }}
+
+op_quadlet_files:
+  - name: op-connect.network
+    content: |
+      [Unit]
+      Description=1Password Connect
+
+      [Network]
+      Label=app=op-connect
+      NetworkName=op-connect
+      Driver=bridge
+
+  - name: op-data.volume
+    content: |
+      [Unit]
+      Description=Shared storage volume for 1Password Connect services
+
+      [Volume]
+      Label=app=op-connect
+      VolumeName=op-data
+      User={{ op_uid }}
+      Group={{ op_gid }}
+
+  - name: op-connect-sync.container
+    content: |
+      [Unit]
+      Description=1Password Connect Sync Service
+      After=network-online.target
+
+      [Service]
+      Restart=on-failure
+
+      [Install]
+      WantedBy=default.target
+
+      [Container]
+      ContainerName=op-connect-sync
+      Label=app=op-connect
+      Image={{ op_connect_sync_image_uri }}
+      AddCapability=NET_BROADCAST
+      UserNS=keep-id:uid={{ op_uid }},gid={{ op_gid }}
+      Network=op-connect.network
+      Volume=op-data:{{ _op_data_mount_target }}:z
+      Secret=op-credentials,type=mount,uid={{ op_uid }},gid={{ op_gid }},target={{ _op_credentials_mount_target }}:z
+
+  - name: op-connect-api.container
+    content: |
+      [Unit]
+      Description=1Password Connect API Service
+      After=network-online.target
+
+      [Service]
+      Restart=on-failure
+
+      [Install]
+      WantedBy=default.target
+
+      [Container]
+      ContainerName=op-connect-api
+      Label=app=op-connect
+      Image={{ op_connect_api_image_uri }}
+      AddCapability=NET_BROADCAST
+      UserNS=keep-id:uid={{ op_uid }},gid={{ op_gid }}
+      Network=op-connect.network
+      PublishPort=8080:8080
+      Volume=op-data:{{ _op_data_mount_target }}:z
+      Secret=op-credentials,type=mount,uid={{ op_uid }},gid={{ op_gid }},target={{ _op_credentials_mount_target }}:z
+      Secret=op-connect-tls-key,uid={{ op_uid }},gid={{ op_gid }},type=mount,target={{ _op_tls_key_mount_target }}:Z
+      Secret=op-connect-tls-fullchain,uid={{ op_uid }},gid={{ op_gid }},type=mount,target={{ _op_tls_fullchain_mount_target }}:Z
+      Environment=OP_TLS_KEY_FILE=/home/opuser/.op/{{ op_tls_key_name }}
+      Environment=OP_TLS_CERT_FILE=/home/opuser/.op/{{ op_tls_fullchain_name }}

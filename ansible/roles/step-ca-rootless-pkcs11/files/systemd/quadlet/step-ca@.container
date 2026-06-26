@@ -1,0 +1,44 @@
+[Unit]
+Description=Step CA - %i
+PartOf=step-ca@%i.target
+Requires=p11-kit-server.target
+After=p11-kit-server.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=step-ca@%i.target
+
+[Container]
+ContainerName=step-ca-%i
+Label=app=step-ca
+Label=instance=%i
+Image=ghcr.io/wtcross/step-ca:latest
+Pull=always
+
+# Maps container uid 1001 (step user) to the host user running this service
+UserNS=keep-id:uid=1001,gid=1001
+SecurityLabelType=step_ca_policy.process
+SecurityLabelLevel=s0:c100,c200
+NoNewPrivileges=true
+Notify=true
+
+Network=step-ca.network
+
+# PublishPort intentionally omitted - configure via drop-in:
+#   [Container]
+#   PublishPort=9000:9000
+
+Volume=step-ca-%i-data:/home/step/.step
+Volume=%t/p11-kit/pkcs11-socket:/run/pkcs11-socket
+
+Secret=hsm-pin-%i,type=mount,target=/home/step/hsm-pin
+
+# Static environment
+Environment=STEPPATH=/home/step/.step
+Environment=STEPCA_INIT_ADDRESS=:9000
+Environment=P11_KIT_SERVER_ADDRESS=unix:path=/run/pkcs11-socket
+
+# Instance-specific environment loaded from file
+EnvironmentFile=%h/.config/step-ca/%i.env

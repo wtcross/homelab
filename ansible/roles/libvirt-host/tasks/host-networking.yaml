@@ -1,0 +1,127 @@
+- name: Detect 1GbE Management Interface
+  ansible.builtin.set_fact:
+    _mgmt_iface: "{{ item }}"
+  loop: "{{ ansible_interfaces }}"
+  when:
+    - _mgmt_iface is not defined
+    - vars['ansible_' + item | regex_replace('-', '_')]['speed'] | default(0) | int == _speed_mgmt
+    - vars['ansible_' + item | regex_replace('-', '_')]['type'] | default('') == 'ether'
+    - "'.' not in item"  # Exclude existing VLANs
+
+- name: Detect 2.5GbE VM Interface
+  ansible.builtin.set_fact:
+    _vm_iface: "{{ item }}"
+  loop: "{{ ansible_interfaces }}"
+  when:
+    - _vm_iface is not defined
+    - vars['ansible_' + item | regex_replace('-', '_')]['speed'] | default(0) | int == _speed_vm
+    - vars['ansible_' + item | regex_replace('-', '_')]['type'] | default('') == 'ether'
+    - "'.' not in item"  # Exclude existing VLANs
+
+- name: Fail if interfaces are not correctly identified
+  ansible.builtin.fail:
+    msg: "Hardware detection failed. Found 1GbE: {{ _mgmt_iface | default('None') }}, 2.5GbE: {{ _vm_iface | default('None') }}"
+  when: _mgmt_iface is not defined or _vm_iface is not defined
+
+- name: Prevent network lockout
+  ansible.builtin.fail:
+    msg: "ABORTING: You are connected via the 2.5GbE interface ({{ _vm_iface }}). Configuring it as a slave will disconnect you. Please connect via 1GbE."
+  when:
+    - ansible_default_ipv4.interface is defined
+    - ansible_default_ipv4.interface == _vm_iface
+
+- name: Configure 1GbE management interface (DHCP)
+  become: yes
+  community.general.nmcli:
+    state: present
+    conn_name: "mgmt-{{ _mgmt_iface }}"
+    ifname: "{{ _mgmt_iface }}"
+    type: ethernet
+    method4: auto
+    method6: auto
+    autoconnect: true
+  notify: Restart NetworkManager
+
+- name: Create bridges (native + VLANs)
+  become: yes
+  community.general.nmcli:
+    conn_name: "{{ item.bridge }}"
+    ifname: "{{ item.bridge }}"
+    type: bridge
+    method4: disabled
+    method6: disabled
+    stp: false
+    state: present
+  loop: "{{ [_native] + _vlans }}"
+  notify: Restart NetworkManager
+
+- name: Configure native slave (physical)
+  become: yes
+  community.general.nmcli:
+    conn_name: "slave-native-{{ _vm_iface }}"
+    ifname: "{{ _vm_iface }}"
+    type: bridge-slave
+    master: "{{ _native.bridge }}"
+    autoconnect: true
+    state: present
+  notify: Restart NetworkManager
+
+- name: Configure VLAN slaves
+  become: yes
+  community.general.nmcli:
+    conn_name: "slave-vlan{{ item.id }}"
+    ifname: "{{ _vm_iface }}.{{ item.id }}"
+    type: vlan
+    vlanid: "{{ item.id }}"
+    vlandev: "{{ _vm_iface }}"
+    master: "{{ item.bridge }}"
+    slave_type: bridge
+    autoconnect: true
+    state: present
+  loop: "{{ _vlans }}"
+  notify: Restart NetworkManager
+
+- name: Find conflicting connections
+  become: yes
+  ansible.builtin.shell: |
+    nmcli -t -f UUID,NAME,DEVICE connection show | \
+    grep ":{{ _vm_iface }}$" | \
+    grep -v ":slave-native-{{ _vm_iface }}:" | \
+    cut -d: -f1
+  register: conflicting_conns
+  changed_when: false
+  failed_when: false
+
+- name: Delete conflicting connections
+  become: yes
+  ansible.builtin.command: "nmcli connection delete {{ item }}"
+  loop: "{{ conflicting_conns.stdout_lines }}"
+  when: conflicting_conns.stdout_lines | length > 0
+  notify: Restart NetworkManager
+
+- name: Activate native slave (physical)
+  become: yes
+  ansible.builtin.command:
+    cmd: "nmcli connection up slave-native-{{ _vm_iface }}"
+  register: phy_up
+  changed_when: "'successfully activated' in phy_up.stdout"
+  failed_when: false
+
+- name: Activate VLAN slaves
+  become: yes
+  ansible.builtin.command:
+    cmd: "nmcli connection up slave-vlan{{ item.id }}"
+  loop: "{{ _vlans }}"
+  register: vlan_up
+  changed_when: "'successfully activated' in vlan_up.stdout"
+  failed_when: false
+
+- name: Add bridges to firewalld 'trusted' zone
+  become: yes
+  ansible.posix.firewalld:
+    zone: trusted
+    interface: "{{ item.bridge }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ [_native] + _vlans }}"

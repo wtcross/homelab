@@ -1,0 +1,25 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: keycloak-admin-creds
+spec:
+  data:
+    - remoteRef:
+        key: polaris-keycloak-admin-user
+      secretKey: username
+    - remoteRef:
+        key: polaris-keycloak-admin-password
+      secretKey: password
+    - remoteRef:
+        key: polaris-keycloak-admin-client-id
+      secretKey: client-id
+    - remoteRef:
+        key: polaris-keycloak-admin-client-secret
+      secretKey: client-secret
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm-cluster-secret-store
+  target:
+    name: keycloak-admin-creds
+    creationPolicy: Owner

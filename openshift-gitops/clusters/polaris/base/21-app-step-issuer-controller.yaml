@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: step-issuer-controller
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  project: platform
+  source:
+    chart: step-issuer
+    repoURL: ghcr.io/wtcross
+    path: step-issuer
+    targetRevision: patch-me-source-revision
+    helm:
+      releaseName: step-issuer
+      parameters:
+        - name: 'securityContext'
+          value: ~
+        - name: 'podSecurityContext'
+          value: ~
+        - name: 'kubeRBACproxy.securityContext'
+          value: ~
+      valuesObject: patch-me-values-object
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: step-issuer
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+    managedNamespaceMetadata:
+      annotations:
+        openshift.io/display-name: "Step Issuer"

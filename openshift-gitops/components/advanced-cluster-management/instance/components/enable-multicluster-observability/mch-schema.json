@@ -1,0 +1,40 @@
+{
+  "swagger": "2.0",
+  "info": { "title": "kustomize-merge-keys", "version": "v0" },
+  "definitions": {
+    "mch.MultiClusterHub": {
+      "x-kubernetes-group-version-kind": [
+        {
+          "group": "operator.open-cluster-management.io",
+          "version": "v1",
+          "kind": "MultiClusterHub"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "spec": {
+          "type": "object",
+          "properties": {
+            "overrides": {
+              "type": "object",
+              "properties": {
+                "components": {
+                  "type": "array",
+                  "x-kubernetes-patch-strategy": "merge",
+                  "x-kubernetes-patch-merge-key": "name",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "enabled": { "type": "boolean" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

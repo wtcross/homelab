@@ -1,0 +1,8 @@
+polkit.addRule(function(action, subject) {
+    // Allow members of group "{{ _step_group }}" to talk to pcscd and access cards
+    if ((action.id == "org.debian.pcsc-lite.access_pcsc" ||
+         action.id == "org.debian.pcsc-lite.access_card") &&
+        subject.isInGroup("{{ _step_group }}")) {
+        return polkit.Result.YES;
+    }
+});

@@ -1,0 +1,12 @@
+- op: replace
+  path: /spec/issuerRef/name
+  value: step-cluster-issuer
+
+- op: replace
+  path: /spec/commonName
+  value: 'api.polaris.lab.cross.solutions'
+
+- op: replace
+  path: /spec/dnsNames
+  value:
+    - 'api.polaris.lab.cross.solutions'

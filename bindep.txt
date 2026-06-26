@@ -1,0 +1,18 @@
+# GPG and smart card tools
+opensc [platform:redhat]
+gnutls [platform:redhat]
+gnutls-utils [platform:redhat]
+openssl-pkcs11-sign-provider [platform:redhat]
+openssl-pkcs11 [platform:redhat]
+pkcs11-provider [platform:redhat]
+pkcs11-helper [platform:redhat]
+gnupg-pkcs11-scd [platform:redhat]
+pinentry-qt [platform:redhat]
+
+# Kubernetes tools
+helm [platform:redhat]
+
+# Container tools
+podman [platform:redhat]
+fuse-overlayfs [platform:redhat]
+skopeo [platform:redhat]
